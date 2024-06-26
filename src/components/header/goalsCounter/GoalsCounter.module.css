@@ -1,0 +1,45 @@
+.container {
+  width: 4.5rem;
+  display: grid;
+  grid-template-rows: 1.5rem 4rem;
+  /* border: 5px solid;
+  border-image: linear-gradient(to right, #08fcdc, #c064ec);
+  border-image-slice: 1; */
+  border-radius: 0.5rem;
+  background: white;
+  position: relative;
+}
+.container div {
+  background-color: transparent;
+  color: #48447c;
+}
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 0.5rem;
+  padding: 5px;
+  background: linear-gradient(to right, #08fcdc, #c064ec);
+  z-index: -1;
+  box-sizing: border-box;
+  height: calc(5.5rem + 5px);
+  width: calc(4.5rem + 5px);
+  align-self: center;
+  justify-self: center;
+}
+.text {
+  font-size: 1rem;
+  font-weight: 700;
+  font-style: oblique;
+  text-align: center;
+  align-content: center;
+}
+.number {
+  font-size: 3rem;
+  font-weight: 900;
+  text-align: center;
+  align-content: center;
+}

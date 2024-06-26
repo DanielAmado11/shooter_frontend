@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  place-content: space-between;
+  position: absolute;
+  top: 10vh;
+  width: 100%;
+  height: min-content;
+  z-index: 1;
+  background: transparent;
+}
+
+.counterContainer {
+  padding: 0 2rem;
+  background: transparent;
+}
+.timerContainer {
+  padding: 0 2rem;
+  background: transparent;
+}
