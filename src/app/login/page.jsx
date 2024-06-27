@@ -31,6 +31,8 @@ const LoginPage = (props) => {
 
   const handleCreateUser = async (e) => {
     e.preventDefault();
+    router.push("/term_conditions");
+    redirect("/term_conditions");
     // createUser.mutate(state);
   };
 
