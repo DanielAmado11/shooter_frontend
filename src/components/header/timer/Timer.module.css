@@ -1,0 +1,32 @@
+.container {
+  display: grid;
+  grid-template-rows: 1.5rem 3rem 1.5rem;
+  width: 4.5rem;
+  background: linear-gradient(to bottom right, #c064ec, #08fcdc) !important;
+  border-radius: 0.5rem;
+  color: white;
+  border: 3px solid white;
+}
+.container div {
+  background-color: transparent;
+}
+.title {
+  font-size: 1rem;
+  font-weight: 500;
+  font-style: oblique;
+  text-align: center;
+  align-content: center;
+}
+.text {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+  align-content: center;
+}
+.number {
+  font-size: 3rem;
+  font-weight: 900;
+  text-align: center;
+  align-content: center;
+  display: grid;
+}
