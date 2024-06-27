@@ -8,7 +8,7 @@ import {
   PerspectiveCamera,
   useProgress,
 } from "@react-three/drei";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import {
   CharacterAnimationProvider,
   useCharacterAnimation,
@@ -24,7 +24,11 @@ import {
   SphereCollaider,
 } from "@/components/Collaiders/collaiders";
 import { Stadium } from "@/components/stadium/Stadium";
-import { Goalkeeper_1 } from "@/components/goalkeepers/GoalKeeper_1";
+const Goalkeeper_1 = lazy(() =>
+  import("@/components/goalkeepers/GoalKeeper_1").then((mod) => ({
+    default: mod.Goalkeeper_1,
+  }))
+);
 import { kicker_positions } from "@/utils/kickerPositions";
 import { Arrow_1 } from "@/components/arrow/arrow_1";
 import Header from "@/components/header/header";
