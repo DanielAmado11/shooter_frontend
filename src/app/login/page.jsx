@@ -31,7 +31,7 @@ const LoginPage = (props) => {
 
   const handleCreateUser = async (e) => {
     e.preventDefault();
-    createUser.mutate(state);
+    // createUser.mutate(state);
   };
 
   return (
