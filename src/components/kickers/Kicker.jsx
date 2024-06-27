@@ -12,7 +12,7 @@ import { kicker_positions } from "@/utils/kickerPositions";
 export function Kicker(props) {
   const { position, animation, onActiveAnimation } = props;
   const { nodes, materials, animations } = useGLTF(
-    "./models/kicker/kicker.gltf"
+    "../models/kicker/kicker.gltf"
   );
   const group = useRef();
 

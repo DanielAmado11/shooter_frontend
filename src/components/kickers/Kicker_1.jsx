@@ -12,7 +12,7 @@ import { useCharacterAnimation } from "@/contexts/CharacterAnimation";
 
 export function Kicker_1(props) {
   const { position, action, onActiveAnimation } = props;
-  const { nodes, materials, animations } = useGLTF("./models/kicker/kick.gltf");
+  const { nodes, materials, animations } = useGLTF("../models/kicker/kick.gltf");
   const group = useRef();
 
   const { actions } = useAnimations(animations, group);

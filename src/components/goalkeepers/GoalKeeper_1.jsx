@@ -13,7 +13,7 @@ export function Goalkeeper_1(props) {
   const { action, type, onActiveAnimation, animationTime } = props;
   const group = useRef();
   const { nodes, materials, animations } = useGLTF(
-    "models/goalKeeper/goalKeeper_1.gltf"
+    "../models/goalKeeper/goalKeeper_1.gltf"
   );
   const { actions, names } = useAnimations(animations, group);
   const { animationIndex } = useCharacterAnimation();

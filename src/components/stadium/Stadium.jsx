@@ -7,7 +7,7 @@ import React, { useRef } from "react";
 import { useGLTF } from "@react-three/drei";
 
 export function Stadium(props) {
-  const { nodes, materials } = useGLTF("./models/stadium/stadium.gltf");
+  const { nodes, materials } = useGLTF("../models/stadium/stadium.gltf");
   return (
     <group {...props} dispose={null}>
       <group rotation={[Math.PI / 2, 0, Math.PI]} scale={0.01}>

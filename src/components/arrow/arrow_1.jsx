@@ -21,7 +21,7 @@ export function Arrow_1(props) {
   const group = useRef();
   const intervalRef = useRef();
   const { nodes, materials, animations } = useGLTF(
-    "./models/arrow/arrow_1.gltf"
+    "../models/arrow/arrow_1.gltf"
   );
   const { actions } = useAnimations(animations, group);
   const { animationIndex, setAnimationIndex } = useCharacterAnimation();

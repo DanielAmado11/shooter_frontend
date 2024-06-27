@@ -50,7 +50,7 @@ const goal_area = [
 
 export function Goal(props) {
   const { shootType, keepPosition, setGoals } = props;
-  const { nodes, materials } = useGLTF("./models/goal/goal.gltf");
+  const { nodes, materials } = useGLTF("../models/goal/goal.gltf");
 
   const handleGoal = (e) => {
     if (!goal) {
