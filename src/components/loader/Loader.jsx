@@ -17,11 +17,11 @@ const Loader = ({ onStart }) => {
       <div className={styles.container}>
         <div className="content home">
           <div className="item logoMiami">
-            <img src={logo1} alt="Miami MoCAAD" />
+            <img src="/images/logo_miami_moCAAD.png" alt="Miami MoCAAD" />
           </div>
           <div className="item logoAR">
             <div className="">
-              <img src={logo2} alt="AR Shoot Out" />
+              <img src="/images/logo_ARshootout.png" alt="AR Shoot Out" />
             </div>
             <div className="progress-container">
               <div
