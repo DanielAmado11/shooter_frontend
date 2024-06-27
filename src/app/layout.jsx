@@ -15,31 +15,31 @@ const queryClient = new QueryClient();
 export default function RootLayout({ children }) {
   const pathname = usePathname();
 
-  if (
-    pathname !== "/login" &&
-    pathname !== "/term_conditions" &&
-    pathname !== "/dashboard" &&
-    pathname !== "/game" &&
-    pathname !== "/leaderboard"
-  ) {
-    return (
-      <html lang="en">
-        <body className={inter.className}>
-          <QueryClientProvider client={queryClient}>
-            {children}
-          </QueryClientProvider>
-        </body>
-      </html>
-    );
-  }
-
+  // if (
+  //   pathname !== "/login" &&
+  //   pathname !== "/term_conditions" &&
+  //   pathname !== "/dashboard" &&
+  //   pathname !== "/game" &&
+  //   pathname !== "/leaderboard"
+  // ) {
+  // }
   return (
     <html lang="en">
       <body className={inter.className}>
         <QueryClientProvider client={queryClient}>
-          <AuthProvider getAuth={getUser}>{children}</AuthProvider>
+          {children}
         </QueryClientProvider>
       </body>
     </html>
   );
+
+  // return (
+  //   <html lang="en">
+  //     <body className={inter.className}>
+  //       <QueryClientProvider client={queryClient}>
+  //         <AuthProvider getAuth={getUser}>{children}</AuthProvider>
+  //       </QueryClientProvider>
+  //     </body>
+  //   </html>
+  // );
 }
