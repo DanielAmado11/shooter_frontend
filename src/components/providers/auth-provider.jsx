@@ -36,7 +36,7 @@ export const AuthProvider = ({ children, getAuth }) => {
 
   useEffect(() => {
     getInitialData();
-    if ((pathname === "/term_conditions" || pathname === "/dashboard" || pathname === "/game" || pathname === "/leaderboard" || pathname === "/thanks") && status === "UNAUTHENTICATED") {
+    if ((pathname === "/term_conditions" || pathname === "/dashboard" || pathname === "/game" || pathname === "/leaderboard") && status === "UNAUTHENTICATED") {
       router.push("/welcome");
     } 
     if ((pathname === "/home" || pathname === "/welcome" || pathname === "/selection" || pathname === "/login") && status === "AUTHENTICATED") {

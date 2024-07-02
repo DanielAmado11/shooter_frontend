@@ -1,6 +1,6 @@
 import { Html, useProgress } from "@react-three/drei";
-import logo1 from "../../../public/img/logo_miami_moCAAD.png";
-import logo2 from "../../../public/img/logo_ARshootout.png";
+import logo1 from "../../../public/images/logo_miami_moCAAD.png";
+import logo2 from "../../../public/images/logo_ARshootout.png";
 import Image from "next/image";
 import styles from "./Loader.module.css";
 

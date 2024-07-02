@@ -7,6 +7,6 @@
   /* position: absolute; */
   top: 0;
   left: 0;
-  background-color: #45457c;
+  background-color: #45457c; /* o el color de fondo que desees */
   z-index: 1000;
 }

@@ -10,7 +10,7 @@ const Timer = ({ start, onStop }) => {
     if (start) {
       let counter = 0;
       const interval = setInterval(() => {
-        if (counter >= 30) {
+        if (counter >= 45) {
           // clearInterval(interval);
           setTime(0);
           counter = 0;

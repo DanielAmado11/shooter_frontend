@@ -13,7 +13,6 @@ import {
   CharacterAnimationProvider,
   useCharacterAnimation,
 } from "@/contexts/CharacterAnimation";
-import Grass from "../../components/grass/Grass";
 import Interface from "@/components/interface/Interface";
 import { Kicker_1 } from "@/components/kickers/Kicker_1";
 import { Goal } from "@/components/goal/goal";
@@ -75,6 +74,7 @@ const Game = (props) => {
       kicker_positions[shootType][kickerAction].camera_position;
     if (cameraRef.current) {
       cameraRef.current.position.set(...cameraPosition);
+      cameraRef.current.lookAt(0, 1.5, 0);
     }
   }, [shootType, kickerAction]);
 
@@ -121,6 +121,7 @@ const Game = (props) => {
         <Header goals={goals} start={start} onStop={handleStop} />
         <Canvas shadows id="canvas">
           <PerspectiveCamera
+            ref={cameraRef}
             makeDefault
             position={kicker_positions[shootType][kickerAction].camera_position}
             fov={50}

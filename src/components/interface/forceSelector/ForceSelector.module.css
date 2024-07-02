@@ -1,5 +1,13 @@
 .container {
-  width: 60%;
+  width: 100%;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2vw;
+}
+.barContainer {
+  width: 60vw;
   height: 0.7rem;
   position: relative;
   border: 2px solid;
@@ -12,4 +20,14 @@
   height: 100%;
   background: linear-gradient(to right, #08fcdc, #c064ec);
   /* transition: width 0.5s ease-in-out; */
+}
+.iconContainer {
+  background: transparent;
+}
+.icon {
+  background: transparent;
+  width: 100px;
+}
+.subCon {
+  display: flex;
 }

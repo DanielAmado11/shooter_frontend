@@ -20,6 +20,10 @@ export function Arrow_1(props) {
   } = props;
   const group = useRef();
   const intervalRef = useRef();
+  const urlModel =
+    process.env.ENV !== "localhost"
+      ? "../models/arrow/arrow_1.gltf"
+      : "/models/arrow/arrow_1.gltf";
   const { nodes, materials, animations } = useGLTF(
     "../models/arrow/arrow_1.gltf"
   );
@@ -31,9 +35,6 @@ export function Arrow_1(props) {
     console.log("start rotation");
     const animation = actions.rotation.setLoop(THREE.LoopRepeat);
     mixerRef.current = animation.getMixer();
-    // mixerRef.current.addEventListener("finished", () => {
-    //   console.log("finished");
-    // });
     animation.play();
   };
 
@@ -57,7 +58,6 @@ export function Arrow_1(props) {
   const incrementForce = () => {
     if (intervalRef.current) return;
     intervalRef.current = setInterval(() => {
-      // increase if 100 decrease
       let up = true;
       setForcePercentage((prev) => {
         if (prev === 100) {
@@ -68,12 +68,12 @@ export function Arrow_1(props) {
         currentPercentage = prev;
         return up ? prev + 1 : prev - 1;
       });
-    }, 50);
+    }, 10);
   };
 
   const handleDown = (e) => {
+    e.preventDefault(); // Prevent default to avoid unexpected behavior on mobile
     if (actions.rotation) {
-      //get current frame
       const elapsedTime = mixerRef.current.time % 2.5416667461395264;
       const intervalName = getIntervalName(elapsedTime);
       mixerRef.current.timeScale = 0;
@@ -107,20 +107,17 @@ export function Arrow_1(props) {
   };
 
   useEffect(() => {
-    // click event in canvas stop the animation
     const screenCanvas = document.getElementById("canvas");
     screenCanvas.addEventListener("mousedown", handleDown);
     screenCanvas.addEventListener("mouseup", handleUp);
-
-    // restart button
-    // const restart = document.getElementById("restart");
-    // restart.addEventListener("click", handleRestart);
+    screenCanvas.addEventListener("touchstart", handleDown);
+    screenCanvas.addEventListener("touchend", handleUp);
 
     return () => {
       screenCanvas.removeEventListener("mousedown", handleDown);
       screenCanvas.removeEventListener("mouseup", handleUp);
-
-      // restart.removeEventListener("click", handleRestart);
+      screenCanvas.removeEventListener("touchstart", handleDown);
+      screenCanvas.removeEventListener("touchend", handleUp);
     };
   }, [actions.rotation]);
 
