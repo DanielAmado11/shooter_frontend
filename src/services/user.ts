@@ -10,6 +10,7 @@ const getUser = async (id: number) => {
 
 const createAccount = async (data: User) => {
   const response = await AxiosInstance.post("/user", data);
+  console.log("account created, session: ", response.data);
   return response.data;
 };
 

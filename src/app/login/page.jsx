@@ -3,11 +3,13 @@ import { useState } from "react";
 import styles from "./page.module.css";
 import { useMutation, useQuery } from "react-query";
 import { createAccount } from "@/services/user";
-import { redirect, useRouter } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 
 const LoginPage = (props) => {
   const [state, setState] = useState({ name: "" });
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const avatarId = searchParams.get("avatar_id");
   const handleChange = (e) => {
     setState({
       ...state,
@@ -30,7 +32,7 @@ const LoginPage = (props) => {
     e.preventDefault();
     const data = {
       ...state,
-      avatar_id: props.searchParams.avatar_id,
+      avatar_id: avatarId,
     };
     console.log("user", data);
     createUser.mutate(data);
