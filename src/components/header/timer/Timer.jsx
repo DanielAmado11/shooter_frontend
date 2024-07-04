@@ -1,23 +1,35 @@
 import { useEffect, useState } from "react";
 import styles from "./Timer.module.css";
+import { useMutation } from "react-query";
+import { createScore } from "@/services/score";
 
-const Timer = ({ start, onStop }) => {
-  const [time, setTime] = useState(0);
-
-  const interval = setInterval(() => {});
+const Timer = ({ start, onStop, goals }) => {
+  const [time, setTime] = useState(45);
+  const { mutate: addScoreMutation, isLoading: isAddingScore } = useMutation(
+    (data) => createScore(data)
+  );
 
   useEffect(() => {
     if (start) {
-      let counter = 0;
+      let counter = 45;
       const interval = setInterval(() => {
-        if (counter >= 45) {
-          // clearInterval(interval);
-          setTime(0);
+        if (counter <= 0) {
           counter = 0;
           onStop();
+          addScoreMutation(
+            { score: goals },
+            {
+              onSuccess: () => {
+                console.log("Score added successfully");
+              },
+              onError: () => {
+                console.log("Error adding score");
+              },
+            }
+          );
         } else {
-          counter++;
-          setTime((prevTime) => prevTime + 1);
+          counter--;
+          setTime((prevTime) => prevTime - 1);
         }
       }, 1000);
       return () => clearInterval(interval);

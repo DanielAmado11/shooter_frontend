@@ -34,4 +34,4 @@ export function Stadium(props) {
   );
 }
 
-useGLTF.preload("./models/stadium/stadium.gltf");
+useGLTF.preload("../models/stadium/stadium.gltf");

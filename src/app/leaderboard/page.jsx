@@ -1,27 +1,36 @@
 "use client";
+import { getScore, getScores } from "@/services/score";
 import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 
 const LeaderBoard = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const { isPending, data, error } = useQuery("users", getScores);
+  // const { data: self, error: error2 } = useQuery("users", getScore);
+
+  console.log(data);
+
   useEffect(() => {}, []);
 
   return (
     <div className="content leaderboard">
+      {isPending && <div>Loading...</div>}
+      {error && <div>Error: {error.message}</div>}
       <div className="containerItems">
         <div className="item">
           <div className="positionRanking">
             <div>Position</div>
-            <div>1</div>
+            <div>{data?.selfScore.position}</div>
           </div>
           <div className="scoreRanking">
             <div>SCORE</div>
-            <div>230</div>
+            <div>{data?.selfScore.score}</div>
           </div>
         </div>
         <div className="item">
-          <img src="/images/cup.png" alt="Cup Ranking"  className="cupImg"/>
+          <img src="/images/cup.png" alt="Cup Ranking" className="cupImg" />
         </div>
       </div>
       <div className="containerRanking">
@@ -40,94 +49,27 @@ const LeaderBoard = () => {
             </div>
           </div>
           <div className="ranking">
-            <div className="itemPosition firstPosition">
-              <div className="positionRanking"><p>1</p></div>
-              <div className="nameRanking">
-                <img src="/images/characters/character-female-1.png" alt="First Position"/>
-                <p>Jean Doe</p>
-              </div>
-              <div className="scoreRanking"><p>230</p></div>
-            </div>
-            <div className="itemPosition">
-              <div className="positionRanking"><p>2</p></div>
-              <div className="nameRanking">
-                <img src="/images/characters/character-male-2.png" alt=""/>
-                <p>Jhon Doe</p>
-              </div>
-              <div className="scoreRanking"><p>228</p></div>
-            </div>
-            <div className="itemPosition">
-              <div className="positionRanking"><p>3</p></div>
-              <div className="nameRanking">
-                <img src="/images/characters/character-male-1.png" alt=""/>
-                <p>Jhon Doe</p>
-              </div>
-              <div className="scoreRanking"><p>224</p></div>
-            </div>
-            <div className="itemPosition">
-              <div className="positionRanking"><p>4</p></div>
-              <div className="nameRanking">
-                <img src="/images/characters/character-female-3.png" alt=""/>
-                <p>Jean Doe</p>
-              </div>
-              <div className="scoreRanking"><p>213</p></div>
-            </div>
-            <div className="itemPosition">
-              <div className="positionRanking"><p>5</p></div>
-              <div className="nameRanking">
-                <img src="/images/characters/character-female-3.png" alt=""/>
-                <p>Jean Doe</p>
-              </div>
-              <div className="scoreRanking"><p>213</p></div>
-            </div>
-            <div className="itemPosition">
-              <div className="positionRanking"><p>6</p></div>
-              <div className="nameRanking">
-                <img src="/images/characters/character-female-1.png" alt="First Position"/>
-                <p>Jean Doe</p>
-              </div>
-              <div className="scoreRanking"><p>230</p></div>
-            </div>
-            <div className="itemPosition">
-              <div className="positionRanking"><p>7</p></div>
-              <div className="nameRanking">
-                <img src="/images/characters/character-male-2.png" alt=""/>
-                <p>Jhon Doe</p>
-              </div>
-              <div className="scoreRanking"><p>228</p></div>
-            </div>
-            <div className="itemPosition">
-              <div className="positionRanking"><p>8</p></div>
-              <div className="nameRanking">
-                <img src="/images/characters/character-male-1.png" alt=""/>
-                <p>Jhon Doe</p>
-              </div>
-              <div className="scoreRanking"><p>224</p></div>
-            </div>
-            <div className="itemPosition">
-              <div className="positionRanking"><p>9</p></div>
-              <div className="nameRanking">
-                <img src="/images/characters/character-female-3.png" alt=""/>
-                <p>Jean Doe</p>
-              </div>
-              <div className="scoreRanking"><p>213</p></div>
-            </div>
-            <div className="itemPosition">
-              <div className="positionRanking"><p>10</p></div>
-              <div className="nameRanking">
-                <img src="/images/characters/character-female-3.png" alt=""/>
-                <p>Jean Doe</p>
-              </div>
-              <div className="scoreRanking"><p>213</p></div>
-            </div>
-            <div className="itemPosition">
-              <div className="positionRanking"><p>11</p></div>
-              <div className="nameRanking">
-                <img src="/images/characters/character-female-3.png" alt=""/>
-                <p>Jean Doe</p>
-              </div>
-              <div className="scoreRanking"><p>213</p></div>
-            </div>
+            {data &&
+              data.scores.map((register, i) => (
+                <div
+                  className={`itemPosition ${i === 0 && "firstPosition"}`}
+                  key={register.id}
+                >
+                  <div className="positionRanking">
+                    <p>{i + 1}</p>
+                  </div>
+                  <div className="nameRanking">
+                    <img
+                      src={`/images/characters/character-${register.User.avatar_id}.png`}
+                      alt="First Position"
+                    />
+                    <p>{register.User.name}</p>
+                  </div>
+                  <div className="scoreRanking">
+                    <p>{register.score}</p>
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
       </div>

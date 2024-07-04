@@ -12,6 +12,7 @@ const Loader = ({ onStart }) => {
       onStart();
     }, 2000);
   }
+
   return (
     <Html center>
       <div className={styles.container}>

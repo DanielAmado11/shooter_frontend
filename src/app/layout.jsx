@@ -22,24 +22,24 @@ export default function RootLayout({ children }) {
   //   pathname !== "/game" &&
   //   pathname !== "/leaderboard"
   // ) {
+  //   return (
+  //     <html lang="en">
+  //       <body className={inter.className}>
+  //         <QueryClientProvider client={queryClient}>
+  //           {children}
+  //         </QueryClientProvider>
+  //       </body>
+  //     </html>
+  //   );
   // }
+
   return (
     <html lang="en">
       <body className={inter.className}>
         <QueryClientProvider client={queryClient}>
-          {children}
+          <AuthProvider getAuth={getUser}>{children}</AuthProvider>
         </QueryClientProvider>
       </body>
     </html>
   );
-
-  // return (
-  //   <html lang="en">
-  //     <body className={inter.className}>
-  //       <QueryClientProvider client={queryClient}>
-  //         <AuthProvider getAuth={getUser}>{children}</AuthProvider>
-  //       </QueryClientProvider>
-  //     </body>
-  //   </html>
-  // );
 }

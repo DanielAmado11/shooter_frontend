@@ -1,12 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {
-    PUBLIC_API_URL: "https://xdmocaadfutbolgameapi.azurewebsites.net",
+    PUBLIC_API_URL: process.env.PUBLIC_API_URL,
   },
   reactStrictMode: true,
-  images: {
-    loader: "custom",
-  },
   // output: "export",
 };
 

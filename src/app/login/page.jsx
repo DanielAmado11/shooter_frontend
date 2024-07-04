@@ -6,9 +6,7 @@ import { createAccount } from "@/services/user";
 import { redirect, useRouter } from "next/navigation";
 
 const LoginPage = (props) => {
-  const [state, setState] = useState({
-    name: "",
-  });
+  const [state, setState] = useState({ name: "" });
   const router = useRouter();
   const handleChange = (e) => {
     setState({
@@ -20,7 +18,6 @@ const LoginPage = (props) => {
   const createUser = useMutation(createAccount, {
     onSuccess: (res) => {
       alert(`user created with code: ${res.code}`);
-      Cookies.set("authToken");
       router.push("/term_conditions");
       redirect("/term_conditions");
     },
@@ -31,33 +28,42 @@ const LoginPage = (props) => {
 
   const handleCreateUser = async (e) => {
     e.preventDefault();
-    router.push("/term_conditions");
-    redirect("/term_conditions");
-    // createUser.mutate(state);
+    const data = {
+      ...state,
+      avatar_id: props.searchParams.avatar_id,
+    };
+    createUser.mutate(data);
   };
 
   return (
     <div className="content">
       <div className="item enterName">
         <div className="characterImg">
-            <img src="/images/characters/full_character_female.png" alt="Full Character Female"/>
+          <img
+            src="/images/characters/full_character_female.png"
+            alt="Full Character Female"
+          />
         </div>
         <div className="contentName">
-            <p className="text">Enter your name to be added to the leaderboard!</p>
-            <form
-              action="create user"
-              onSubmit={handleCreateUser}
-              className={styles.form}
-            >
-              <input
-                type="text"
-                placeholder="Enter your name"
-                name="name"
-                value={state.name}
-                onChange={handleChange}
-              />
-            </form>
-            <button type="submit" onClick={handleCreateUser} className="btn">Continue</button>
+          <p className="text">
+            Enter your name to be added to the leaderboard!
+          </p>
+          <form
+            action="create user"
+            onSubmit={handleCreateUser}
+            className={styles.form}
+          >
+            <input
+              type="text"
+              placeholder="Enter your name"
+              name="name"
+              value={state.name}
+              onChange={handleChange}
+            />
+          </form>
+          <button type="submit" onClick={handleCreateUser} className="btn">
+            Continue
+          </button>
         </div>
       </div>
     </div>

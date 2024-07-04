@@ -3,9 +3,14 @@ import { Score } from "@/interfaces/score";
 
 const AxiosInstance = getClientAxiosInstance();
 
-const getScore = async () => {
+const getScores = async () => {
   const response = await AxiosInstance.get(`/score`);
-  return response;
+  return response.data;
+};
+
+const getScore = async () => {
+  const response = await AxiosInstance.get(`/score/self`);
+  return response.data;
 };
 
 const createScore = async (data: Score) => {
@@ -13,4 +18,4 @@ const createScore = async (data: Score) => {
   return response.data;
 };
 
-export { getScore, createScore };
+export { getScores, createScore, getScore };

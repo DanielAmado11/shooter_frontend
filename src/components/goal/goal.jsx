@@ -22,7 +22,6 @@ const planes = [
     [7.6, 2.8, 1],
     (e) => {
       // stop ball
-      e.target.velocity.set(0, 0, 0);
     },
   ], // Fondo
   [

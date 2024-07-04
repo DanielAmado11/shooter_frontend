@@ -9,7 +9,7 @@ const Header = ({ goals, start, onStop }) => {
         <GoalsCounter goals={goals} />
       </div>
       <div className={styles.timerContainer}>
-        <Timer start={start} onStop={onStop} />
+        <Timer start={start} onStop={onStop} goals={goals} />
       </div>
     </div>
   );

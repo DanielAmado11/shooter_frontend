@@ -32,13 +32,7 @@ import { useRouter } from "next/navigation";
 import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader";
 import { SkyBox } from "@/components/skybox/skybox";
 
-const goalKeeperActions = [
-  "left_down",
-  "left_up",
-  "center",
-  "right_down",
-  "right_up",
-];
+const goalKeeperActions = ["center"];
 
 const Game = (props) => {
   const [shootType, setShootType] = useState("penalty");
