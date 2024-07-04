@@ -8,7 +8,6 @@ const LeaderBoard = () => {
   const [loading, setLoading] = useState(true);
 
   const { isPending, data, error } = useQuery("users", getScores);
-  // const { data: self, error: error2 } = useQuery("users", getScore);
 
   console.log(data);
 
@@ -60,10 +59,10 @@ const LeaderBoard = () => {
                   </div>
                   <div className="nameRanking">
                     <img
-                      src={`/images/characters/character-${register.User.avatar_id}.png`}
+                      src={`/images/characters/character-${register.avatar_id}.png`}
                       alt="First Position"
                     />
-                    <p>{register.User.name}</p>
+                    <p>{register.name}</p>
                   </div>
                   <div className="scoreRanking">
                     <p>{register.score}</p>
