@@ -37,7 +37,7 @@ const Timer = ({ start, onStop, goals }) => {
           counter--;
           setTime((prevTime) => prevTime - 1);
         }
-      }, 4500);
+      }, 1000);
       return () => clearInterval(interval);
     }
   }, [start]);
