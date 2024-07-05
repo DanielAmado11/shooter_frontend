@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { getUser } from "@/services/user";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { usePathname, useRouter } from "next/navigation";
+import { Suspense } from "react";
 
 // import { AuthProvider } from "@/components/providers/auth-provider.jsx";
 
@@ -37,7 +38,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <QueryClientProvider client={queryClient}>
-          <AuthProvider getAuth={getUser}>{children}</AuthProvider>
+          <AuthProvider getAuth={getUser}>
+            <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+          </AuthProvider>
         </QueryClientProvider>
       </body>
     </html>

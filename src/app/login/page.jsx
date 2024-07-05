@@ -34,7 +34,6 @@ const LoginPage = (props) => {
       ...state,
       avatar_id: avatarId,
     };
-    console.log("user", data);
     createUser.mutate(data);
   };
 
