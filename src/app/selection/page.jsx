@@ -1,11 +1,30 @@
-"use client";
+"use client"
+import { useAuth } from "@/components/providers/auth-provider";
+import { changeAvatar } from "@/services/user";
 import { redirect, useRouter } from "next/navigation";
+import { useMutation } from "react-query";
+
 const Selection = () => {
   const router = useRouter();
+  const { status } = useAuth();
 
-  const redirectToUserName = (id) => {
-    router.push(`/login?avatar_id=${id}`);
-    redirect(`/login?avatar_id=${id}`);
+  const changeAvatar_ = useMutation(changeAvatar, {
+    onSuccess: (res) => {
+      router.push("/dashboard");
+      redirect("/dashboard");
+    },
+    onError: (error) => {
+      alert(`ERROR: ${error.response.data}`);
+    }
+  });
+
+  const handleSelect = (id) => {
+    if (status === "AUTHENTICATED") {
+      changeAvatar_.mutate(id);
+    } else {
+      router.push(`/login?avatar_id=${id}`);
+      redirect(`/login?avatar_id=${id}`);
+    }
   };
 
   const changeGender = () => {
@@ -40,16 +59,16 @@ const Selection = () => {
           </div>
           <div className="characters">
             <button
-              onClick={() => redirectToUserName(1)}
+              onClick={() => handleSelect(1)}
               value="1"
               className="character"
             >
               <img src="/images/characters/character-1.png" alt="" />
             </button>
-            <button onClick={() => redirectToUserName(2)} className="character">
+            <button onClick={() => handleSelect(2)} className="character">
               <img src="/images/characters/character-2.png" alt="" />
             </button>
-            <button onClick={() => redirectToUserName(3)} className="character">
+            <button onClick={() => handleSelect(3)} className="character">
               <img src="/images/characters/character-3.png" alt="" />
             </button>
           </div>
@@ -65,13 +84,13 @@ const Selection = () => {
             <img src="/images/icon-male.png" alt="Female" />
           </div>
           <div className="characters">
-            <button onClick={() => redirectToUserName(4)} className="character">
+            <button onClick={() => handleSelect(4)} className="character">
               <img src="/images/characters/character-4.png" alt="" />
             </button>
-            <button onClick={() => redirectToUserName(5)} className="character">
+            <button onClick={() => handleSelect(5)} className="character">
               <img src="/images/characters/character-5.png" alt="" />
             </button>
-            <button onClick={() => redirectToUserName(6)} className="character">
+            <button onClick={() => handleSelect(6)} className="character">
               <img src="/images/characters/character-6.png" alt="" />
             </button>
           </div>

@@ -36,7 +36,7 @@ const goalKeeperActions = ["center"];
 
 const Game = (props) => {
   const [shootType, setShootType] = useState("penalty");
-  const [kickerAction, setKickerAction] = useState("penalty");
+  const [kickerAction, setKickerAction] = useState("kick");
   const [keeperAction, setKeeperAction] = useState("right_down");
   const [direction, setDirection] = useState(null);
   const [force, setForce] = useState(1);
@@ -174,7 +174,7 @@ const Game = (props) => {
                 mass={1}
                 type="Static"
                 name="ground"
-                // onCollide={(e) => console.log("collided")}
+              // onCollide={(e) => console.log("collided")}
               >
                 <mesh>
                   <boxGeometry args={[120, 1, 120]} />

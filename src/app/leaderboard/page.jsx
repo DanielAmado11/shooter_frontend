@@ -1,17 +1,10 @@
 "use client";
-import { getScore, getScores } from "@/services/score";
-import { useEffect, useState } from "react";
+import { getScores } from "@/services/score";
 import { useQuery } from "react-query";
 
 const LeaderBoard = () => {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   const { isPending, data, error } = useQuery("users", getScores);
-
-  console.log(data);
-
-  useEffect(() => {}, []);
 
   return (
     <div className="content leaderboard">

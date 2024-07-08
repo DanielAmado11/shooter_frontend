@@ -5,7 +5,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 export const authContext = createContext({
   data: {},
   status: "UNAUTHENTICATED",
-  signOut: () => {},
+  signOut: () => { },
 });
 
 export const AuthProvider = ({ children, getAuth }) => {
@@ -17,7 +17,7 @@ export const AuthProvider = ({ children, getAuth }) => {
 
   const getInitialData = async () => {
     try {
-      const data = await getAuth();
+      const { data } = await getAuth();
       if (data) {
         setData(data);
         setStatus("AUTHENTICATED");
@@ -50,7 +50,6 @@ export const AuthProvider = ({ children, getAuth }) => {
       (pathname === "/" ||
         pathname === "/home" ||
         pathname === "/welcome" ||
-        pathname === "/selection" ||
         pathname === "/login") &&
       status === "AUTHENTICATED"
     ) {

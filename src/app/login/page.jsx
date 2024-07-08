@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import styles from "./page.module.css";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { createAccount } from "@/services/user";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
 

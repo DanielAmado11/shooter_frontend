@@ -8,7 +8,7 @@ const Welcome = () => {
         router.push("/selection");
         redirect("/selection");
     }
-    return(
+    return (
         <div className="content">
             <div className="item contentWelcome">
                 <p>Welcome to Miami MoCAAD Augmented Reality Penalty Shootout Game!</p>

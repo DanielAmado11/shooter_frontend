@@ -1,12 +1,11 @@
 .container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
-  /* position: absolute; */
-  top: 0;
-  left: 0;
+  position: absolute;
+  bottom: -32vh;
+  left: -50vw;
   background-color: #45457c; /* o el color de fondo que desees */
   z-index: 1000;
+}
+.container2 {
+  background-color: #45457c; /* o el color de fondo que desees */
+  /* z-index: 1000; */
 }

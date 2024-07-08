@@ -6,7 +6,7 @@ import { createScore } from "@/services/score";
 let goalsCounter = 0;
 
 const Timer = ({ start, onStop, goals }) => {
-  const [time, setTime] = useState(45);
+  const [time, setTime] = useState(3000);
   const { mutate: addScoreMutation, isLoading: isAddingScore } = useMutation(
     (data) => createScore(data)
   );
@@ -27,7 +27,7 @@ const Timer = ({ start, onStop, goals }) => {
 
   useEffect(() => {
     if (start) {
-      let counter = 45;
+      let counter = 3000;
       const interval = setInterval(() => {
         if (counter <= 0) {
           counter = 0;

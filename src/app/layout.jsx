@@ -6,6 +6,8 @@ import { getUser } from "@/services/user";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { usePathname, useRouter } from "next/navigation";
 import { Suspense } from "react";
+import Loader from "@/components/loader/LoaderPage";
+import AudioLoop from "@/components/audioLoop/AudioLoop";
 
 // import { AuthProvider } from "@/components/providers/auth-provider.jsx";
 
@@ -39,7 +41,10 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <QueryClientProvider client={queryClient}>
           <AuthProvider getAuth={getUser}>
-            <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+            <Suspense fallback={<Loader />}>
+              <AudioLoop src="/sounds/loop_1.ogg" />
+              {children}
+            </Suspense>
           </AuthProvider>
         </QueryClientProvider>
       </body>
