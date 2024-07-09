@@ -9,7 +9,7 @@ export const goal_keeper_positions = {
     },
     left_down: {
       position: [0, 0, 0],
-      collider_position: [-1.6, 0.3, 0],
+      collider_position: [-1.6, 0.4, 0],
       collider_rotation: [0, 0, Math.PI / 2],
       rotation: [Math.PI / 2, 0, 0],
       animation: "left down",

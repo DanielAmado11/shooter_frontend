@@ -7,6 +7,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useSphereCollaider } from "../Collaiders/collaiders";
 import { useCharacterAnimation } from "@/contexts/CharacterAnimation";
 import { trayectory_forces } from "@/utils/trayectory_forces";
+import { sounds } from "../sounds/sounds";
 
 export function Ball(props) {
   const { position, animationTime, direction, force, attemptShoot } = props;
@@ -43,7 +44,9 @@ export function Ball(props) {
   }, [position]);
 
   const shoot = () => {
+    console.log('timeeeeee', animationTime)
     const force_ = trayectory_forces[position][direction][force];
+    sounds.kick_1.play();
     sphereCollaiderAPI.applyForce(force_, [0, 0, 0]);
     attemptShoot(3, restartBall);
   };
@@ -53,7 +56,7 @@ export function Ball(props) {
       case 1:
         setTimeout(() => {
           shoot();
-        }, animationTime * 1000 - 700);
+        }, animationTime * 1000 - 500);
         break;
       default:
         break;

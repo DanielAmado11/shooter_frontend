@@ -38,9 +38,6 @@ export function Kicker_1(props) {
     const timeToKick = actions[action].getClip().duration;
     const animation = actions[action].setLoop(THREE.LoopOnce);
     stopMovement("idle");
-    setTimeout(() => {
-      sounds.kick_1.play();
-    }, timeToKick * 1000 - 500);
     animation.reset();
     animation.play();
     // animation.clampWhenFinished = true;

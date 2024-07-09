@@ -1,6 +1,6 @@
 .container {
   position: absolute;
-  bottom: -32vh;
+  bottom: -40vh;
   left: -50vw;
   background-color: #45457c; /* o el color de fondo que desees */
   z-index: 1000;

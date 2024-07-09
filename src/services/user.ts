@@ -18,4 +18,9 @@ const changeAvatar = async (id: number) => {
   return response.data;
 };
 
-export { getUser, createAccount, changeAvatar };
+const getAccount = async (code: string) => {
+  const response = await AxiosInstance.post("/login", { code });
+  return response.data;
+};
+
+export { getUser, createAccount, changeAvatar, getAccount };

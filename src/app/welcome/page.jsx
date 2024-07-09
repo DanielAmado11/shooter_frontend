@@ -1,13 +1,36 @@
 "use client";
+import { getAccount } from "@/services/user";
 import { redirect, useRouter } from "next/navigation";
+import { useState } from "react";
+import { useMutation } from "react-query";
 
 const Welcome = () => {
+    const [code, setCode] = useState("");
     const router = useRouter();
+    const { mutate: logUser } = useMutation(getAccount, {
+        onSuccess: (res) => {
+            alert(`Welcome back ${res.name}`);
+            router.push("/dashboard");
+            redirect("/dashboard");
+        },
+        onError: (error) => {
+            alert(`ERROR: ${error.response.data.error}`);
+        }
+    })
 
-    const redirectToSelection = () => {
-        router.push("/selection");
-        redirect("/selection");
+    const handleChange = (e) => {
+        setCode(e.target.value);
     }
+
+    const HandleSubmit = () => {
+        if (code === "") {
+            router.push("/selection");
+            redirect("/selection");
+        } else {
+            logUser(code);
+        }
+    };
+
     return (
         <div className="content">
             <div className="item contentWelcome">
@@ -16,7 +39,11 @@ const Welcome = () => {
                 <a href="https://murals.miamimocaad.org/">
                     <p>https://murals.miamimocaad.org/</p>
                 </a>
-                <button className="btn" onClick={redirectToSelection}>Continue</button>
+                <div>
+                    <p>Use your user ID if you already have one </p>
+                    <input type="text" placeholder="123ABC" name="code" value={code} onChange={handleChange} />
+                </div>
+                <button className="btn" onClick={HandleSubmit}>Continue</button>
             </div>
         </div>
     );
