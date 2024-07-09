@@ -24,7 +24,7 @@ export function Ball(props) {
       restitution: 0.9,
     },
     name: "ball",
-    onCollide: (e) => {},
+    onCollide: (e) => { },
   });
 
   const restartBall = () => {
@@ -53,7 +53,7 @@ export function Ball(props) {
       case 1:
         setTimeout(() => {
           shoot();
-        }, animationTime * 1000 - 500);
+        }, animationTime * 1000 - 700);
         break;
       default:
         break;

@@ -32,7 +32,6 @@ export function Arrow_1(props) {
   const mixerRef = useRef();
 
   const startRotation = () => {
-    console.log("start rotation");
     const animation = actions.rotation.setLoop(THREE.LoopRepeat);
     mixerRef.current = animation.getMixer();
     animation.play();

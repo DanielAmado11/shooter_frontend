@@ -10,21 +10,18 @@ import * as THREE from "three";
 import { kicker_positions } from "@/utils/kickerPositions";
 import { useCharacterAnimation } from "@/contexts/CharacterAnimation";
 import { useAuth } from "../providers/auth-provider";
+import { sounds } from "../sounds/sounds";
 
 export function Kicker_1(props) {
   const { position, action, onActiveAnimation } = props;
   const { data } = useAuth();
 
-  const urlModel =
-    process.env.ENV !== "localhost"
-      ? "../models/kicker/kick.gltf"
-      : "/models/kicker/kick.gltf";
   const { nodes, materials, animations } = useGLTF(
     `../models/kicker/kicker_${data.avatar_id}.gltf`
   );
   const group = useRef();
 
-  const { actions, names } = useAnimations(animations, group);
+  const { actions } = useAnimations(animations, group);
   const { animationIndex } = useCharacterAnimation();
   const stopMovement = (movement) => {
     const animation = actions[movement];
@@ -38,8 +35,12 @@ export function Kicker_1(props) {
   };
 
   const handleKick = () => {
+    const timeToKick = actions[action].getClip().duration;
     const animation = actions[action].setLoop(THREE.LoopOnce);
     stopMovement("idle");
+    setTimeout(() => {
+      sounds.kick_1.play();
+    }, timeToKick * 1000 - 500);
     animation.reset();
     animation.play();
     // animation.clampWhenFinished = true;

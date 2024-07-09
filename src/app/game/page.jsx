@@ -20,7 +20,6 @@ import { Ball } from "@/components/ball/ball";
 import { Debug, Physics } from "@react-three/cannon";
 import {
   BoxCollaider,
-  SphereCollaider,
 } from "@/components/Collaiders/collaiders";
 import { Stadium } from "@/components/stadium/Stadium";
 import { Goalkeeper_1 } from "@/components/goalkeepers/GoalKeeper_1";
@@ -31,8 +30,9 @@ import Loader from "@/components/loader/Loader";
 import { useRouter } from "next/navigation";
 import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader";
 import { SkyBox } from "@/components/skybox/skybox";
+import { sounds } from "@/components/sounds/sounds";
 
-const goalKeeperActions = ["center"];
+const goalKeeperActions = [];
 
 const Game = (props) => {
   const [shootType, setShootType] = useState("penalty");
@@ -53,11 +53,19 @@ const Game = (props) => {
 
   const handleStart = () => {
     setStart(true);
+    sounds.background_1.stop();
+    sounds.whistle_1.play();
+    sounds.stadium.play();
   };
 
   const handleStop = () => {
     setStart(false);
     setTimeout(() => {
+      sounds.whistle_2.play();
+    }, 1000);
+    setTimeout(() => {
+      sounds.stadium.stop();
+      sounds.background_2.play();
       router.push("leaderboard");
     }, 2000);
   };
@@ -79,6 +87,8 @@ const Game = (props) => {
       biasedActions.push("left_down", "left_up");
     } else if (unitDirection === "right") {
       biasedActions.push("right_down", "right_up");
+    } else if (unitDirection === "center") {
+      biasedActions.push("left_down", "left_up", "center", "right_down", "right_up");
     }
     const randomIndex = Math.floor(Math.random() * biasedActions.length);
     setKeeperAction(biasedActions[randomIndex]);

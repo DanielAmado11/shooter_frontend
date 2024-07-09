@@ -11,6 +11,8 @@ import {
   PlaneCollider,
 } from "../Collaiders/collaiders";
 import { goal_keeper_positions } from "@/utils/goalKeeperPositions";
+import { sounds } from "../sounds/sounds";
+import { useBox } from "@react-three/cannon";
 
 let goal = false;
 
@@ -39,6 +41,11 @@ const planes = [
     [-Math.PI / 2, 0, 0],
     [7.6, 2.3, 0.1],
   ], // Parte superior
+  [
+    [0, 0, -0.9],
+    [-Math.PI / 2, 0, 0],
+    [7.4, 2, 0.1],
+  ]
 ];
 
 const goal_area = [
@@ -49,18 +56,23 @@ const goal_area = [
 
 export function Goal(props) {
   const { shootType, keepPosition, setGoals } = props;
-  const urlModel =
-    process.env.ENV !== "localhost"
-      ? "../models/goal/goal.gltf"
-      : "/models/goal/goal.gltf";
-  const { nodes, materials } = useGLTF("../models/goal/goal.gltf");
-
   const handleGoal = (e) => {
     if (!goal) {
       goal = true;
+      sounds.goal.play();
+      sounds.goal_stadium.play();
       setGoals((prev) => prev + 1);
     }
   };
+  const [ref, api] = useBox(() => ({
+    args: [7.6, 2.8, 2.5],
+    position: [0, 1.5, -1.3],
+    isTrigger: true,
+    onCollide: (e) => {
+      handleGoal();
+    },
+  }));
+
 
   useEffect(() => {
     goal = false;
@@ -80,6 +92,10 @@ export function Goal(props) {
           mass={1}
           type="Static"
           material={{ restitution: 0.1, friction: 0.9 }}
+          name="keeper_goal_area"
+          onCollide={(e) => {
+            sounds.keep_1.play();
+          }}
         />
         <>
           {planes.map((plane, index) => (
@@ -94,13 +110,15 @@ export function Goal(props) {
             />
           ))}
         </>
-        <BoxCollaider
+        {/* <BoxCollaider
           args={goal_area[2]}
           position={goal_area[0]}
           rotation={goal_area[1]}
           name={"goal_area"}
           onCollide={handleGoal}
-        />
+        /> */}
+        <mesh ref={ref} >
+        </mesh>
         <CylinderCollaider
           scale={[0.1, 0.1, 7.32]}
           args={[0.1, 0.1, 7.32]}

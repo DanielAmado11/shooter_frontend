@@ -6,8 +6,6 @@ import styles from "./Loader.module.css";
 
 const Loader = (props) => {
 
-    console.log("Loader", props);
-
     return (
         <div className={styles.container2}>
             <div className="content home">

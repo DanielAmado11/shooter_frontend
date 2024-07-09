@@ -5,9 +5,9 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { getUser } from "@/services/user";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { usePathname, useRouter } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import Loader from "@/components/loader/LoaderPage";
-import AudioLoop from "@/components/audioLoop/AudioLoop";
+import { sounds } from "@/components/sounds/sounds";
 
 // import { AuthProvider } from "@/components/providers/auth-provider.jsx";
 
@@ -17,7 +17,9 @@ const queryClient = new QueryClient();
 
 export default function RootLayout({ children }) {
   const pathname = usePathname();
-
+  useEffect(() => {
+    sounds.background_1.play();
+  }, [])
   // if (
   //   pathname !== "/login" &&
   //   pathname !== "/term_conditions" &&
@@ -42,7 +44,6 @@ export default function RootLayout({ children }) {
         <QueryClientProvider client={queryClient}>
           <AuthProvider getAuth={getUser}>
             <Suspense fallback={<Loader />}>
-              <AudioLoop src="/sounds/loop_1.ogg" />
               {children}
             </Suspense>
           </AuthProvider>
