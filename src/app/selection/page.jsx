@@ -27,9 +27,13 @@ const Selection = () => {
     }
   };
 
+  const handleBack = () => {
+    router.back();
+  };
+
   return (
     <div>
-      <button className="back" id="toggle-button">
+      <button className="back" id="toggle-button" onClick={handleBack}>
         <img src="/images/back.png" alt="" />
       </button>
       <div className="content">
@@ -38,20 +42,11 @@ const Selection = () => {
             <p>Select your avatar</p>
           </div>
           <div className="characters">
-            <button
-              onClick={() => handleSelect(1)}
-              className="character"
-            >
-              <img
-                src="/images/characters/kicker_1.jpg"
-                alt="player women 1"
-              />
+            <button onClick={() => handleSelect(1)} className="character">
+              <img src="/images/characters/kicker_1.jpg" alt="player women 1" />
             </button>
             <button className="character" onClick={() => handleSelect(2)}>
-              <img
-                src="/images/characters/kicker_2.jpg"
-                alt="payer women 2"
-              />
+              <img src="/images/characters/kicker_2.jpg" alt="payer women 2" />
             </button>
             <button className="character" onClick={() => handleSelect(3)}>
               <img
@@ -62,22 +57,13 @@ const Selection = () => {
           </div>
           <div className="characters">
             <button className="character" onClick={() => handleSelect(4)}>
-              <img
-                src="/images/characters/kicker_4.jpg"
-                alt="player men 1"
-              />
+              <img src="/images/characters/kicker_4.jpg" alt="player men 1" />
             </button>
             <button className="character" onClick={() => handleSelect(5)}>
-              <img
-                src="/images/characters/kicker_5.jpg"
-                alt="player men 2"
-              />
+              <img src="/images/characters/kicker_5.jpg" alt="player men 2" />
             </button>
             <button className="character" onClick={() => handleSelect(6)}>
-              <img
-                src="/images/characters/kicker_6.jpg"
-                alt="player men 3"
-              />
+              <img src="/images/characters/kicker_6.jpg" alt="player men 3" />
             </button>
           </div>
           <button className="btn">Continue</button>

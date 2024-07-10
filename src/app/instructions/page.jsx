@@ -7,7 +7,7 @@ const Instructions = () => {
     router.push("/dashboard");
   };
   const handleBack = () => {
-    router.push("/welcome");
+    router.back();
   };
   return (
     <>

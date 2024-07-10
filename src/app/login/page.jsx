@@ -37,9 +37,13 @@ const LoginPage = (props) => {
     createUser.mutate(data);
   };
 
+  const handleBack = () => {
+    router.back();
+  };
+
   return (
     <>
-      <button className="back" id="toggle-button">
+      <button className="back" id="toggle-button" onClick={handleBack}>
         <img src="/images/back.png" alt="back" />
       </button>
       <div className="content">
