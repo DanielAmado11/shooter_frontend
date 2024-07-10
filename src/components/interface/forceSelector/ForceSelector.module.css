@@ -8,9 +8,9 @@
 }
 .barContainer {
   width: 60vw;
-  height: 0.7rem;
+  height: 0.5rem;
   position: relative;
-  border: 2px solid;
+  border: 1.5px solid;
   border-image: linear-gradient(to right, #08fcdc, #c064ec);
   border-image-slice: 1;
   background-color: transparent;

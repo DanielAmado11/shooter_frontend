@@ -3,7 +3,6 @@ import { getScores } from "@/services/score";
 import { useQuery } from "react-query";
 
 const LeaderBoard = () => {
-
   const { isPending, data, error } = useQuery("users", getScores);
 
   return (
@@ -52,7 +51,7 @@ const LeaderBoard = () => {
                   </div>
                   <div className="nameRanking">
                     <img
-                      src={`/images/characters/character-${register.avatar_id}.png`}
+                      src={`/images/characters/kicker_${register.avatar_id}_small.png`}
                       alt="First Position"
                     />
                     <p>{register.name}</p>

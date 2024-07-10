@@ -23,4 +23,9 @@ const getAccount = async (code: string) => {
   return response.data;
 };
 
-export { getUser, createAccount, changeAvatar, getAccount };
+const logout = async () => {
+  const response = await AxiosInstance.post("/logout");
+  return response.data;
+};
+
+export { getUser, createAccount, changeAvatar, getAccount, logout };

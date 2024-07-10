@@ -1,17 +1,22 @@
 "use client";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { getUser } from "@/services/user";
 import { AuthProvider } from "@/components/providers/auth-provider";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Suspense, useEffect } from "react";
 import Loader from "@/components/loader/LoaderPage";
 import { sounds } from "@/components/sounds/sounds";
 
 // import { AuthProvider } from "@/components/providers/auth-provider.jsx";
 
-const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  display: "swap",
+});
 
 const queryClient = new QueryClient();
 
@@ -19,7 +24,8 @@ export default function RootLayout({ children }) {
   const pathname = usePathname();
   useEffect(() => {
     sounds.background_1.play();
-  }, [])
+  }, []);
+
   // if (
   //   pathname !== "/login" &&
   //   pathname !== "/term_conditions" &&
@@ -40,12 +46,10 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={poppins.className}>
         <QueryClientProvider client={queryClient}>
           <AuthProvider getAuth={getUser}>
-            <Suspense fallback={<Loader />}>
-              {children}
-            </Suspense>
+            <Suspense fallback={<Loader />}>{children}</Suspense>
           </AuthProvider>
         </QueryClientProvider>
       </body>
