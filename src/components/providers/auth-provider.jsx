@@ -1,11 +1,12 @@
 "use client";
+import { logout } from "@/services/user";
 import { usePathname, useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
 export const authContext = createContext({
   data: {},
   status: "UNAUTHENTICATED",
-  signOut: () => { },
+  signOut: () => {},
 });
 
 export const AuthProvider = ({ children, getAuth }) => {
@@ -28,17 +29,21 @@ export const AuthProvider = ({ children, getAuth }) => {
     }
   };
 
-  const signOut = () => {
-    setData({});
-    setStatus("UNAUTHENTICATED");
-    router.push("/welcome");
+  const signOut = async () => {
+    try {
+      await logout();
+      setData({});
+      setStatus("UNAUTHENTICATED");
+      router.push("/welcome");
+    } catch (error) {
+      alert("Error signing out");
+    }
   };
 
   useEffect(() => {
     getInitialData();
     if (
       (pathname === "/" ||
-        pathname === "/term_conditions" ||
         pathname === "/dashboard" ||
         pathname === "/game" ||
         pathname === "/leaderboard") &&

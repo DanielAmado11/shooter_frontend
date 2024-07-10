@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useAuth } from "@/components/providers/auth-provider";
 import { changeAvatar } from "@/services/user";
 import { redirect, useRouter } from "next/navigation";
@@ -15,7 +15,7 @@ const Selection = () => {
     },
     onError: (error) => {
       alert(`ERROR: ${error.response.data}`);
-    }
+    },
   });
 
   const handleSelect = (id) => {
@@ -27,73 +27,60 @@ const Selection = () => {
     }
   };
 
-  const changeGender = () => {
-    const female = document.getElementById("female");
-    const male = document.getElementById("male");
-    const toggleImage = document.getElementById("toggle-image");
-
-    female.classList.toggle("hidden");
-    male.classList.toggle("hidden");
-
-    if (female.classList.contains("hidden")) {
-      toggleImage.src = "/images/icon-female.png";
-      toggleImage.alt = "Male";
-    } else {
-      toggleImage.src = "/images/icon-male.png";
-      toggleImage.alt = "Female";
-    }
-  };
-
   return (
     <div>
-      <button className="gender" id="toggle-button" onClick={changeGender}>
-        <img id="toggle-image" src="/images/icon-male.png" alt="Male" />
+      <button className="back" id="toggle-button">
+        <img src="/images/back.png" alt="" />
       </button>
-      <div className="content female " id="female">
+      <div className="content">
         <div className="item selector">
           <div className="text-selector">
-            <p>To start select an avatar</p>
-          </div>
-          <div className="icon-gender">
-            <img src="/images/icon-female.png" alt="Female" />
+            <p>Select your avatar</p>
           </div>
           <div className="characters">
             <button
               onClick={() => handleSelect(1)}
-              value="1"
               className="character"
             >
-              <img src="/images/characters/character-1.png" alt="" />
+              <img
+                src="/images/characters/kicker_1.jpg"
+                alt="player women 1"
+              />
             </button>
-            <button onClick={() => handleSelect(2)} className="character">
-              <img src="/images/characters/character-2.png" alt="" />
+            <button className="character" onClick={() => handleSelect(2)}>
+              <img
+                src="/images/characters/kicker_2.jpg"
+                alt="payer women 2"
+              />
             </button>
-            <button onClick={() => handleSelect(3)} className="character">
-              <img src="/images/characters/character-3.png" alt="" />
+            <button className="character" onClick={() => handleSelect(3)}>
+              <img
+                src="/images/characters/kicker_3.jpg"
+                alt="player woment 3"
+              />
             </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="content male hidden" id="male">
-        <div className="item selector">
-          <div className="text-selector">
-            <p>To start select an avatar</p>
-          </div>
-          <div className="icon-gender">
-            <img src="/images/icon-male.png" alt="Female" />
           </div>
           <div className="characters">
-            <button onClick={() => handleSelect(4)} className="character">
-              <img src="/images/characters/character-4.png" alt="" />
+            <button className="character" onClick={() => handleSelect(4)}>
+              <img
+                src="/images/characters/kicker_4.jpg"
+                alt="player men 1"
+              />
             </button>
-            <button onClick={() => handleSelect(5)} className="character">
-              <img src="/images/characters/character-5.png" alt="" />
+            <button className="character" onClick={() => handleSelect(5)}>
+              <img
+                src="/images/characters/kicker_5.jpg"
+                alt="player men 2"
+              />
             </button>
-            <button onClick={() => handleSelect(6)} className="character">
-              <img src="/images/characters/character-6.png" alt="" />
+            <button className="character" onClick={() => handleSelect(6)}>
+              <img
+                src="/images/characters/kicker_6.jpg"
+                alt="player men 3"
+              />
             </button>
           </div>
+          <button className="btn">Continue</button>
         </div>
       </div>
     </div>

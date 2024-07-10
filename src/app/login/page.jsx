@@ -19,7 +19,6 @@ const LoginPage = (props) => {
 
   const createUser = useMutation(createAccount, {
     onSuccess: (res) => {
-      console.log(res)
       alert(`user created with code: ${res.code}`);
       router.push("/term_conditions");
       redirect("/term_conditions");
@@ -39,23 +38,22 @@ const LoginPage = (props) => {
   };
 
   return (
-    <div className="content">
-      <div className="item enterName">
-        <div className="characterImg">
-          <img
-            src="/images/characters/full_character_female.png"
-            alt="Full Character Female"
-          />
-        </div>
-        <div className="contentName">
-          <p className="text">
-            Enter your name to be added to the leaderboard!
-          </p>
-          <form
-            action="create user"
-            onSubmit={handleCreateUser}
-            className={styles.form}
-          >
+    <>
+      <button className="back" id="toggle-button">
+        <img src="/images/back.png" alt="back" />
+      </button>
+      <div className="content">
+        <div className="item enterName">
+          <div className="characterImg">
+            <img
+              src={`/images/characters/kicker_${avatarId}_body.jpg`}
+              alt="Full body Character"
+            />
+          </div>
+          <div className="contentName">
+            <p className="text">
+              Enter your name to be added to the leaderboard!
+            </p>
             <input
               type="text"
               placeholder="Enter your name"
@@ -63,13 +61,13 @@ const LoginPage = (props) => {
               value={state.name}
               onChange={handleChange}
             />
-          </form>
-          <button type="submit" onClick={handleCreateUser} className="btn">
-            Continue
-          </button>
+            <button className="btn" onClick={handleCreateUser}>
+              Continue
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
