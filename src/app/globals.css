@@ -609,7 +609,7 @@ img {
 .content .containerRanking .ranking .itemPosition .nameRanking {
   width: 60%;
   align-items: center;
-  justify-content: space-around;
+  justify-content: left;
   color: var(--white);
 }
 
