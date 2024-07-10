@@ -61,8 +61,8 @@ const TermConditions = () => {
       <div className="content terms_conditions">
         <div className="text" id="contentTerms">
           <p>
-            By clicking "Consent" you consent to have your name displayed on the
-            game's leaderboard. This allows other players to see your
+            By clicking `Consent` you consent to have your name displayed on the
+            game`s leaderboard. This allows other players to see your
             achievements and rank within the game. Your participation enhances
             the competitive spirit and community engagement, showcasing your
             skills and dedication to the game. If you have any concerns about
