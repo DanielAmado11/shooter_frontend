@@ -31,6 +31,16 @@ const Selection = () => {
     router.back();
   };
 
+  const handleContinue = (e) => {
+    e.preventDefault();
+    if (status === "AUTHENTICATED") {
+      router.push("/dashboard");
+      redirect("/dashboard");
+    } else {
+      alert("Please select an avatar");
+    }
+  };
+
   return (
     <div>
       <button className="back" id="toggle-button" onClick={handleBack}>
@@ -43,30 +53,32 @@ const Selection = () => {
           </div>
           <div className="characters">
             <button onClick={() => handleSelect(1)} className="character">
-              <img src="/images/characters/kicker_1.jpg" alt="player women 1" />
+              <img src="/images/characters/kicker_1.png" alt="player women 1" />
             </button>
             <button className="character" onClick={() => handleSelect(2)}>
-              <img src="/images/characters/kicker_2.jpg" alt="payer women 2" />
+              <img src="/images/characters/kicker_2.png" alt="payer women 2" />
             </button>
             <button className="character" onClick={() => handleSelect(3)}>
               <img
-                src="/images/characters/kicker_3.jpg"
+                src="/images/characters/kicker_3.png"
                 alt="player woment 3"
               />
             </button>
           </div>
           <div className="characters">
             <button className="character" onClick={() => handleSelect(4)}>
-              <img src="/images/characters/kicker_4.jpg" alt="player men 1" />
+              <img src="/images/characters/kicker_4.png" alt="player men 1" />
             </button>
             <button className="character" onClick={() => handleSelect(5)}>
-              <img src="/images/characters/kicker_5.jpg" alt="player men 2" />
+              <img src="/images/characters/kicker_5.png" alt="player men 2" />
             </button>
             <button className="character" onClick={() => handleSelect(6)}>
-              <img src="/images/characters/kicker_6.jpg" alt="player men 3" />
+              <img src="/images/characters/kicker_6.png" alt="player men 3" />
             </button>
           </div>
-          <button className="btn">Continue</button>
+          <button className="btn" onClick={handleContinue}>
+            Continue
+          </button>
         </div>
       </div>
     </div>

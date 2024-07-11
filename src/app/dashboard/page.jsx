@@ -18,7 +18,7 @@ const Dashboard = () => {
       </button>
 
       <div className={`${styles.container}`}>
-        <div className={styles.item}>Jane Doe</div>
+        <div className={styles.item}>{data.name}</div>
         <div className={styles.item}>
           <span>User Id: </span> {data.code}
         </div>
