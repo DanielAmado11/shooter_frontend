@@ -52,9 +52,28 @@ const TermConditions = () => {
   };
 
   const handleAccept = () => {
+    const isMobileDevice = () => {
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      const mobileDevices = [
+        "Android",
+        "webOS",
+        "iPhone",
+        "iPad",
+        "iPod",
+        "BlackBerry",
+        "IEMobile",
+        "Opera Mini",
+      ];
+
+      return mobileDevices.some((device) => userAgent.includes(device));
+    };
     Cookies.set("user_code", userCode);
-    router.push("/dashboard");
-    redirect("/dashboard");
+    if (isMobileDevice()) {
+      window.location.reload();
+    } else {
+      router.push("/dashboard");
+      redirect("/dashboard");
+    }
   };
 
   const handleBack = () => {

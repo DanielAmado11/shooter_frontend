@@ -10,8 +10,8 @@ const Welcome = () => {
   const { mutate: logUser } = useMutation(getAccount, {
     onSuccess: (res) => {
       alert(`Welcome back ${res.name}`);
-      router.push("/term_conditions");
-      redirect("/term_conditions");
+      router.push(`/term_conditions?user_code=${res.code}`);
+      redirect(`/term_conditions?user_code=${res.code}`);
     },
     onError: (error) => {
       alert(`ERROR: ${error.response.data.error}`);

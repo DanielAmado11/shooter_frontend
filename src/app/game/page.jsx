@@ -127,7 +127,7 @@ const Game = (props) => {
       {/* <Loader onStart={handleStart} /> */}
       <CharacterAnimationProvider>
         <Header goals={goals} start={start} onStop={handleStop} />
-        <Canvas shadows id="canvas">
+        <Canvas shadows id="canvas" className={styles.canvas}>
           <PerspectiveCamera
             ref={cameraRef}
             makeDefault
