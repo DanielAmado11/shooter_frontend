@@ -56,6 +56,10 @@ export function Kicker_1(props) {
       case 1:
         handleKick();
         break;
+      case 2:
+        stopMovement("idle");
+        startMovement("happy");
+        break;
       default:
         break;
     }
@@ -67,14 +71,62 @@ export function Kicker_1(props) {
         <group name="boy_white" rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
           <primitive object={nodes.mixamorigHips} />
           <group name="black_man1">
-            <skinnedMesh frustumCulled={false} name="Mesh" geometry={nodes.Mesh.geometry} material={materials.shorts} skeleton={nodes.Mesh.skeleton} />
-            <skinnedMesh frustumCulled={false} name="Mesh_1" geometry={nodes.Mesh_1.geometry} material={materials.eyes} skeleton={nodes.Mesh_1.skeleton} />
-            <skinnedMesh frustumCulled={false} name="Mesh_2" geometry={nodes.Mesh_2.geometry} material={materials.hair} skeleton={nodes.Mesh_2.skeleton} />
-            <skinnedMesh frustumCulled={false} name="Mesh_3" geometry={nodes.Mesh_3.geometry} material={materials.shoes} skeleton={nodes.Mesh_3.skeleton} />
-            <skinnedMesh frustumCulled={false} name="Mesh_4" geometry={nodes.Mesh_4.geometry} material={materials.body} skeleton={nodes.Mesh_4.skeleton} />
-            <skinnedMesh frustumCulled={false} name="Mesh_5" geometry={nodes.Mesh_5.geometry} material={materials.head} skeleton={nodes.Mesh_5.skeleton} />
-            <skinnedMesh frustumCulled={false} name="Mesh_6" geometry={nodes.Mesh_6.geometry} material={materials.shirt} skeleton={nodes.Mesh_6.skeleton} />
-            <skinnedMesh frustumCulled={false} name="Mesh_7" geometry={nodes.Mesh_7.geometry} material={materials.socks} skeleton={nodes.Mesh_7.skeleton} />
+            <skinnedMesh
+              frustumCulled={false}
+              name="Mesh"
+              geometry={nodes.Mesh.geometry}
+              material={materials.shorts}
+              skeleton={nodes.Mesh.skeleton}
+            />
+            <skinnedMesh
+              frustumCulled={false}
+              name="Mesh_1"
+              geometry={nodes.Mesh_1.geometry}
+              material={materials.eyes}
+              skeleton={nodes.Mesh_1.skeleton}
+            />
+            <skinnedMesh
+              frustumCulled={false}
+              name="Mesh_2"
+              geometry={nodes.Mesh_2.geometry}
+              material={materials.hair}
+              skeleton={nodes.Mesh_2.skeleton}
+            />
+            <skinnedMesh
+              frustumCulled={false}
+              name="Mesh_3"
+              geometry={nodes.Mesh_3.geometry}
+              material={materials.shoes}
+              skeleton={nodes.Mesh_3.skeleton}
+            />
+            <skinnedMesh
+              frustumCulled={false}
+              name="Mesh_4"
+              geometry={nodes.Mesh_4.geometry}
+              material={materials.body}
+              skeleton={nodes.Mesh_4.skeleton}
+            />
+            <skinnedMesh
+              frustumCulled={false}
+              name="Mesh_5"
+              geometry={nodes.Mesh_5.geometry}
+              material={materials.head}
+              skeleton={nodes.Mesh_5.skeleton}
+            />
+            <skinnedMesh
+              frustumCulled={false}
+              name="Mesh_6"
+              geometry={nodes.Mesh_6.geometry}
+              material={materials.shirt}
+              skeleton={nodes.Mesh_6.skeleton}
+            />
+            <skinnedMesh
+              frustumCulled={false}
+              name="Mesh_7"
+              geometry={nodes.Mesh_7.geometry}
+              material={materials.socks}
+              skeleton={nodes.Mesh_7.skeleton}
+            />
           </group>
         </group>
       </group>

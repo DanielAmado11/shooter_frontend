@@ -1,10 +1,13 @@
 "use client";
 import { useAuth } from "@/components/providers/auth-provider";
-import { redirect, useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 const TermConditions = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const userCode = searchParams.get("user_code");
   const { signOut } = useAuth();
 
   useEffect(() => {
@@ -49,6 +52,7 @@ const TermConditions = () => {
   };
 
   const handleAccept = () => {
+    Cookies.set("user_code", userCode);
     router.push("/dashboard");
     redirect("/dashboard");
   };

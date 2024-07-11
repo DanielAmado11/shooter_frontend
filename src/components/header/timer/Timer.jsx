@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 import styles from "./Timer.module.css";
 import { useMutation } from "react-query";
 import { createScore } from "@/services/score";
+import { useCharacterAnimation } from "@/contexts/CharacterAnimation";
 
 let goalsCounter = 0;
 
+const timer = process.env.TIMER || 45;
+
 const Timer = ({ start, onStop, goals }) => {
-  const [time, setTime] = useState(45);
+  const [time, setTime] = useState(timer);
+  const { setAnimationIndex } = useCharacterAnimation();
   const { mutate: addScoreMutation, isLoading: isAddingScore } = useMutation(
     (data) => createScore(data)
   );
@@ -25,14 +29,19 @@ const Timer = ({ start, onStop, goals }) => {
     );
   };
 
+  const handleStop = () => {
+    onStop();
+    setAnimationIndex(2);
+    handleAddScore();
+  };
+
   useEffect(() => {
     if (start) {
-      let counter = 45;
+      let counter = timer;
       const interval = setInterval(() => {
         if (counter <= 0) {
           counter = 0;
-          onStop();
-          handleAddScore();
+          handleStop();
         } else {
           counter--;
           setTime((prevTime) => prevTime - 1);

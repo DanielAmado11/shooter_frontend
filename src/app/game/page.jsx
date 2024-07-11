@@ -18,9 +18,7 @@ import { Kicker_1 } from "@/components/kickers/Kicker_1";
 import { Goal } from "@/components/goal/goal";
 import { Ball } from "@/components/ball/ball";
 import { Debug, Physics } from "@react-three/cannon";
-import {
-  BoxCollaider,
-} from "@/components/Collaiders/collaiders";
+import { BoxCollaider } from "@/components/Collaiders/collaiders";
 import { Stadium } from "@/components/stadium/Stadium";
 import { Goalkeeper_1 } from "@/components/goalkeepers/GoalKeeper_1";
 import { kicker_positions } from "@/utils/kickerPositions";
@@ -88,7 +86,13 @@ const Game = (props) => {
     } else if (unitDirection === "right") {
       biasedActions.push("right_down", "right_up");
     } else if (unitDirection === "center") {
-      biasedActions.push("left_down", "left_up", "center", "right_down", "right_up");
+      biasedActions.push(
+        "left_down",
+        "left_up",
+        "center",
+        "right_down",
+        "right_up"
+      );
     }
     const randomIndex = Math.floor(Math.random() * biasedActions.length);
     setKeeperAction(biasedActions[randomIndex]);
@@ -184,7 +188,7 @@ const Game = (props) => {
                 mass={1}
                 type="Static"
                 name="ground"
-              // onCollide={(e) => console.log("collided")}
+                // onCollide={(e) => console.log("collided")}
               >
                 <mesh>
                   <boxGeometry args={[120, 1, 120]} />

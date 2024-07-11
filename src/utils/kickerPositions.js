@@ -12,6 +12,12 @@ export const kicker_positions = {
       animation: "penalty",
       camera_position: [0, 2.5, 15],
     },
+    happy: {
+      position: [-1, 0, 12],
+      rotation: [0, Math.PI, 0],
+      animation: "happy",
+      camera_position: [0, 2.5, 15],
+    },
   },
   freekick_center: {
     idle: {
@@ -24,6 +30,12 @@ export const kicker_positions = {
       position: [-1, 0, 19],
       rotation: [0, Math.PI, 0],
       animation: "penalty",
+      camera_position: [0, 2.5, 22],
+    },
+    happy: {
+      position: [-1, 0, 19],
+      rotation: [0, Math.PI, 0],
+      animation: "happy",
       camera_position: [0, 2.5, 22],
     },
   },
@@ -40,6 +52,12 @@ export const kicker_positions = {
       animation: "penalty",
       camera_position: [-19, 2.5, 24],
     },
+    happy: {
+      position: [-16, 0, 18],
+      rotation: [0, Math.PI - Math.PI / 4, 0],
+      animation: "happy",
+      camera_position: [-19, 2.5, 24],
+    },
   },
   freekick_right: {
     idle: {
@@ -52,6 +70,12 @@ export const kicker_positions = {
       position: [18, 0, 18.5],
       rotation: [0, Math.PI - Math.PI / 4, 0],
       animation: "penalty",
+      camera_position: [24, 2.5, 19],
+    },
+    happy: {
+      position: [18, 0, 18.5],
+      rotation: [0, Math.PI - Math.PI / 4, 0],
+      animation: "happy",
       camera_position: [24, 2.5, 19],
     },
   },
