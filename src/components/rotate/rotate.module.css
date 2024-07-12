@@ -1,0 +1,9 @@
+.container {
+  position: absolute;
+  background: var(--blue);
+  z-index: 10;
+}
+
+.close {
+  display: none;
+}
