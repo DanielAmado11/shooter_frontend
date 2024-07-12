@@ -2,7 +2,7 @@ import { Howl } from "howler";
 
 export const sounds = {
   background_1: new Howl({
-    src: ["/sounds/loop_1.ogg"],
+    src: ["/sounds/loop_1.mp3"],
     volume: 0.5,
     loop: true,
     onplayerror: function () {
