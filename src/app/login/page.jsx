@@ -20,7 +20,6 @@ const LoginPage = (props) => {
   const createUser = useMutation(createAccount, {
     onSuccess: (res) => {
       router.push(`/term_conditions?user_code=${res.code}`);
-      redirect("");
     },
     onError: (error) => {
       alert(`ERROR: ${error.response.data.error}`);

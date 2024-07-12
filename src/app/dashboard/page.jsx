@@ -28,8 +28,7 @@ const Dashboard = () => {
             <button
               className={styles.button}
               onClick={() => {
-                router.push("/game");
-                redirect("/game");
+                router.push("/instructions");
               }}
             >
               Play
@@ -43,7 +42,6 @@ const Dashboard = () => {
               className={styles.button}
               onClick={() => {
                 router.push("/selection");
-                redirect("/selection");
               }}
             >
               Edit
@@ -57,7 +55,6 @@ const Dashboard = () => {
               className={styles.button}
               onClick={() => {
                 router.push("/leaderboard");
-                redirect("/leaderboard");
               }}
             >
               Leaderboard

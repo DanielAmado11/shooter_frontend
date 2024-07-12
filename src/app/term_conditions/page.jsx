@@ -69,12 +69,9 @@ const TermConditions = () => {
     };
     Cookies.set("user_code", userCode);
     if (isMobileDevice()) {
-      router.replace("/dashboard").then(() => {
-        router.reload();
-      });
+      router.push("/dashboard");
     } else {
       router.push("/dashboard");
-      redirect("/dashboard");
     }
   };
 

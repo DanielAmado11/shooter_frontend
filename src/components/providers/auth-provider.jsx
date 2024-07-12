@@ -1,5 +1,5 @@
 "use client";
-import { logout } from "@/services/user";
+import { getUser, logout } from "@/services/user";
 import { usePathname, useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -9,7 +9,7 @@ export const authContext = createContext({
   signOut: () => {},
 });
 
-export const AuthProvider = ({ children, getAuth }) => {
+export const AuthProvider = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -18,7 +18,7 @@ export const AuthProvider = ({ children, getAuth }) => {
 
   const getInitialData = async () => {
     try {
-      const { data } = await getAuth();
+      const { data } = await getUser();
       if (data) {
         setData(data);
         setStatus("AUTHENTICATED");

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 const Instructions = () => {
   const router = useRouter();
   const handleContinue = () => {
-    router.push("/dashboard");
+    router.push("/game");
   };
   const handleBack = () => {
     router.back();

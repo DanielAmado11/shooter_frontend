@@ -45,7 +45,7 @@ const planes = [
     [0, 0, -0.9],
     [-Math.PI / 2, 0, 0],
     [7.4, 2, 0.1],
-  ]
+  ],
 ];
 
 export function Goal(props) {
@@ -66,7 +66,6 @@ export function Goal(props) {
       handleGoal();
     },
   }));
-
 
   useEffect(() => {
     goal = false;
@@ -111,8 +110,7 @@ export function Goal(props) {
           name={"goal_area"}
           onCollide={handleGoal}
         /> */}
-        <mesh ref={ref} >
-        </mesh>
+        <mesh ref={ref}></mesh>
         <CylinderCollaider
           scale={[0.1, 0.1, 7.32]}
           args={[0.1, 0.1, 7.32]}
@@ -135,5 +133,3 @@ export function Goal(props) {
     </group>
   );
 }
-
-useGLTF.preload("./models/goal/goal.gltf");

@@ -3,8 +3,9 @@ import { User } from "@/interfaces/user";
 
 const AxiosInstance = getClientAxiosInstance();
 
-const getUser = async (id: number) => {
-  const response = await AxiosInstance.get(`/user`);
+const getUser = async () => {
+  const AxiosInstanceAuth = getClientAxiosInstance();
+  const response = await AxiosInstanceAuth.get(`/user`);
   return response;
 };
 
