@@ -12,21 +12,22 @@ const Dashboard = () => {
   };
 
   return (
-    <div className={styles.page}>
+    <>
       <button className="back" id="toggle-button" onClick={handleBack}>
         <img src="/images/back.png" alt="back" />
       </button>
-
-      <div className={`${styles.container}`}>
-        <div className={styles.item}>{data.name}</div>
-        <div className={styles.item}>
-          <span>User Id: </span> {data.code}
-        </div>
-        <div className={styles.item1}>
-          <div className={`${styles.selection1}`}>
-            <img src="/images/play_backgrund.jpg" alt="Play" />
+      <div className="content headerDashboard">
+        <p className="name">{data.name}</p>
+        <p className="userID">User ID: {data.code}</p>
+      </div>
+      <div className="content dashboard">
+        <div className="item">
+          <div className="selectItem">
+            <div className="contentImg">
+              <img src="/images/gamePlay.png" alt="Play" />
+            </div>
             <button
-              className={styles.button}
+              className="btn"
               onClick={() => {
                 router.push("/instructions");
               }}
@@ -35,11 +36,13 @@ const Dashboard = () => {
             </button>
           </div>
         </div>
-        <div className={styles.item}>
-          <div className={`${styles.selection}`}>
-            <img src="/images/select.png" alt="Edit" />
+        <div className="item">
+          <div className="selectItem">
+            <div className="contentImg">
+              <img src="/images/edit_avatar.png" alt="Edit" />
+            </div>
             <button
-              className={styles.button}
+              className="btn"
               onClick={() => {
                 router.push("/selection");
               }}
@@ -47,12 +50,12 @@ const Dashboard = () => {
               Edit
             </button>
           </div>
-        </div>
-        <div className={`${styles.item} ${styles.leader}`}>
-          <div className={`${styles.selection}`}>
-            <img src="/images/cup.png" alt="Leaderboard" />
+          <div className="selectItem">
+            <div className="contentImg">
+              <img src="/images/cup.png" alt="Leaderboard" />
+            </div>
             <button
-              className={styles.button}
+              className="btn"
               onClick={() => {
                 router.push("/leaderboard");
               }}
@@ -62,7 +65,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

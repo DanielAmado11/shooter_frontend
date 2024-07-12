@@ -1,5 +1,6 @@
 "use client";
 import { getUser, logout } from "@/services/user";
+import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -32,6 +33,7 @@ export const AuthProvider = ({ children }) => {
   const signOut = async () => {
     try {
       await logout();
+      Cookies.remove("user_code");
       setData({});
       setStatus("UNAUTHENTICATED");
       router.push("/welcome");

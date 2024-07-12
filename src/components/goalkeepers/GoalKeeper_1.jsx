@@ -10,7 +10,7 @@ import * as THREE from "three";
 import { goal_keeper_positions } from "@/utils/goalKeeperPositions.js";
 
 export function Goalkeeper_1(props) {
-  const { action, type, onActiveAnimation, animationTime } = props;
+  const { action, type, onActiveAnimation, animationTime, playing } = props;
   const group = useRef();
 
   const { nodes, materials, animations } = useGLTF(
@@ -33,16 +33,18 @@ export function Goalkeeper_1(props) {
   };
 
   const handleKeep = () => {
-    const animation = actions[
-      goal_keeper_positions[type][action].animation
-    ].setLoop(THREE.LoopOnce);
-    animation.reset();
-    animation.play();
-    animation.clampWhenFinished = true;
-    animation.getMixer().addEventListener("finished", () => {
-      stopMovement(action);
-      startMovement();
-    });
+    if (playing) {
+      const animation = actions[
+        goal_keeper_positions[type][action].animation
+      ].setLoop(THREE.LoopOnce);
+      animation.reset();
+      animation.play();
+      animation.clampWhenFinished = true;
+      animation.getMixer().addEventListener("finished", () => {
+        stopMovement(action);
+        startMovement();
+      });
+    }
   };
 
   useEffect(() => {

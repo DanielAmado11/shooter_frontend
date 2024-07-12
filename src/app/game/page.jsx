@@ -177,6 +177,7 @@ const Game = (props) => {
                 forcePercentage={forcePercentage}
               />
               <Goalkeeper_1
+                playing={start}
                 action={keeperAction}
                 type={shootType}
                 animationTime={currentKickerAnimation.time}
