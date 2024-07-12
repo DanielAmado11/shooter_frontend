@@ -13,7 +13,7 @@ import { useAuth } from "../providers/auth-provider";
 import { sounds } from "../sounds/sounds";
 
 export function Kicker_1(props) {
-  const { position, action, onActiveAnimation } = props;
+  const { position, action, onActiveAnimation, playing } = props;
   const { data } = useAuth();
 
   const { nodes, materials, animations } = useGLTF(
@@ -35,16 +35,18 @@ export function Kicker_1(props) {
   };
 
   const handleKick = () => {
-    const timeToKick = actions[action].getClip().duration;
-    const animation = actions[action].setLoop(THREE.LoopOnce);
-    stopMovement("idle");
-    animation.reset();
-    animation.play();
-    // animation.clampWhenFinished = true;
-    animation.getMixer().addEventListener("finished", () => {
-      stopMovement(action);
-      startMovement("idle");
-    });
+    if (playing) {
+      const timeToKick = actions[action].getClip().duration;
+      const animation = actions[action].setLoop(THREE.LoopOnce);
+      stopMovement("idle");
+      animation.reset();
+      animation.play();
+      // animation.clampWhenFinished = true;
+      animation.getMixer().addEventListener("finished", () => {
+        stopMovement(action);
+        startMovement("idle");
+      });
+    }
   };
 
   useEffect(() => {

@@ -153,11 +153,13 @@ const Game = (props) => {
             >
               {/* <Debug color="red"> */}
               <Kicker_1
+                playing={start}
                 position={shootType}
                 action={kickerAction}
                 onActiveAnimation={setCurrentKickerAnimation}
               />
               <Ball
+                playing={start}
                 position={shootType}
                 animationTime={currentKickerAnimation.time}
                 direction={direction}
