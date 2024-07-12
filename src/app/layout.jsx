@@ -66,7 +66,7 @@ export default function RootLayout({ children }) {
       <body className={poppins.className}>
         <QueryClientProvider client={queryClient}>
           <AuthProvider getAuth={getUser}>
-            <Rotate rotate={rotate} onClose={() => setRotate(false)} />
+            <Rotate open={rotate} onClose={() => setRotate(false)} />
             <Suspense fallback={<Loader />}>{children}</Suspense>
           </AuthProvider>
         </QueryClientProvider>
