@@ -718,7 +718,7 @@ img {
 .shareRanking .containerItems {
   width: 20%;
   justify-content: center;
-  margin-bottom: 10%;
+  margin-bottom: 0;
 }
 
 .shareRanking .containerItems .item .name {

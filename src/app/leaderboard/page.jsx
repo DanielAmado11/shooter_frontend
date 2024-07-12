@@ -10,7 +10,11 @@ const LeaderBoard = () => {
   const { data } = useAuth();
 
   const handleBack = () => {
-    router.back();
+    router.push("/dashboard");
+  };
+
+  const handlePlayAgain = () => {
+    router.push("/game");
   };
 
   return (
@@ -26,6 +30,16 @@ const LeaderBoard = () => {
               alt="Miami CAAD"
               className="maimiLogo"
             />
+          </div>
+
+          <div
+            style={{
+              marginTop: "50px",
+            }}
+          >
+            <button className="btn" onClick={handlePlayAgain}>
+              Play Again
+            </button>
           </div>
         </div>
         <div className="contentImgCharacter">
