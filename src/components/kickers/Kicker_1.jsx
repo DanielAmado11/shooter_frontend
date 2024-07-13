@@ -10,7 +10,6 @@ import * as THREE from "three";
 import { kicker_positions } from "@/utils/kickerPositions";
 import { useCharacterAnimation } from "@/contexts/CharacterAnimation";
 import { useAuth } from "../providers/auth-provider";
-import { sounds } from "../sounds/sounds";
 
 export function Kicker_1(props) {
   const { position, action, onActiveAnimation, playing } = props;
@@ -68,7 +67,12 @@ export function Kicker_1(props) {
   }, [animationIndex]);
 
   return (
-    <group ref={group} {...kicker_positions[position].idle} dispose={null}>
+    <group
+      ref={group}
+      position={kicker_positions[position].idle.position[data.avatar_id]}
+      rotation={kicker_positions[position].idle.rotation}
+      dispose={null}
+    >
       <group name="Scene">
         <group name="boy_white" rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
           <primitive object={nodes.mixamorigHips} />

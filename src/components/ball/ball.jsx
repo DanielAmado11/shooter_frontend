@@ -8,8 +8,19 @@ import { useSphereCollaider } from "../Collaiders/collaiders";
 import { useCharacterAnimation } from "@/contexts/CharacterAnimation";
 import { trayectory_forces } from "@/utils/trayectory_forces";
 import { sounds } from "../sounds/sounds";
+import { useAuth } from "../providers/auth-provider";
+
+const playersDelay = {
+  1: 500,
+  2: 500,
+  3: 500,
+  4: 700,
+  5: 500,
+  6: 500,
+};
 
 export function Ball(props) {
+  const { data: user } = useAuth();
   const { position, animationTime, direction, force, attemptShoot, playing } =
     props;
   const { animationIndex, setAnimationIndex } = useCharacterAnimation();
@@ -54,27 +65,17 @@ export function Ball(props) {
   };
 
   useEffect(() => {
+    const delay = playersDelay[user.avatar_id];
     switch (animationIndex) {
       case 1:
         setTimeout(() => {
           shoot();
-        }, animationTime * 1000 - 500);
+        }, animationTime * 1000 - delay);
         break;
       default:
         break;
     }
   }, [animationIndex]);
-
-  // document.getElementById("restart").addEventListener("click", () => {
-  //   // restart ball position
-  //   sphereCollaiderAPI.velocity.set(0, 0, 0);
-  //   sphereCollaiderAPI.angularVelocity.set(0, 0, 0);
-  //   sphereCollaiderAPI.position.set(
-  //     trayectory_forces[position].ball_position[0],
-  //     trayectory_forces[position].ball_position[1],
-  //     trayectory_forces[position].ball_position[2]
-  //   );
-  // });
 
   return (
     <group dispose={null}>

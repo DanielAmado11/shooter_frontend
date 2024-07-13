@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { useGLTF, useAnimations } from "@react-three/drei";
-import { kicker_positions } from "@/utils/kickerPositions";
 import { useCharacterAnimation } from "@/contexts/CharacterAnimation";
 import { trayectory_forces } from "@/utils/trayectory_forces";
 import { getIntervalName } from "@/utils/scrip";
