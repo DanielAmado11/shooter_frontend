@@ -9,6 +9,8 @@ import { useCharacterAnimation } from "@/contexts/CharacterAnimation";
 import { trayectory_forces } from "@/utils/trayectory_forces";
 import { sounds } from "../sounds/sounds";
 import { useAuth } from "../providers/auth-provider";
+import * as THREE from "three";
+import { useTexture } from "@react-three/drei";
 
 const playersDelay = {
   1: 500,
@@ -77,11 +79,14 @@ export function Ball(props) {
     }
   }, [animationIndex]);
 
+  // texture
+  const texture = useTexture("/ball_texture/ball_albedo.jpg");
+
   return (
     <group dispose={null}>
       <mesh ref={sphereCollaider}>
         <sphereGeometry args={[0.15, 10, 10]} />
-        <meshStandardMaterial color={"#B0B0B0"} />
+        <meshStandardMaterial map={texture} />
       </mesh>
     </group>
   );
