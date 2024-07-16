@@ -52,7 +52,7 @@ const LeaderBoard = () => {
             alt="Your Character"
           />
           <div className="text">
-            <p>Share your score with your friends!</p>
+            {/* <p>Share your score with your friends!</p> */}
           </div>
         </div>
         <div className="containerShare">
