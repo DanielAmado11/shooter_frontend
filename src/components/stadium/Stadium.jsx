@@ -5,29 +5,43 @@ Command: npx gltfjsx@6.2.18 stadium.gltf
 
 import React, { useRef } from "react";
 import { useGLTF } from "@react-three/drei";
+import * as THREE from "three";
 
 export function Stadium(props) {
   const { nodes, materials } = useGLTF("../models/stadium/stadium.gltf");
+  materials.M_Sponsor_Low2.emissiveIntensity = 0.5;
+  materials.M_Sponsor_Low2.envMapIntensity = 0.5;
+  materials.M_gradas.emissiveIntensity = 1.8;
+  materials.M_gradas.envMapIntensity = 1.8;
   return (
     <group {...props} dispose={null}>
       <group rotation={[Math.PI / 2, 0, Math.PI]} scale={0.01}>
         <mesh geometry={nodes.feeld.geometry} material={materials.M_Field4} />
         <mesh geometry={nodes.gradas.geometry} material={materials.M_gradas} />
+        <mesh geometry={nodes.puclico.geometry} material={materials.multidud} />
         <mesh
           geometry={nodes.sponsor.geometry}
           material={materials.M_Sponsor_Low2}
+          emissiveIntensity={0.5}
+          envMapIntensity={0.5}
         />
         <mesh
           geometry={nodes.terrain.geometry}
           material={materials.M_terrain}
+          castShadow
+          receiveShadow
         />
         <mesh
           geometry={nodes.Mesh002.geometry}
           material={materials.M_Fishnet}
+          castShadow
+          receiveShadow
         />
         <mesh
           geometry={nodes.Mesh002_1.geometry}
           material={materials.M_Metal}
+          castShadow
+          receiveShadow
         />
       </group>
     </group>

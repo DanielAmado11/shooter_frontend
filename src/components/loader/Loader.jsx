@@ -14,7 +14,7 @@ const Loader = ({ onStart }) => {
   }
 
   return (
-    <Html >
+    <Html>
       <div className={styles.container}>
         <div className="content home">
           <div className="item logoMiami">

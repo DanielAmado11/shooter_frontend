@@ -44,7 +44,7 @@ const Welcome = () => {
           <p>https://murals.miamimocaad.org/</p>
         </a>
         <div className="codeSession">
-          <p>Use your player ID if you have played before:</p>
+          <p>Enter your player ID if you have played before:</p>
           <input
             type="text"
             placeholder="Enter your ID"

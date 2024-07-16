@@ -80,13 +80,21 @@ export function Ball(props) {
   }, [animationIndex]);
 
   // texture
-  const texture = useTexture("/ball_texture/ball_albedo.jpg");
+  const [texture, normal, roughness] = useTexture([
+    "/ball_texture/ball_albedo.jpg",
+    "/ball_texture/ball_normal.jpg",
+    "/ball_texture/ball_roughness.jpg",
+  ]);
 
   return (
     <group dispose={null}>
       <mesh ref={sphereCollaider}>
         <sphereGeometry args={[0.15, 10, 10]} />
-        <meshStandardMaterial map={texture} />
+        <meshStandardMaterial
+          map={texture}
+          normalMap={normal}
+          roughnessMap={roughness}
+        />
       </mesh>
     </group>
   );
