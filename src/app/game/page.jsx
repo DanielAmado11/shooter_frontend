@@ -143,7 +143,7 @@ const Game = (props) => {
           />
           <ambientLight intensity={2} color={"0xffffff"} />
           <directionalLight color="white" position={[5, 5, 5]} />
-          <OrbitControls target={[0, 1.5, 0]} enableDamping={false} />
+          {/* <OrbitControls target={[0, 1.5, 0]} enableDamping={false} /> */}
           <Suspense fallback={<Loader onStart={handleStart} />}>
             {/* <Environment background={true} files={exrTexture} /> */}
             <SkyBox url="skybox/skybox.exr" />
