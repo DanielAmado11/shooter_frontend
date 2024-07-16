@@ -16,7 +16,7 @@ export function Kicker_1(props) {
   const { data } = useAuth();
 
   const { nodes, materials, animations } = useGLTF(
-    `../models/kicker/kicker_${data.avatar_id}.gltf`
+    `../models/kicker/kicker_${data.avatar_id ?? 1}.gltf`
   );
   const group = useRef();
 

@@ -6,7 +6,11 @@ import { useQuery } from "react-query";
 
 const LeaderBoard = () => {
   const router = useRouter();
-  const { isPending, data: users, error } = useQuery("users", getScores);
+  const {
+    isPending,
+    data: users,
+    error,
+  } = useQuery("users", () => getScores());
   const { data } = useAuth();
 
   const handleBack = () => {
@@ -55,7 +59,7 @@ const LeaderBoard = () => {
           <div className="containerRanking">
             <div className="headLeaderboard">
               <div className="logohead">
-                <img src="/images/logo_horizontal.png" alt="AR Shootout" />
+                {/* <img src="/images/logo_horizontal.png" alt="AR Shootout" /> */}
               </div>
               <div className="tituloRanking">LEADERBOARD</div>
             </div>
@@ -72,7 +76,7 @@ const LeaderBoard = () => {
                   <p>Score</p>
                 </div>
               </div>
-              <div className="ranking">
+              <div id="ranking" className="ranking">
                 {users?.scores.map((user, i) => (
                   <div
                     className={`itemPosition ${
@@ -81,7 +85,7 @@ const LeaderBoard = () => {
                     key={user.id}
                   >
                     <div className="positionRanking">
-                      <p>{i + 1}</p>
+                      <p>{user.position}</p>
                     </div>
                     <div className="nameRanking">
                       <img
@@ -98,7 +102,7 @@ const LeaderBoard = () => {
               </div>
             </div>
           </div>
-          <div className="shareIcons">
+          {/* <div className="shareIcons">
             <button className="iconFacebook">
               <img src="/images/icon-facebook.png" alt="Facebook" />
             </button>
@@ -111,7 +115,7 @@ const LeaderBoard = () => {
             <button className="iconPinterest">
               <img src="/images/icon-pinterest.png" alt="Pinterest" />
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

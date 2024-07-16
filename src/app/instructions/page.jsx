@@ -38,8 +38,8 @@ const Instructions = () => {
             click on the screen.
           </p>
           <p>
-            4. The longer you hold your finger finger on the screen, the more
-            power your shot will have.
+            4. The longer you hold your finger on the screen, the more power
+            your shot will have.
           </p>
         </div>
         <div className="contentBtn">

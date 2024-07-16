@@ -592,6 +592,7 @@ img {
 }
 
 .content .containerRanking .headLeaderboard .logohead {
+  min-height: 6vh;
   width: 35%;
   display: flex;
   justify-content: center;
@@ -646,7 +647,6 @@ img {
   flex-direction: column;
   flex-wrap: wrap;
   max-height: 70vh;
-  overflow-x: scroll;
 }
 
 .content .containerRanking .ranking .itemPosition {

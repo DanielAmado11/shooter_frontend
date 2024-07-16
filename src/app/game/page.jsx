@@ -29,10 +29,12 @@ import { useRouter } from "next/navigation";
 import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader";
 import { SkyBox } from "@/components/skybox/skybox";
 import { sounds } from "@/components/sounds/sounds";
+import { useAuth } from "@/components/providers/auth-provider";
 
 const goalKeeperActions = [];
 
 const Game = (props) => {
+  const { data: user } = useAuth();
   const [shootType, setShootType] = useState("penalty");
   const [kickerAction, setKickerAction] = useState("kick");
   const [keeperAction, setKeeperAction] = useState("right_down");
@@ -141,7 +143,7 @@ const Game = (props) => {
           />
           <ambientLight intensity={2} color={"0xffffff"} />
           <directionalLight color="white" position={[5, 5, 5]} />
-          {/* <OrbitControls target={[0, 1.5, 0]} enableDamping={false} /> */}
+          <OrbitControls target={[0, 1.5, 0]} enableDamping={false} />
           <Suspense fallback={<Loader onStart={handleStart} />}>
             {/* <Environment background={true} files={exrTexture} /> */}
             <SkyBox url="skybox/skybox.exr" />
@@ -157,6 +159,7 @@ const Game = (props) => {
                 position={shootType}
                 action={kickerAction}
                 onActiveAnimation={setCurrentKickerAnimation}
+                user={user}
               />
               <Ball
                 playing={start}

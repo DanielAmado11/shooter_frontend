@@ -44,10 +44,10 @@ const Welcome = () => {
           <p>https://murals.miamimocaad.org/</p>
         </a>
         <div className="codeSession">
-          <p>Use your user ID if you already have one</p>
+          <p>Use your player ID if you have played before:</p>
           <input
             type="text"
-            placeholder="Enter your code"
+            placeholder="Enter your ID"
             name="code"
             value={code}
             onChange={handleChange}
