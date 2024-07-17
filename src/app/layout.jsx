@@ -9,6 +9,7 @@ import { Suspense, useEffect, useState } from "react";
 import Loader from "@/components/loader/LoaderPage";
 import { sounds } from "@/components/sounds/sounds";
 import Rotate from "@/components/rotate/rotate";
+import Mute from "@/components/mute/Mute";
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -66,6 +67,7 @@ export default function RootLayout({ children }) {
       <body className={poppins.className}>
         <QueryClientProvider client={queryClient}>
           <AuthProvider getAuth={getUser}>
+            <Mute />
             <Rotate open={rotate} onClose={() => setRotate(false)} />
             <Suspense fallback={<Loader />}>{children}</Suspense>
           </AuthProvider>

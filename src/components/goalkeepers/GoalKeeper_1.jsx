@@ -44,6 +44,8 @@ export function Goalkeeper_1(props) {
         stopMovement(action);
         startMovement();
       });
+    } else {
+      startMovement();
     }
   };
 

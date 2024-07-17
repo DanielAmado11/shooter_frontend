@@ -1,4 +1,7 @@
 /**STYLE GLOBALES**/
+.disable-clicks {
+  pointer-events: none;
+}
 :root {
   --gradientBluePurple: linear-gradient(
     90deg,
@@ -824,6 +827,12 @@ img {
 
 .shareRanking .containerRanking .ranking .itemPosition .nameRanking p {
   font-size: 8pt;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Número de líneas a mostrar */
+  -webkit-box-orient: vertical;
+  text-align: start;
 }
 /**SHARE**/
 

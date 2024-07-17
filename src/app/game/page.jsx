@@ -48,15 +48,37 @@ const Game = (props) => {
   });
   const [arrowState, setArrowState] = useState({ isRotating: true });
   const [start, setStart] = useState(false);
+  const showLoaderRef = useRef(false);
 
   const router = useRouter();
 
   const handleStart = () => {
     setStart(true);
     sounds.background_1.stop();
+    sounds.background_2.stop();
     sounds.whistle_1.play();
     sounds.stadium.play();
   };
+
+  const handleUnMount = () => {
+    sounds.stadium.stop();
+    if (sounds.background_2.playing()) {
+      sounds.background_2.stop();
+    }
+    if (!sounds.background_1.playing()) {
+      sounds.background_1.play();
+    }
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      !showLoaderRef.current && handleStart();
+    }, 2000);
+    return () => {
+      console.log("unmounting");
+      handleUnMount();
+    };
+  }, []);
 
   const handleStop = () => {
     setStart(false);
@@ -67,7 +89,7 @@ const Game = (props) => {
       sounds.stadium.stop();
       sounds.background_2.play();
       router.push("leaderboard");
-    }, 2000);
+    }, 2500);
   };
 
   const cameraRef = useRef();
@@ -144,7 +166,14 @@ const Game = (props) => {
           <ambientLight intensity={2} color={"0xffffff"} />
           <directionalLight color="white" position={[5, 5, 5]} />
           {/* <OrbitControls target={[0, 1.5, 0]} enableDamping={false} /> */}
-          <Suspense fallback={<Loader onStart={handleStart} />}>
+          <Suspense
+            fallback={
+              <Loader
+                onStart={handleStart}
+                showLoader={() => (showLoaderRef.current = true)}
+              />
+            }
+          >
             {/* <Environment background={true} files={exrTexture} /> */}
             <SkyBox url="skybox/skybox.exr" />
             <Physics
@@ -178,6 +207,7 @@ const Game = (props) => {
                 setForcePercentage={setForcePercentage}
                 setForce={setForce}
                 forcePercentage={forcePercentage}
+                playing={start}
               />
               <Goalkeeper_1
                 playing={start}
@@ -220,6 +250,7 @@ const Game = (props) => {
           arrowState={arrowState}
           attempts={attempts}
           forcePercentage={forcePercentage}
+          playing={start}
         />
       </CharacterAnimationProvider>
     </div>

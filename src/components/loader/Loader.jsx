@@ -3,15 +3,21 @@ import logo1 from "../../../public/images/logo_miami_moCAAD.png";
 import logo2 from "../../../public/images/logo_ARshootout.png";
 import Image from "next/image";
 import styles from "./Loader.module.css";
+import { useEffect } from "react";
 
-const Loader = ({ onStart }) => {
-  const { progress } = useProgress();
+const Loader = ({ onStart, showLoader }) => {
+  const { progress, ...pros } = useProgress();
 
   if (progress === 100) {
     setTimeout(() => {
       onStart();
     }, 2000);
   }
+
+  useEffect(() => {
+    console.log("showing loader");
+    showLoader();
+  }, []);
 
   return (
     <Html>

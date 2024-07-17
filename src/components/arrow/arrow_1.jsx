@@ -16,13 +16,10 @@ export function Arrow_1(props) {
     setForcePercentage,
     forcePercentage,
     setForce,
+    playing,
   } = props;
   const group = useRef();
   const intervalRef = useRef();
-  const urlModel =
-    process.env.ENV !== "localhost"
-      ? "../models/arrow/arrow_1.gltf"
-      : "/models/arrow/arrow_1.gltf";
   const { nodes, materials, animations } = useGLTF(
     "../models/arrow/arrow_1.gltf"
   );
@@ -54,7 +51,7 @@ export function Arrow_1(props) {
   }, [animationIndex, shootType]);
 
   const incrementForce = () => {
-    if (intervalRef.current) return;
+    if (intervalRef.current || playing === false) return;
     intervalRef.current = setInterval(() => {
       let up = true;
       setForcePercentage((prev) => {
@@ -71,7 +68,8 @@ export function Arrow_1(props) {
 
   const handleDown = (e) => {
     e.preventDefault(); // Prevent default to avoid unexpected behavior on mobile
-    if (actions.rotation) {
+    console.log(playing);
+    if (actions.rotation && playing) {
       const elapsedTime = mixerRef.current.time % 2.5416667461395264;
       const intervalName = getIntervalName(elapsedTime);
       mixerRef.current.timeScale = 0;
@@ -117,7 +115,9 @@ export function Arrow_1(props) {
       screenCanvas.removeEventListener("touchstart", handleDown);
       screenCanvas.removeEventListener("touchend", handleUp);
     };
-  }, [actions.rotation]);
+  }, [actions.rotation, playing]);
+
+  useEffect(() => {}, [playing]);
 
   return (
     <group ref={group} dispose={null}>

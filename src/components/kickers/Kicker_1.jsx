@@ -59,7 +59,9 @@ export function Kicker_1(props) {
         break;
       case 2:
         stopMovement("idle");
-        startMovement("happy");
+        setTimeout(() => {
+          startMovement("happy");
+        }, [actions[action].getClip().duration]);
         break;
       default:
         break;

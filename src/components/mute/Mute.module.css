@@ -1,0 +1,11 @@
+.container {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 0.6rem;
+  z-index: 1;
+}
+.image {
+  /* transparence */
+  opacity: 0.5;
+}
