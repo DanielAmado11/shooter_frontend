@@ -88,12 +88,14 @@ export function Ball(props) {
 
   return (
     <group dispose={null}>
-      <mesh ref={sphereCollaider}>
+      <mesh ref={sphereCollaider} receiveShadow={true} castShadow={true}>
         <sphereGeometry args={[0.15, 10, 10]} />
         <meshStandardMaterial
           map={texture}
           normalMap={normal}
           roughnessMap={roughness}
+          roughness={0.5}
+          normalScale={new THREE.Vector2(5, 5)}
         />
       </mesh>
     </group>

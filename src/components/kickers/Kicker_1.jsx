@@ -35,16 +35,23 @@ export function Kicker_1(props) {
 
   const handleKick = () => {
     if (playing) {
-      const timeToKick = actions[action].getClip().duration;
+      const timeToKick = actions[action].getClip().duration - 0.05;
       const animation = actions[action].setLoop(THREE.LoopOnce);
       stopMovement("idle");
       animation.reset();
       animation.play();
       // animation.clampWhenFinished = true;
-      animation.getMixer().addEventListener("finished", () => {
+      const mixer = animation.getMixer();
+      mixer.addEventListener("finished", () => {
         stopMovement(action);
-        startMovement("idle");
+        // startMovement("idle");
       });
+      setTimeout(() => {
+        mixer.timeScale = 0;
+      }, timeToKick * 1000);
+      setTimeout(() => {
+        mixer.timeScale = 1;
+      }, timeToKick * 1000 + 1500);
     }
   };
 
@@ -74,17 +81,27 @@ export function Kicker_1(props) {
       position={kicker_positions[position].idle.position[data.avatar_id]}
       rotation={kicker_positions[position].idle.rotation}
       dispose={null}
+      castShadow
+      receiveShadow
     >
-      <group name="Scene">
-        <group name="boy_white" rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
+      <group name="Scene" castShadow>
+        <group
+          name="boy_white"
+          rotation={[Math.PI / 2, 0, 0]}
+          scale={0.01}
+          castShadow
+          receiveShadow
+        >
           <primitive object={nodes.mixamorigHips} />
-          <group name="black_man1">
+          <group name="black_man1" castShadow receiveShadow>
             <skinnedMesh
               frustumCulled={false}
               name="Mesh"
               geometry={nodes.Mesh.geometry}
               material={materials.shorts}
               skeleton={nodes.Mesh.skeleton}
+              castShadow
+              receiveShadow
             />
             <skinnedMesh
               frustumCulled={false}
@@ -92,6 +109,8 @@ export function Kicker_1(props) {
               geometry={nodes.Mesh_1.geometry}
               material={materials.eyes}
               skeleton={nodes.Mesh_1.skeleton}
+              castShadow
+              receiveShadow
             />
             <skinnedMesh
               frustumCulled={false}
@@ -99,6 +118,8 @@ export function Kicker_1(props) {
               geometry={nodes.Mesh_2.geometry}
               material={materials.hair}
               skeleton={nodes.Mesh_2.skeleton}
+              castShadow
+              receiveShadow
             />
             <skinnedMesh
               frustumCulled={false}
@@ -106,6 +127,8 @@ export function Kicker_1(props) {
               geometry={nodes.Mesh_3.geometry}
               material={materials.shoes}
               skeleton={nodes.Mesh_3.skeleton}
+              castShadow
+              receiveShadow
             />
             <skinnedMesh
               frustumCulled={false}
@@ -113,6 +136,8 @@ export function Kicker_1(props) {
               geometry={nodes.Mesh_4.geometry}
               material={materials.body}
               skeleton={nodes.Mesh_4.skeleton}
+              castShadow
+              receiveShadow
             />
             <skinnedMesh
               frustumCulled={false}
@@ -120,6 +145,8 @@ export function Kicker_1(props) {
               geometry={nodes.Mesh_5.geometry}
               material={materials.head}
               skeleton={nodes.Mesh_5.skeleton}
+              castShadow
+              receiveShadow
             />
             <skinnedMesh
               frustumCulled={false}
@@ -127,6 +154,8 @@ export function Kicker_1(props) {
               geometry={nodes.Mesh_6.geometry}
               material={materials.shirt}
               skeleton={nodes.Mesh_6.skeleton}
+              castShadow
+              receiveShadow
             />
             <skinnedMesh
               frustumCulled={false}
@@ -134,6 +163,8 @@ export function Kicker_1(props) {
               geometry={nodes.Mesh_7.geometry}
               material={materials.socks}
               skeleton={nodes.Mesh_7.skeleton}
+              castShadow
+              receiveShadow
             />
           </group>
         </group>

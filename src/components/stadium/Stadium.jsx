@@ -16,14 +16,29 @@ export function Stadium(props) {
   return (
     <group {...props} dispose={null}>
       <group rotation={[Math.PI / 2, 0, Math.PI]} scale={0.01}>
-        <mesh geometry={nodes.feeld.geometry} material={materials.M_Field4} />
-        <mesh geometry={nodes.gradas.geometry} material={materials.M_gradas} />
-        <mesh geometry={nodes.puclico.geometry} material={materials.multidud} />
+        <mesh
+          geometry={nodes.feeld.geometry}
+          material={materials.M_Field4}
+          castShadow
+          receiveShadow
+        />
+        <mesh
+          geometry={nodes.gradas.geometry}
+          material={materials.M_gradas}
+          castShadow
+          receiveShadow
+        />
+        <mesh
+          geometry={nodes.puclico.geometry}
+          material={materials.multidud}
+          castShadow
+          receiveShadow
+        />
         <mesh
           geometry={nodes.sponsor.geometry}
           material={materials.M_Sponsor_Low2}
-          emissiveIntensity={0.5}
-          envMapIntensity={0.5}
+          castShadow
+          receiveShadow
         />
         <mesh
           geometry={nodes.terrain.geometry}

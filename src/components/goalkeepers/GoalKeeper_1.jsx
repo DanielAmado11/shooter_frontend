@@ -69,7 +69,7 @@ export function Goalkeeper_1(props) {
   }, [animationIndex]);
 
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group ref={group} {...props} dispose={null} receiveShadow castShadow>
       <group name="Scene">
         <group
           name="idle"
@@ -83,42 +83,56 @@ export function Goalkeeper_1(props) {
             geometry={nodes.brown_2__Body.geometry}
             material={materials.body1}
             skeleton={nodes.brown_2__Body.skeleton}
+            castShadow
+            receiveShadow
           />
           <skinnedMesh
             name="brown_2_Eyes"
             geometry={nodes.brown_2_Eyes.geometry}
             material={materials.Wolf3D_Eye3}
             skeleton={nodes.brown_2_Eyes.skeleton}
+            castShadow
+            receiveShadow
           />
           <skinnedMesh
             name="brown_2_hair"
             geometry={nodes.brown_2_hair.geometry}
             material={materials.Wolf3D_Hair1}
             skeleton={nodes.brown_2_hair.skeleton}
+            castShadow
+            receiveShadow
           />
           <skinnedMesh
             name="brown_2_Head"
             geometry={nodes.brown_2_Head.geometry}
             material={materials.head1}
             skeleton={nodes.brown_2_Head.skeleton}
+            castShadow
+            receiveShadow
           />
           <skinnedMesh
             name="brown_2_pants"
             geometry={nodes.brown_2_pants.geometry}
             material={materials.pantaloneta5}
             skeleton={nodes.brown_2_pants.skeleton}
+            castShadow
+            receiveShadow
           />
           <skinnedMesh
             name="brown_2_shirt"
             geometry={nodes.brown_2_shirt.geometry}
             material={materials.shirt6}
             skeleton={nodes.brown_2_shirt.skeleton}
+            castShadow
+            receiveShadow
           />
           <skinnedMesh
             name="brown_2_shoes"
             geometry={nodes.brown_2_shoes.geometry}
             material={materials.shoes5}
             skeleton={nodes.brown_2_shoes.skeleton}
+            castShadow
+            receiveShadow
           />
         </group>
       </group>

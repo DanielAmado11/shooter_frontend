@@ -30,6 +30,7 @@ import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader";
 import { SkyBox } from "@/components/skybox/skybox";
 import { sounds } from "@/components/sounds/sounds";
 import { useAuth } from "@/components/providers/auth-provider";
+import * as THREE from "three";
 
 const goalKeeperActions = [];
 
@@ -152,10 +153,14 @@ const Game = (props) => {
       <CharacterAnimationProvider>
         <Header goals={goals} start={start} onStop={handleStop} />
         <Canvas
-          shadows
+          shadows={true}
           id="canvas"
           className={styles.canvas}
           style={{ width: "100vw", height: "100vh" }}
+          gl={{
+            toneMapping: THREE.ACESFilmicToneMapping,
+            toneMappingExposure: 1,
+          }}
         >
           <PerspectiveCamera
             ref={cameraRef}
@@ -164,7 +169,19 @@ const Game = (props) => {
             fov={50}
           />
           <ambientLight intensity={2} color={"0xffffff"} />
-          <directionalLight color="white" position={[5, 5, 5]} />
+          <directionalLight
+            color="white"
+            position={[20, 20, 20]}
+            intensity={1}
+            castShadow
+            shadow-mapSize-width={1024}
+            shadow-mapSize-height={1024}
+            shadow-camera-far={50}
+            shadow-camera-left={-30}
+            shadow-camera-right={30}
+            shadow-camera-top={30}
+            shadow-camera-bottom={-30}
+          />
           {/* <OrbitControls target={[0, 1.5, 0]} enableDamping={false} /> */}
           <Suspense
             fallback={
