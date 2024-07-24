@@ -15,6 +15,7 @@
     "@react-three/fiber": "^8.16.6",
     "axios": "^1.7.2",
     "howler": "^2.2.4",
+    "html-to-image": "^1.11.11",
     "js-cookie": "^3.0.5",
     "js-cookies": "^1.0.4",
     "next": "14.2.3",

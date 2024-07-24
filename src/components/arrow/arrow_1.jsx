@@ -68,7 +68,6 @@ export function Arrow_1(props) {
 
   const handleDown = (e) => {
     e.preventDefault(); // Prevent default to avoid unexpected behavior on mobile
-    console.log(playing);
     if (actions.rotation && playing) {
       const elapsedTime = mixerRef.current.time % 2.5416667461395264;
       const intervalName = getIntervalName(elapsedTime);
