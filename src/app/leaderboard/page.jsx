@@ -1,10 +1,17 @@
 "use client";
 import { useAuth } from "@/components/providers/auth-provider";
-import { getScores } from "@/services/score";
+import { getScores, saveScreenshot } from "@/services/score";
 import { toPng } from "html-to-image";
+import {
+  FacebookShareButton,
+  InstagramShareButton,
+  PinterestShareButton,
+} from "next-share";
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
-import { useQuery } from "react-query";
+import { useRef, useState } from "react";
+import { useMutation, useQuery } from "react-query";
+
+let social = "";
 
 const LeaderBoard = () => {
   const router = useRouter();
@@ -13,6 +20,36 @@ const LeaderBoard = () => {
     data: users,
     error,
   } = useQuery("users", () => getScores());
+
+  const shareWithNavigator = () => {
+    if (navigator.share) {
+      const url = `${process.env.PUBLIC_URL}/${encodeURIComponent(data.name)}`;
+      navigator
+        .share({
+          title: "AR Shootout",
+          text: "Check out my score in AR Shootout",
+          url: url,
+          // files: [new File([blob], "arshootout.png", { type: "image/png" })],
+        })
+        .then(() => console.log("Successful share"))
+        .catch((error) => console.log("Error sharing", error));
+    } else {
+      alert(
+        "Your browser does not support sharing files. We are working on it"
+      );
+    }
+  };
+
+  const saveScreenShot = useMutation(saveScreenshot, {
+    onSuccess: (result) => {
+      if (social === "instagram") {
+        shareWithNavigator();
+      }
+    },
+    onError: (error) => {
+      alert(`ERROR: ${error.response.data.error}`);
+    },
+  });
   const { data } = useAuth();
   const leaderBoardRef = useRef(null);
 
@@ -20,38 +57,21 @@ const LeaderBoard = () => {
     if (leaderBoardRef.current) {
       const dataUrl = await toPng(leaderBoardRef.current);
       const blob = await fetch(dataUrl).then((res) => res.blob());
-      // // descargar imagen
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "arshootout.png";
-      a.click();
-      URL.revokeObjectURL(url);
-
       return blob;
     } else {
       return null;
     }
   };
 
-  const share = () => {
-    if (navigator.share) {
-      generateImage().then((blob) => {
-        navigator
-          .share({
-            title: "AR Shootout",
-            text: "Check out my score in AR Shootout",
-            url: "https://arshootout.com",
-            files: [new File([blob], "arshootout.png", { type: "image/png" })],
-          })
-          .then(() => console.log("Successful share"))
-          .catch((error) => console.log("Error sharing", error));
-      });
-    } else {
-      alert(
-        "Your browser does not support sharing files. We are working on it"
-      );
-    }
+  const saveImage = (e) => {
+    console.log(`${process.env.PUBLIC_URL}/${encodeURIComponent(data.name)}`);
+    generateImage().then((blob) => {
+      if (blob) {
+        const formData = new FormData();
+        formData.append("image", blob);
+        saveScreenShot.mutate(formData);
+      }
+    });
   };
 
   const handleBack = () => {
@@ -63,11 +83,15 @@ const LeaderBoard = () => {
   };
 
   return (
-    <div style={{ background: "#45457c" }}>
+    <div>
       <button className="back" id="toggle-button" onClick={handleBack}>
         <img src="/images/back.png" alt="" />
       </button>
-      <div className="content shareRanking" ref={leaderBoardRef}>
+      <div
+        className="content shareRanking"
+        style={{ background: "#45457c" }}
+        ref={leaderBoardRef}
+      >
         <div className="containerItems">
           <div className="item">
             <img
@@ -143,17 +167,41 @@ const LeaderBoard = () => {
               </div>
             </div>
           </div>
-          <div className="shareIcons" onClick={share}>
-            <button className="iconFacebook">
+          <div className="shareIcons">
+            <FacebookShareButton
+              url={`${process.env.PUBLIC_URL}/${encodeURIComponent(data.name)}`}
+              quote="Miami MoCAAD"
+              hashtag={"#MoCAAD"}
+              onClick={saveImage}
+              blankTarget={false}
+            >
               <img src="/images/icon-facebook.png" alt="Facebook" />
-            </button>
-            <button className="iconInstagram">
+            </FacebookShareButton>
+            <button
+              className="iconInstagram"
+              onClick={() => {
+                social = "instagram";
+                saveImage();
+              }}
+            >
               <img src="/images/icon-instagram.png" alt="Instagram" />
             </button>
-            <button className="iconTiktok">
+            <button
+              className="iconTiktok"
+              onClick={() => {
+                social = "instagram";
+                saveImage();
+              }}
+            >
               <img src="/images/icon-tiktok.png" alt="Tik Tok" />
             </button>
-            <button className="iconPinterest">
+            <button
+              className="iconPinterest"
+              onClick={() => {
+                social = "instagram";
+                saveImage();
+              }}
+            >
               <img src="/images/icon-pinterest.png" alt="Pinterest" />
             </button>
           </div>

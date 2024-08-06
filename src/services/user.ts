@@ -1,10 +1,10 @@
 import { getClientAxiosInstance } from "@/config/clientAxiosInstance";
 import { User } from "@/interfaces/user";
 
-const AxiosInstance = getClientAxiosInstance();
+const AxiosInstance = getClientAxiosInstance({ withFiles: false });
 
 const getUser = async () => {
-  const AxiosInstanceAuth = getClientAxiosInstance();
+  const AxiosInstanceAuth = getClientAxiosInstance({ withFiles: false });
   const response = await AxiosInstanceAuth.get(`/user`);
   return response;
 };
@@ -29,4 +29,16 @@ const logout = async () => {
   return response.data;
 };
 
-export { getUser, createAccount, changeAvatar, getAccount, logout };
+const getUserData = async (username: string) => {
+  const response = await AxiosInstance.get(`/user/data/${username}`);
+  return response.data;
+};
+
+export {
+  getUser,
+  createAccount,
+  changeAvatar,
+  getAccount,
+  logout,
+  getUserData,
+};

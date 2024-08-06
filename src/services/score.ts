@@ -1,7 +1,7 @@
 import { getClientAxiosInstance } from "@/config/clientAxiosInstance";
 import { Score } from "@/interfaces/score";
 
-const AxiosInstance = getClientAxiosInstance();
+const AxiosInstance = getClientAxiosInstance({ withFiles: false });
 
 const getScores = async () => {
   const response = await AxiosInstance.get(`/score`);
@@ -18,4 +18,10 @@ const createScore = async (data: Score) => {
   return response.data;
 };
 
-export { getScores, createScore, getScore };
+const saveScreenshot = async (data: any) => {
+  const AxiosInstanceWithFiles = getClientAxiosInstance({ withFiles: true });
+  const response = await AxiosInstanceWithFiles.post("/score/image", data);
+  return response.data;
+};
+
+export { getScores, createScore, getScore, saveScreenshot };
