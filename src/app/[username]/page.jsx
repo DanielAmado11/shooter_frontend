@@ -1,26 +1,5 @@
 import { getUserData } from "@/services/user";
-
-export async function generateMetadata({ params }) {
-  const { username } = params;
-  const data = await getUserData(username);
-  return {
-    title: "AR Shootout",
-    description: "Check out my score in AR Shootout!",
-    openGraph: {
-      title: "AR Shootout",
-      description: "Check out my score in AR Shootout!",
-      url: `https://shooter-frontend-zeta.vercel.app/${username}`,
-      images: [
-        {
-          url: data?.image,
-          width: 800,
-          height: 600,
-          alt: "Shared Score",
-        },
-      ],
-    },
-  };
-}
+import Head from "next/head";
 
 const PreviewPage = async ({ params }) => {
   const { username } = params;
@@ -28,6 +7,21 @@ const PreviewPage = async ({ params }) => {
   const data = await getUserData(username);
   return (
     <>
+      <Head>
+        <meta property="og:title" content="AR Shootout" />
+        <meta
+          property="og:description"
+          content="Check out my score in AR Shootout!"
+        />
+        <meta
+          property="og:image"
+          content="https://yourwebsite.com/path-to-saved-image.png"
+        />
+        <meta
+          property="og:url"
+          content="https://yourwebsite.com/path-to-page"
+        />
+      </Head>
       <div className="content">
         <img src={data?.image} alt="screenShot" />
       </div>
