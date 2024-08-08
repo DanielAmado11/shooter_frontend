@@ -21,29 +21,46 @@ const LeaderBoard = () => {
     error,
   } = useQuery("users", () => getScores());
 
-  const shareWithNavigator = () => {
-    if (navigator.share) {
-      const url = `${process.env.PUBLIC_URL}/${encodeURIComponent(data.name)}`;
-      navigator
-        .share({
+  const shareWithNavigator = async (imageUrl) => {
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const file = new File([blob], "image.png", { type: blob.type }); // Asegúrate de que 'file' esté bien definido aquí
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file], // Aquí usamos 'file'
           title: "AR Shootout",
-          text: "Check out my score in AR Shootout",
-          url: url,
-          // files: [new File([blob], "arshootout.png", { type: "image/png" })],
-        })
-        .then(() => console.log("Successful share"))
-        .catch((error) => console.log("Error sharing", error));
-    } else {
-      alert(
-        "Your browser does not support sharing files. We are working on it"
-      );
+          text: "Check out my score in AR Shootout!",
+        });
+        console.log("Thanks for sharing!");
+      } else {
+        alert(
+          "Your browser does not support sharing files. We are working on it"
+        );
+      }
+    } catch (error) {
+      console.error("Error sharing the image:", error);
     }
+  };
+
+  const handleFacebookShare = () => {
+    const url = `${process.env.PUBLIC_URL}/${encodeURIComponent(data.name)}`;
+    console.log(url);
+    window.open(
+      `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+      "facebook-share-dialog",
+      "width=626,height=436"
+    );
   };
 
   const saveScreenShot = useMutation(saveScreenshot, {
     onSuccess: (result) => {
       if (social === "instagram") {
         shareWithNavigator();
+      } else {
+        console.log(result);
+        handleFacebookShare(result.url);
       }
     },
     onError: (error) => {
@@ -64,7 +81,6 @@ const LeaderBoard = () => {
   };
 
   const saveImage = (e) => {
-    console.log(`${process.env.PUBLIC_URL}/${encodeURIComponent(data.name)}`);
     generateImage().then((blob) => {
       if (blob) {
         const formData = new FormData();
@@ -168,15 +184,9 @@ const LeaderBoard = () => {
             </div>
           </div>
           <div className="shareIcons">
-            <FacebookShareButton
-              url={`${process.env.PUBLIC_URL}/${encodeURIComponent(data.name)}`}
-              quote="Miami MoCAAD"
-              hashtag={"#MoCAAD"}
-              onClick={saveImage}
-              blankTarget={false}
-            >
+            <button className="iconFacebook" onClick={saveImage}>
               <img src="/images/icon-facebook.png" alt="Facebook" />
-            </FacebookShareButton>
+            </button>
             <button
               className="iconInstagram"
               onClick={() => {

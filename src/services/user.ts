@@ -31,6 +31,7 @@ const logout = async () => {
 
 const getUserData = async (username: string) => {
   const response = await AxiosInstance.get(`/user/data/${username}`);
+  console.log(response.data);
   return response.data;
 };
 

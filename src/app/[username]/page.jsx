@@ -1,13 +1,31 @@
-"use client";
 import { getUserData } from "@/services/user";
-import { useState } from "react";
-import { useQuery } from "react-query";
 
-const PreviewPage = ({ params }) => {
-  const [screenShot, setScreenShot] = useState("");
+export async function generateMetadata({ params }) {
+  const { username } = params;
+  const data = await getUserData(username);
+  return {
+    title: "AR Shootout",
+    description: "Check out my score in AR Shootout!",
+    openGraph: {
+      title: "AR Shootout",
+      description: "Check out my score in AR Shootout!",
+      url: `https://shooter-frontend-zeta.vercel.app/${username}`,
+      images: [
+        {
+          url: data?.image,
+          width: 800,
+          height: 600,
+          alt: "Shared Score",
+        },
+      ],
+    },
+  };
+}
+
+const PreviewPage = async ({ params }) => {
   const { username } = params;
 
-  const { data } = useQuery("screenShot", () => getUserData(username));
+  const data = await getUserData(username);
   return (
     <>
       <div className="content">
