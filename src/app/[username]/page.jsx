@@ -13,13 +13,10 @@ const PreviewPage = async ({ params }) => {
           property="og:description"
           content="Check out my score in AR Shootout!"
         />
-        <meta
-          property="og:image"
-          content="https://yourwebsite.com/path-to-saved-image.png"
-        />
+        <meta property="og:image" content={data?.image} />
         <meta
           property="og:url"
-          content="https://yourwebsite.com/path-to-page"
+          content="https://shooter-frontend-zeta.vercel.app/${username}"
         />
       </Head>
       <div className="content">

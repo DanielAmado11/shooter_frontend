@@ -44,11 +44,13 @@ const LeaderBoard = () => {
     }
   };
 
-  const handleFacebookShare = () => {
+  const handleFacebookShare = (image) => {
     const url = `${process.env.PUBLIC_URL}/${encodeURIComponent(data.name)}`;
     console.log(url);
     window.open(
-      `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        image
+      )}`,
       "facebook-share-dialog",
       "width=626,height=436"
     );
