@@ -9,9 +9,7 @@ import {
 } from "next-share";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
-import { useMutation, useQuery } from "react-query";
-
-let social = "";
+import { useQuery } from "react-query";
 
 const LeaderBoard = () => {
   const router = useRouter();
@@ -21,54 +19,6 @@ const LeaderBoard = () => {
     error,
   } = useQuery("users", () => getScores());
 
-  const shareWithNavigator = async (imageUrl) => {
-    try {
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      const file = new File([blob], "image.png", { type: blob.type }); // Asegúrate de que 'file' esté bien definido aquí
-
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          files: [file], // Aquí usamos 'file'
-          title: "AR Shootout",
-          text: "Check out my score in AR Shootout!",
-        });
-        console.log("Thanks for sharing!");
-      } else {
-        alert(
-          "Your browser does not support sharing files. We are working on it"
-        );
-      }
-    } catch (error) {
-      console.error("Error sharing the image:", error);
-    }
-  };
-
-  const handleFacebookShare = (image) => {
-    const url = `${process.env.PUBLIC_URL}/${encodeURIComponent(data.name)}`;
-    console.log(url);
-    window.open(
-      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-        image
-      )}`,
-      "facebook-share-dialog",
-      "width=626,height=436"
-    );
-  };
-
-  const saveScreenShot = useMutation(saveScreenshot, {
-    onSuccess: (result) => {
-      if (social === "instagram") {
-        shareWithNavigator();
-      } else {
-        console.log(result);
-        handleFacebookShare(result.url);
-      }
-    },
-    onError: (error) => {
-      alert(`ERROR: ${error.response.data.error}`);
-    },
-  });
   const { data } = useAuth();
   const leaderBoardRef = useRef(null);
 
@@ -82,12 +32,24 @@ const LeaderBoard = () => {
     }
   };
 
-  const saveImage = (e) => {
+  const handleShare = (e) => {
     generateImage().then((blob) => {
       if (blob) {
-        const formData = new FormData();
-        formData.append("image", blob);
-        saveScreenShot.mutate(formData);
+        const file = new File([blob], "image.png", { type: blob.type });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator
+            .share({
+              files: [file],
+              title: "AR Shootout",
+              text: "Check out my score in AR Shootout!",
+            })
+            .then(() => console.log("Thanks for sharing!"))
+            .catch((error) => console.error("Error sharing the image:", error));
+        } else {
+          alert(
+            "Your browser does not support sharing files. We are working on it"
+          );
+        }
       }
     });
   };
@@ -141,9 +103,7 @@ const LeaderBoard = () => {
         <div className="containerShare">
           <div className="containerRanking">
             <div className="headLeaderboard">
-              <div className="logohead">
-                {/* <img src="/images/logo_horizontal.png" alt="AR Shootout" /> */}
-              </div>
+              <div className="logohead"></div>
               <div className="tituloRanking">LEADERBOARD</div>
             </div>
             <div className="mainRanking">
@@ -186,35 +146,9 @@ const LeaderBoard = () => {
             </div>
           </div>
           <div className="shareIcons">
-            <button className="iconFacebook" onClick={saveImage}>
-              <img src="/images/icon-facebook.png" alt="Facebook" />
-            </button>
-            <button
-              className="iconInstagram"
-              onClick={() => {
-                social = "instagram";
-                saveImage();
-              }}
-            >
-              <img src="/images/icon-instagram.png" alt="Instagram" />
-            </button>
-            <button
-              className="iconTiktok"
-              onClick={() => {
-                social = "instagram";
-                saveImage();
-              }}
-            >
-              <img src="/images/icon-tiktok.png" alt="Tik Tok" />
-            </button>
-            <button
-              className="iconPinterest"
-              onClick={() => {
-                social = "instagram";
-                saveImage();
-              }}
-            >
-              <img src="/images/icon-pinterest.png" alt="Pinterest" />
+            <button className="button-box" onClick={handleShare}>
+              <img src="/images/share_icon.png" alt="share" />
+              <p>Share your score with your friends!</p>
             </button>
           </div>
         </div>
