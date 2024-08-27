@@ -68,7 +68,7 @@ const LeaderBoard = () => {
         <img src="/images/back.png" alt="" />
       </button>
       <div
-        className="content shareRanking"
+        className="content shareRanking bbb"
         style={{ background: "#45457c" }}
         ref={leaderBoardRef}
       >
@@ -80,19 +80,10 @@ const LeaderBoard = () => {
               className="maimiLogo"
             />
           </div>
-
-          <div
-            style={{
-              marginTop: "50px",
-            }}
-          >
-            <button className="btn" onClick={handlePlayAgain}>
-              Play Again
-            </button>
-          </div>
         </div>
         <div className="contentImgCharacter">
           <img
+            style={{ width: "93%" }}
             src={`/images/characters/kicker_${data.avatar_id}_body.jpg`}
             alt="Your Character"
           />
@@ -145,13 +136,16 @@ const LeaderBoard = () => {
               </div>
             </div>
           </div>
-          <div className="shareIcons">
-            <button className="button-box" onClick={handleShare}>
-              <img src="/images/share_icon.png" alt="share" />
-              <p>Share your score with your friends!</p>
-            </button>
-          </div>
         </div>
+      </div>
+      <div className="btn-container">
+        <button className="button-box" onClick={handlePlayAgain}>
+          <p>Play Again</p>
+        </button>
+        <button className="button-box" onClick={handleShare}>
+          <img src="/images/share_icon.png" alt="share" />
+          <p>Share your score with your friends!</p>
+        </button>
       </div>
     </div>
   );

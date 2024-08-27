@@ -1058,7 +1058,8 @@ img {
 
 .button-box {
   width: 100%;
-  height: 35px;
+  height: 50px;
+  max-width: 30rem;
   background: linear-gradient(
     120deg,
     rgba(0, 255, 218, 1) 0%,
@@ -1068,10 +1069,10 @@ img {
   border: none;
   border-radius: 6px;
   display: flex;
-  /* font-family: "Poppins", sans-serif; */
+  margin: 0.7rem;
 }
 .button-box img {
-  width: 27px;
+  width: 31px;
   align-self: center;
   margin-left: 10px;
 }
@@ -1081,4 +1082,25 @@ img {
   font-size: 11pt;
   font-weight: 600;
   align-self: center;
+}
+.bbb.content {
+  height: 78vh;
+}
+.btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  width: 100%;
+  height: 20vh;
+}
+/* Estilo para el primer botón */
+.btn-container button:first-of-type {
+}
+
+/* Estilo para el segundo botón */
+.btn-container button:nth-of-type(2) {
+  background-color: green;
+  color: black;
+  /* Otros estilos específicos */
 }
