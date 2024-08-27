@@ -923,6 +923,7 @@ img {
     height: 70vh;
     align-items: center;
     align-content: center;
+    place-content: center;
   }
 
   .content.dashboard .item:nth-child(2) .selectItem:nth-child(2) img {

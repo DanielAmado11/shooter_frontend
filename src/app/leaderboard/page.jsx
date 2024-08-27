@@ -2,6 +2,7 @@
 import { useAuth } from "@/components/providers/auth-provider";
 import { getScores, saveScreenshot } from "@/services/score";
 import { toPng } from "html-to-image";
+import html2canvas from "html2canvas";
 import {
   FacebookShareButton,
   InstagramShareButton,
@@ -22,9 +23,22 @@ const LeaderBoard = () => {
   const { data } = useAuth();
   const leaderBoardRef = useRef(null);
 
+  // const generateImage = async () => {
+  //   if (leaderBoardRef.current) {
+  //     const dataUrl = await toPng(leaderBoardRef.current);
+  //     const blob = await fetch(dataUrl).then((res) => res.blob());
+  //     return blob;
+  //   } else {
+  //     return null;
+  //   }
+  // };
+
   const generateImage = async () => {
     if (leaderBoardRef.current) {
-      const dataUrl = await toPng(leaderBoardRef.current);
+      const canvas = await html2canvas(leaderBoardRef.current, {
+        useCORS: true, // Permitir CORS si las imágenes están en otro dominio
+      });
+      const dataUrl = canvas.toDataURL();
       const blob = await fetch(dataUrl).then((res) => res.blob());
       return blob;
     } else {

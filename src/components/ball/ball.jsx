@@ -13,7 +13,7 @@ import * as THREE from "three";
 import { useTexture } from "@react-three/drei";
 
 const playersDelay = {
-  1: 500,
+  1: 600,
   2: 500,
   3: 500,
   4: 700,
