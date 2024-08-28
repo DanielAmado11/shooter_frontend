@@ -124,7 +124,11 @@ const LeaderBoard = () => {
                   <p>Score</p>
                 </div>
               </div>
-              <div id="ranking" className="ranking">
+              <div
+                id="ranking"
+                className="ranking"
+                style={{ "overflow-x": "scroll" }}
+              >
                 {users?.scores.map((user, i) => (
                   <div
                     className={`itemPosition ${
