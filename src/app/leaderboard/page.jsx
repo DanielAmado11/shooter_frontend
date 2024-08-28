@@ -35,9 +35,7 @@ const LeaderBoard = () => {
 
   const generateImage = async () => {
     if (leaderBoardRef.current) {
-      const canvas = await html2canvas(leaderBoardRef.current, {
-        useCORS: true, // Permitir CORS si las imágenes están en otro dominio
-      });
+      const canvas = await html2canvas(leaderBoardRef.current);
       const dataUrl = canvas.toDataURL();
       const blob = await fetch(dataUrl).then((res) => res.blob());
       return blob;
@@ -58,12 +56,14 @@ const LeaderBoard = () => {
               text: "Check out my score in AR Shootout!",
             })
             .then(() => console.log("Thanks for sharing!"))
-            .catch((error) => console.error("Error sharing the image:", error));
+            .catch((error) => alert("Error sharing the image:", error));
         } else {
           alert(
             "Your browser does not support sharing files. We are working on it"
           );
         }
+      } else {
+        alert("Error, Please try again");
       }
     });
   };
