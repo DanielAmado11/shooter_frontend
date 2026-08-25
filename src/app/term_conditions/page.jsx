@@ -2,7 +2,7 @@
 import { useAuth } from "@/components/providers/auth-provider";
 import Cookies from "js-cookie";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Button from "@/components/ui/Button";
 import BackButton from "@/components/ui/BackButton";
 import PageShell from "@/components/ui/PageShell";
@@ -13,29 +13,11 @@ const TermConditions = () => {
   const searchParams = useSearchParams();
   const userCode = searchParams.get("user_code");
   const { signOut } = useAuth();
-  const [enabled, setEnabled] = useState(false);
   const [accepting, setAccepting] = useState(false);
   const [declining, setDeclining] = useState(false);
 
-  useEffect(() => {
-    const contentContainer = document.getElementById("contentTerms");
-    if (!contentContainer) return;
-
-    function checkScroll() {
-      setEnabled(
-        contentContainer.scrollTop + contentContainer.clientHeight >=
-          contentContainer.scrollHeight
-      );
-    }
-
-    contentContainer.addEventListener("scroll", checkScroll);
-    checkScroll();
-
-    return () => contentContainer.removeEventListener("scroll", checkScroll);
-  }, []);
-
   const handleNoAcepted = async () => {
-    if (declining || !enabled) return;
+    if (declining) return;
     setDeclining(true);
     await signOut();
     router.push("/welcome");
@@ -43,7 +25,7 @@ const TermConditions = () => {
   };
 
   const handleAccept = () => {
-    if (accepting || !enabled) return;
+    if (accepting) return;
     setAccepting(true);
     Cookies.set("user_code", userCode);
     router.push("/dashboard");
@@ -76,7 +58,7 @@ const TermConditions = () => {
             id="btnNoAcepted"
             variant="ghost"
             loading={declining}
-            disabled={!enabled || declining}
+            disabled={declining}
             onClick={handleNoAcepted}
           >
             Do not consent
@@ -84,7 +66,7 @@ const TermConditions = () => {
           <Button
             id="btnAcepted"
             loading={accepting}
-            disabled={!enabled || accepting}
+            disabled={accepting}
             onClick={handleAccept}
           >
             Consent

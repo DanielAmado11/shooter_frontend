@@ -59,8 +59,7 @@ function buildSponsorTexture() {
   // texture vertically, so we flip the text to appear upright.
   const bandTopY = 0.508 * 1024; // maps to the board's TOP edge
   const textY = 514;
-  const text =
-    "NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥";
+  const text = "NATT ♥";
   ctx.save();
   ctx.translate(512, textY);
   ctx.scale(1, -1);
