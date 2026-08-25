@@ -7,22 +7,79 @@ import React, { useMemo } from "react";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
+// Generates a clean "LED sponsor board" texture (no Miami MoCAAD branding).
+function buildSponsorTexture() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1024;
+  canvas.height = 1024;
+  const ctx = canvas.getContext("2d");
+
+  // Dark navy gradient background
+  const bg = ctx.createLinearGradient(0, 0, 1024, 1024);
+  bg.addColorStop(0, "#0a0a20");
+  bg.addColorStop(0.5, "#12123a");
+  bg.addColorStop(1, "#0a0a20");
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, 1024, 1024);
+
+  // Subtle LED grid
+  ctx.strokeStyle = "rgba(0, 255, 213, 0.07)";
+  ctx.lineWidth = 2;
+  for (let x = 0; x <= 1024; x += 64) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, 1024);
+    ctx.stroke();
+  }
+  for (let y = 0; y <= 1024; y += 64) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(1024, y);
+    ctx.stroke();
+  }
+
+  // Glowing cyan -> purple diagonal bands (game gradient accents)
+  for (let i = -1024; i < 2048; i += 512) {
+    const g = ctx.createLinearGradient(i, 0, i + 512, 1024);
+    g.addColorStop(0, "rgba(0, 255, 213, 0)");
+    g.addColorStop(0.5, "rgba(0, 255, 213, 0.28)");
+    g.addColorStop(0.62, "rgba(168, 85, 247, 0.28)");
+    g.addColorStop(1, "rgba(236, 72, 153, 0)");
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.moveTo(i, 1024);
+    ctx.lineTo(i + 256, 0);
+    ctx.lineTo(i + 512, 0);
+    ctx.lineTo(i + 256, 1024);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.wrapS = THREE.RepeatWrapping;
+  tex.wrapT = THREE.RepeatWrapping;
+  tex.anisotropy = 4;
+  return tex;
+}
+
 export function Stadium(props) {
   const { nodes, materials } = useGLTF("../models/stadium/stadium.gltf");
   materials.M_gradas.emissiveIntensity = 1.8;
   materials.M_gradas.envMapIntensity = 1.8;
 
-  // Remove the sponsor/Miami MoCAAD branding from the perimeter boards.
+  // Replace the sponsor/Miami MoCAAD texture with a neutral LED-board look.
   const sponsorMaterial = useMemo(() => {
     const mat = materials.M_Sponsor_Low2;
     if (mat) {
-      mat.map = null;
-      mat.emissiveMap = null;
-      mat.emissive = new THREE.Color(0x0a0a1a);
-      mat.emissiveIntensity = 0.3;
-      mat.color = new THREE.Color(0x141428);
-      mat.metalness = 0.2;
-      mat.roughness = 0.8;
+      const tex = buildSponsorTexture();
+      mat.map = tex;
+      mat.emissiveMap = tex;
+      mat.emissive = new THREE.Color(0xffffff);
+      mat.emissiveIntensity = 0.35;
+      mat.color = new THREE.Color(0xffffff);
+      mat.metalness = 0.1;
+      mat.roughness = 0.75;
       mat.needsUpdate = true;
     }
     return mat;
