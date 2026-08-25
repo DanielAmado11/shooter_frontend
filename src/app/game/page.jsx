@@ -69,6 +69,7 @@ const GameContent = () => {
   const [kickCount, setKickCount] = useState(0);
   const [slowMo, setSlowMo] = useState(false);
   const [isPowerupShot, setIsPowerupShot] = useState(false);
+  const [splashVisible, setSplashVisible] = useState(true);
   const startedRef = useRef(false);
   const startRef = useRef(false);
   const shootTypeRef = useRef("penalty");
@@ -113,6 +114,7 @@ const GameContent = () => {
     startedRef.current = true;
     startTimeRef.current = Date.now();
     setStart(true);
+    setSplashVisible(false);
     preloadSounds();
     sounds.background_1.stop();
     sounds.background_2.stop();
@@ -465,7 +467,7 @@ const GameContent = () => {
           </div>
         </div>
       )}
-      {!start && (
+      {splashVisible && (
         <div className={styles.splash}>
           <div className={styles.splashContent}>
             <img
