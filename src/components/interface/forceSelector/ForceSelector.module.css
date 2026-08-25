@@ -94,29 +94,6 @@
   }
 }
 
-@media (max-height: 500px) {
-  .container {
-    width: min(82vw, 460px);
-    gap: var(--space-2);
-  }
-
-  .barContainer {
-    height: 16px;
-  }
-
-  .power {
-    font-size: 0.66rem;
-  }
-
-  .icon {
-    width: 48px;
-  }
-
-  .iconLabel {
-    font-size: 0.5rem;
-  }
-}
-
 .iconContainer {
   display: flex;
   flex-direction: column;
@@ -136,4 +113,31 @@
   text-transform: uppercase;
   color: var(--cian);
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-height: 500px) {
+  .container {
+    width: min(84vw, 460px);
+    gap: var(--space-1);
+  }
+
+  .barWrapper {
+    gap: 3px;
+  }
+
+  .barContainer {
+    height: 15px;
+  }
+
+  .power {
+    font-size: 0.58rem;
+  }
+
+  .icon {
+    width: 34px;
+  }
+
+  .iconLabel {
+    font-size: 0.42rem;
+  }
 }

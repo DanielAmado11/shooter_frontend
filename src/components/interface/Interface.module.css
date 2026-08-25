@@ -85,7 +85,7 @@
 
 @media (max-height: 500px) {
   .container {
-    bottom: calc(var(--safe-bottom) + 8px);
+    bottom: calc(var(--safe-bottom) + 2px);
     gap: 6px;
   }
 

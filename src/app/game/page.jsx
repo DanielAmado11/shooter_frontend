@@ -499,7 +499,7 @@ const GameScene = memo(function GameScene({
       shadows={true}
       id="canvas"
       className={styles.canvas}
-      style={{ width: "100vw", height: "100vh" }}
+      style={{ width: "100vw", height: "100dvh" }}
       gl={{
         toneMapping: THREE.ACESFilmicToneMapping,
         toneMappingExposure: 1,
