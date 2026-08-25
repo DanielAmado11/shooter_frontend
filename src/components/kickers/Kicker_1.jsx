@@ -10,6 +10,7 @@ import * as THREE from "three";
 import { kicker_positions } from "@/utils/kickerPositions";
 import { useCharacterAnimation } from "@/contexts/CharacterAnimation";
 import { useAuth } from "../providers/auth-provider";
+import { GAME_TIMING } from "@/utils/gameTiming";
 
 export function Kicker_1(props) {
   const { position, action, onActiveAnimation, playing } = props;
@@ -22,42 +23,58 @@ export function Kicker_1(props) {
 
   const { actions } = useAnimations(animations, group);
   const { animationIndex } = useCharacterAnimation();
+  const idleReturnRef = useRef(null);
+
   const stopMovement = (movement) => {
     const animation = actions[movement];
-    animation.stop();
+    if (animation) animation.stop();
   };
 
-  const startMovement = (movement) => {
-    const animation = actions[movement].setLoop(THREE.LoopRepeat);
+  const startMovement = (movement, fadeDuration = 0.25) => {
+    const animation = actions[movement];
+    if (!animation) return;
+    Object.values(actions).forEach((a) => {
+      if (a !== animation) a.stop();
+    });
+    animation.setLoop(THREE.LoopRepeat);
     animation.reset();
+    if (fadeDuration > 0) animation.fadeIn(fadeDuration);
     animation.play();
   };
 
-  const handleKick = () => {
-    if (playing) {
-      const timeToKick = actions[action].getClip().duration - 0.05;
-      const animation = actions[action].setLoop(THREE.LoopOnce);
-      stopMovement("idle");
-      animation.reset();
-      animation.play();
-      // animation.clampWhenFinished = true;
-      const mixer = animation.getMixer();
-      mixer.addEventListener("finished", () => {
-        stopMovement(action);
-        // startMovement("idle");
-      });
-      setTimeout(() => {
-        mixer.timeScale = 0;
-      }, timeToKick * 1000);
-      setTimeout(() => {
-        mixer.timeScale = 1;
-      }, timeToKick * 1000 + 1500);
+  const clearPendingIdle = () => {
+    if (idleReturnRef.current) {
+      clearTimeout(idleReturnRef.current);
+      idleReturnRef.current = null;
     }
   };
 
+  const handleKick = () => {
+    const kick = actions[action];
+    if (!playing || !kick) return;
+    clearPendingIdle();
+    stopMovement("idle");
+    kick.reset();
+    kick.setLoop(THREE.LoopOnce);
+    kick.clampWhenFinished = true;
+    kick.fadeIn(0.12);
+    kick.play();
+    const mixer = kick.getMixer();
+    const onFinished = () => {
+      mixer.removeEventListener("finished", onFinished);
+      idleReturnRef.current = setTimeout(() => {
+        idleReturnRef.current = null;
+        startMovement("idle", 0.3);
+      }, GAME_TIMING.kickFollowThroughHold);
+    };
+    mixer.addEventListener("finished", onFinished);
+  };
+
   useEffect(() => {
+    if (Object.keys(actions).length === 0 || !actions[action]) return;
     switch (animationIndex) {
       case 0:
+        clearPendingIdle();
         onActiveAnimation({ time: actions[action].getClip().duration });
         startMovement("idle");
         break;
@@ -65,15 +82,13 @@ export function Kicker_1(props) {
         handleKick();
         break;
       case 2:
-        stopMovement("idle");
-        setTimeout(() => {
-          startMovement("happy");
-        }, [actions[action].getClip().duration]);
+        clearPendingIdle();
+        startMovement("happy", 0.25);
         break;
       default:
         break;
     }
-  }, [animationIndex]);
+  }, [animationIndex, actions, action]);
 
   return (
     <group

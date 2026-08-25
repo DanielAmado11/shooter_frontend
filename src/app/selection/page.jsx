@@ -1,29 +1,45 @@
 "use client";
 import { useAuth } from "@/components/providers/auth-provider";
 import { changeAvatar } from "@/services/user";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useMutation } from "react-query";
+import { useState } from "react";
+import Button from "@/components/ui/Button";
+import BackButton from "@/components/ui/BackButton";
+import ImageWithLoader from "@/components/ui/ImageWithLoader";
+import PageShell from "@/components/ui/PageShell";
+import styles from "./page.module.css";
+
+const PLAYERS = [
+  { id: 1, label: "Aurora" },
+  { id: 2, label: "Valeria" },
+  { id: 3, label: "Camila" },
+  { id: 4, label: "Diego" },
+  { id: 5, label: "Mateo" },
+  { id: 6, label: "Leo" },
+];
 
 const Selection = () => {
   const router = useRouter();
-  const { status } = useAuth();
+  const { status, refresh } = useAuth();
+  const [selected, setSelected] = useState(1);
 
   const changeAvatar_ = useMutation(changeAvatar, {
     onSuccess: (res) => {
+      refresh();
       router.push("/dashboard");
-      redirect("/dashboard");
     },
     onError: (error) => {
       alert(`ERROR: ${error.response.data}`);
     },
   });
 
-  const handleSelect = (id) => {
+  const handleContinue = (e) => {
+    e.preventDefault();
     if (status === "AUTHENTICATED") {
-      changeAvatar_.mutate(id);
+      changeAvatar_.mutate(selected);
     } else {
-      router.push(`/login?avatar_id=${id}`);
-      redirect(`/login?avatar_id=${id}`);
+      router.push(`/login?avatar_id=${selected}`);
     }
   };
 
@@ -31,57 +47,66 @@ const Selection = () => {
     router.back();
   };
 
-  const handleContinue = (e) => {
-    e.preventDefault();
-    if (status === "AUTHENTICATED") {
-      router.push("/dashboard");
-      redirect("/dashboard");
-    } else {
-      alert("Please select an avatar");
-    }
-  };
+  const selectedPlayer = PLAYERS.find((p) => p.id === selected);
 
   return (
-    <div>
-      <button className="back" id="toggle-button" onClick={handleBack}>
-        <img src="/images/back.png" alt="" />
-      </button>
-      <div className="content">
-        <div className="item selector">
-          <div className="text-selector">
-            <p>Select your avatar</p>
-          </div>
-          <div className="characters">
-            <button onClick={() => handleSelect(1)} className="character">
-              <img src="/images/characters/kicker_1.png" alt="player women 1" />
-            </button>
-            <button className="character" onClick={() => handleSelect(2)}>
-              <img src="/images/characters/kicker_2.png" alt="payer women 2" />
-            </button>
-            <button className="character" onClick={() => handleSelect(3)}>
-              <img
-                src="/images/characters/kicker_3.png"
-                alt="player woment 3"
+    <>
+      <BackButton onClick={handleBack} />
+      <PageShell>
+        <div className={styles.layout}>
+          <h1 className={styles.title}>Select your avatar</h1>
+
+          <div className={styles.preview}>
+            <div className={styles.previewImage}>
+              <ImageWithLoader
+                src={`/images/characters/kicker_${selected}_body.jpg`}
+                alt={selectedPlayer.label}
+                aspectRatio="3 / 4"
+                objectFit="contain"
+                eager
               />
-            </button>
+            </div>
+            <div className={styles.previewInfo}>
+              <span className={styles.previewLabel}>Selected</span>
+              <span className={styles.previewName}>{selectedPlayer.label}</span>
+            </div>
           </div>
-          <div className="characters">
-            <button className="character" onClick={() => handleSelect(4)}>
-              <img src="/images/characters/kicker_4.png" alt="player men 1" />
-            </button>
-            <button className="character" onClick={() => handleSelect(5)}>
-              <img src="/images/characters/kicker_5.png" alt="player men 2" />
-            </button>
-            <button className="character" onClick={() => handleSelect(6)}>
-              <img src="/images/characters/kicker_6.png" alt="player men 3" />
-            </button>
+
+          <div className={styles.grid}>
+            {PLAYERS.map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                aria-label={`Select ${p.label}`}
+                aria-pressed={selected === p.id}
+                className={`${styles.avatar} ${
+                  selected === p.id ? styles.avatarSelected : ""
+                }`}
+                onClick={() => setSelected(p.id)}
+              >
+                <ImageWithLoader
+                  src={`/images/characters/kicker_${p.id}.png`}
+                  alt={p.label}
+                  objectFit="contain"
+                />
+                <span className={styles.avatarName}>{p.label}</span>
+              </button>
+            ))}
           </div>
-          <button className="btn" onClick={handleContinue}>
+
+          <Button
+            type="button"
+            fullWidth
+            loading={changeAvatar_.isLoading}
+            disabled={changeAvatar_.isLoading}
+            onClick={handleContinue}
+            className={styles.continue}
+          >
             Continue
-          </button>
+          </Button>
         </div>
-      </div>
-    </div>
+      </PageShell>
+    </>
   );
 };
 

@@ -1,11 +1,28 @@
 .container {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  padding: 0.6rem;
-  z-index: 1;
+  position: fixed;
+  bottom: calc(var(--safe-bottom) + 12px);
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--glass-bg);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 30;
+  transition: background 0.15s ease, transform 0.15s ease;
 }
+
+.container:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.container:active {
+  transform: scale(0.92);
+}
+
 .image {
-  /* transparence */
-  opacity: 0.5;
+  opacity: 0.85;
 }

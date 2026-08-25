@@ -1,0 +1,55 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: min(90vw, 640px);
+  text-align: center;
+  padding: clamp(24px, 5vw, 40px);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-md);
+  animation: fadeInUp 0.4s ease both;
+}
+
+.title {
+  font-size: clamp(1.3rem, 4vw, 1.8rem);
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.35;
+}
+
+.text {
+  font-size: clamp(0.95rem, 2.6vw, 1.1rem);
+  font-weight: 500;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.credit {
+  font-size: clamp(0.85rem, 2.4vw, 0.95rem);
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.credit a {
+  color: var(--cian);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.codeSession {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.button {
+  max-width: 380px;
+  width: 100%;
+}

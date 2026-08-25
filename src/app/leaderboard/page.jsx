@@ -1,16 +1,14 @@
 "use client";
 import { useAuth } from "@/components/providers/auth-provider";
-import { getScores, saveScreenshot } from "@/services/score";
-import { toPng } from "html-to-image";
+import { getScores } from "@/services/score";
 import html2canvas from "html2canvas";
-import {
-  FacebookShareButton,
-  InstagramShareButton,
-  PinterestShareButton,
-} from "next-share";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useQuery } from "react-query";
+import Button from "@/components/ui/Button";
+import BackButton from "@/components/ui/BackButton";
+import ImageWithLoader from "@/components/ui/ImageWithLoader";
+import styles from "./page.module.css";
 
 const LeaderBoard = () => {
   const router = useRouter();
@@ -22,16 +20,8 @@ const LeaderBoard = () => {
 
   const { data } = useAuth();
   const leaderBoardRef = useRef(null);
-
-  // const generateImage = async () => {
-  //   if (leaderBoardRef.current) {
-  //     const dataUrl = await toPng(leaderBoardRef.current);
-  //     const blob = await fetch(dataUrl).then((res) => res.blob());
-  //     return blob;
-  //   } else {
-  //     return null;
-  //   }
-  // };
+  const [sharing, setSharing] = useState(false);
+  const [playingAgain, setPlayingAgain] = useState(false);
 
   const generateImage = async () => {
     if (leaderBoardRef.current) {
@@ -44,19 +34,19 @@ const LeaderBoard = () => {
     }
   };
 
-  const handleShare = (e) => {
-    generateImage().then((blob) => {
+  const handleShare = async (e) => {
+    if (sharing) return;
+    setSharing(true);
+    try {
+      const blob = await generateImage();
       if (blob) {
         const file = new File([blob], "image.png", { type: blob.type });
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          navigator
-            .share({
-              files: [file],
-              title: "AR Shootout",
-              text: "Check out my score in AR Shootout!",
-            })
-            .then(() => console.log("Thanks for sharing!"))
-            .catch((error) => alert("Error sharing the image:", error));
+          await navigator.share({
+            files: [file],
+            title: "AR Shootout",
+            text: "Check out my score in AR Shootout!",
+          });
         } else {
           alert(
             "Your browser does not support sharing files. We are working on it"
@@ -65,7 +55,13 @@ const LeaderBoard = () => {
       } else {
         alert("Error, Please try again");
       }
-    });
+    } catch (err) {
+      if (err?.name !== "AbortError") {
+        alert("Error sharing the image");
+      }
+    } finally {
+      setSharing(false);
+    }
   };
 
   const handleBack = () => {
@@ -73,99 +69,102 @@ const LeaderBoard = () => {
   };
 
   const handlePlayAgain = () => {
+    if (playingAgain) return;
+    setPlayingAgain(true);
     router.push("/game");
+    setTimeout(() => setPlayingAgain(false), 2000);
   };
 
   return (
-    <div>
-      <button className="back" id="toggle-button" onClick={handleBack}>
-        <img src="/images/back.png" alt="" />
-      </button>
-      <div
-        className="content shareRanking bbb"
-        style={{ background: "#45457c" }}
-        ref={leaderBoardRef}
-      >
-        <div className="containerItems">
-          <div className="item">
-            <img
-              src="/images/logo_miami_moCAAD.png"
-              alt="Miami CAAD"
-              className="maimiLogo"
-            />
+    <>
+      <BackButton onClick={handleBack} />
+      <div className={styles.page}>
+        <div className={styles.shareCard} ref={leaderBoardRef}>
+          <div className={styles.header}>
+          <div className={styles.branding}>
+            <span className={styles.brandText}>AR Shootout</span>
           </div>
-        </div>
-        <div className="contentImgCharacter">
-          <img
-            style={{ width: "93%" }}
-            src={`/images/characters/kicker_${data.avatar_id}_body.jpg`}
-            alt="Your Character"
-          />
-          <div className="text">
-            {/* <p>Share your score with your friends!</p> */}
-          </div>
-        </div>
-        <div className="containerShare">
-          <div className="containerRanking">
-            <div className="headLeaderboard">
-              <div className="logohead"></div>
-              <div className="tituloRanking">LEADERBOARD</div>
-            </div>
-            <div className="mainRanking">
-              <div className="mainHeaderRanking">
-                <div className="headerRanking">
-                  <p>Position</p>
-                  <p>Name</p>
-                  <p>Score</p>
-                </div>
-                <div className="headerRanking">
-                  <p>Position</p>
-                  <p>Name</p>
-                  <p>Score</p>
-                </div>
+            <h1 className={styles.title}>LEADERBOARD</h1>
+            <div className={styles.youCard}>
+              <div className={styles.youImage}>
+                <ImageWithLoader
+                  src={`/images/characters/kicker_${data.avatar_id}_body.jpg`}
+                  alt="Your Character"
+                  aspectRatio="3 / 4"
+                  objectFit="contain"
+                  eager
+                />
               </div>
+              <span className={styles.youLabel}>You</span>
+            </div>
+          </div>
+
+          <div className={styles.rankingHeader}>
+            <span>Position</span>
+            <span>Name</span>
+            <span>Score</span>
+          </div>
+
+          <div className={styles.ranking}>
+            {isPending && (
+              <div className={styles.empty}>Loading scores...</div>
+            )}
+            {error && (
+              <div className={styles.empty}>Could not load the leaderboard</div>
+            )}
+            {users?.scores.map((user) => (
               <div
-                id="ranking"
-                className="ranking"
-                style={{ "overflow-x": "scroll" }}
+                className={`${styles.row} ${
+                  user.code === data.code ? styles.rowYou : ""
+                }`}
+                key={user.id}
               >
-                {users?.scores.map((user, i) => (
-                  <div
-                    className={`itemPosition ${
-                      user.code === data.code && "firstPosition"
-                    }`}
-                    key={user.id}
-                  >
-                    <div className="positionRanking">
-                      <p>{user.position}</p>
-                    </div>
-                    <div className="nameRanking">
-                      <img
-                        src={`/images/characters/kicker_${user.avatar_id}.png`}
-                        alt="First Position"
-                      />
-                      <p>{user.name}</p>
-                    </div>
-                    <div className="scoreRanking">
-                      <p>{user.score}</p>
-                    </div>
+                <div className={styles.position}>
+                  <p>{user.position}</p>
+                </div>
+                <div className={styles.name}>
+                  <div className={styles.nameImage}>
+                    <ImageWithLoader
+                      src={`/images/characters/kicker_${user.avatar_id}.png`}
+                      alt={`${user.name} avatar`}
+                      aspectRatio="1 / 1"
+                    />
                   </div>
-                ))}
+                  <span className={styles.nameText}>{user.name}</span>
+                </div>
+                <div className={styles.score}>{user.score}</div>
               </div>
-            </div>
+            ))}
           </div>
+
+          <p className={styles.credit}>
+            Created by{" "}
+            <a href="https://github.com/DanielAmado11">DanielAmado11</a> ·
+            danielamado1107@gmail.com
+          </p>
+        </div>
+
+        <div className={styles.actions}>
+          <Button
+            loading={playingAgain}
+            disabled={playingAgain}
+            onClick={handlePlayAgain}
+            className={styles.actionButton}
+          >
+            Play Again
+          </Button>
+          <Button
+            variant="ghost"
+            loading={sharing}
+            disabled={sharing}
+            onClick={handleShare}
+            className={styles.actionButton}
+          >
+            Share your score with your friends!
+          </Button>
         </div>
       </div>
-      <div className="btn-container">
-        <button className="button-box" onClick={handlePlayAgain}>
-          <p>Play Again</p>
-        </button>
-        <button className="button-box" onClick={handleShare}>
-          <img src="/images/share_icon.png" alt="share" />
-          <p>Share your score with your friends!</p>
-        </button>
-      </div>
-    </div>
+    </>
   );
 };
 

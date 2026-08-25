@@ -1,35 +1,16 @@
 import { Html, useProgress } from "@react-three/drei";
-import logo1 from "../../../public/images/logo_miami_moCAAD.png";
-import logo2 from "../../../public/images/logo_ARshootout.png";
-import Image from "next/image";
 import styles from "./Loader.module.css";
-import { useEffect } from "react";
 
-const Loader = ({ onStart, showLoader }) => {
-  const { progress, ...pros } = useProgress();
-
-  if (progress === 100) {
-    setTimeout(() => {
-      onStart();
-    }, 2000);
-  }
-
-  useEffect(() => {
-    console.log("showing loader");
-    showLoader();
-  }, []);
+const Loader = () => {
+  const { progress } = useProgress();
 
   return (
     <Html>
       <div className={styles.container}>
         <div className="content home">
-          <div className="item logoMiami">
-            <img src="/images/logo_miami_moCAAD.png" alt="Miami MoCAAD" />
-          </div>
+          <div className="item logoMiami"></div>
           <div className="item logoAR">
-            <div className="">
-              <img src="/images/logo_ARshootout.png" alt="AR Shoot Out" />
-            </div>
+            <img src="/images/logo_ARshootout.png" alt="AR Shoot Out" />
             <div className="progress-container">
               <div
                 className="progress-bar"
@@ -37,6 +18,7 @@ const Loader = ({ onStart, showLoader }) => {
                 style={{ width: `${progress}%` }}
               ></div>
             </div>
+            <div className="readyText">GET READY TO SHOOT!</div>
           </div>
           <div className="item"></div>
         </div>

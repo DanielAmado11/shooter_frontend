@@ -1,11 +1,15 @@
-.container {
-  position: absolute;
-  bottom: -40vh;
-  left: -50vw;
-  background-color: #45457c; /* o el color de fondo que desees */
-  z-index: 1000;
-}
+.container,
 .container2 {
-  background-color: #45457c; /* o el color de fondo que desees */
-  /* z-index: 1000; */
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(
+    1000px 600px at 20% -10%,
+    var(--bg-soft) 0%,
+    var(--bg) 50%,
+    var(--bg-deep) 100%
+  );
 }

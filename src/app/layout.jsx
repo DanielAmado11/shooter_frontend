@@ -1,5 +1,5 @@
 "use client";
-import { Poppins } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { getUser } from "@/services/user";
@@ -11,9 +11,9 @@ import { sounds } from "@/components/sounds/sounds";
 import Rotate from "@/components/rotate/rotate";
 import Mute from "@/components/mute/Mute";
 
-const poppins = Poppins({
+const poppins = Outfit({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  style: ["normal", "italic"],
+  style: ["normal"],
   subsets: ["latin"],
   display: "swap",
 });
@@ -68,7 +68,10 @@ export default function RootLayout({ children }) {
         <QueryClientProvider client={queryClient}>
           <AuthProvider getAuth={getUser}>
             <Mute />
-            <Rotate open={rotate} onClose={() => setRotate(false)} />
+            <Rotate
+              open={rotate && pathname === "/game"}
+              onClose={() => setRotate(false)}
+            />
             <Suspense fallback={<Loader />}>{children}</Suspense>
           </AuthProvider>
         </QueryClientProvider>

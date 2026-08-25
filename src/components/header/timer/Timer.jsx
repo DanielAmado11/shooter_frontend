@@ -8,7 +8,7 @@ let goalsCounter = 0;
 
 const timer = process.env.TIMER || 45;
 
-const Timer = ({ start, onStop, goals }) => {
+const Timer = ({ start, onStop, goals, onTick }) => {
   const [time, setTime] = useState(timer);
   const { setAnimationIndex } = useCharacterAnimation();
   const { mutate: addScoreMutation, isLoading: isAddingScore } = useMutation(
@@ -45,6 +45,7 @@ const Timer = ({ start, onStop, goals }) => {
         } else {
           counter--;
           setTime((prevTime) => prevTime - 1);
+          if (typeof onTick === "function") onTick(counter);
         }
       }, 1000);
       return () => clearInterval(interval);
@@ -56,7 +57,9 @@ const Timer = ({ start, onStop, goals }) => {
   }, [goals]);
 
   return (
-    <div className={styles.container}>
+    <div
+      className={`${styles.container} ${time <= 10 ? styles.low : ""}`}
+    >
       <div className={styles.title}>TIME</div>
       <div className={styles.number}>{time}</div>
       <div className={styles.text}>SEC</div>

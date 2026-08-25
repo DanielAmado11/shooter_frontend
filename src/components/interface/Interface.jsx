@@ -28,6 +28,20 @@ const Interface = (props) => {
 
   return (
     <div className={styles.container}>
+      {props.playing && (
+        <div className={styles.hint}>
+          Tap to aim · Hold to charge · Full power to a corner = BALONAZO!
+        </div>
+      )}
+      {props.playing && props.arrowState.isRotating && (
+        <div
+          id="aim-zone"
+          className={styles.aimZone}
+          data-corner="false"
+        >
+          CENTER
+        </div>
+      )}
       <div className={styles.barContainer}>
         <ForceSelector
           setForce={setForce}

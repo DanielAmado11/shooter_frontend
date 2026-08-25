@@ -1,23 +1,14 @@
 "use client";
 import styles from "./page.module.css";
-import { Canvas, useLoader } from "@react-three/fiber";
-import {
-  Environment,
-  Html,
-  OrbitControls,
-  PerspectiveCamera,
-  useProgress,
-} from "@react-three/drei";
-import { Suspense, useEffect, useRef, useState } from "react";
-import {
-  CharacterAnimationProvider,
-  useCharacterAnimation,
-} from "@/contexts/CharacterAnimation";
+import { Canvas } from "@react-three/fiber";
+import { PerspectiveCamera, useProgress } from "@react-three/drei";
+import { Suspense, memo, useCallback, useEffect, useRef, useState } from "react";
+import { CharacterAnimationProvider, useCharacterAnimation } from "@/contexts/CharacterAnimation";
 import Interface from "@/components/interface/Interface";
 import { Kicker_1 } from "@/components/kickers/Kicker_1";
 import { Goal } from "@/components/goal/goal";
 import { Ball } from "@/components/ball/ball";
-import { Debug, Physics } from "@react-three/cannon";
+import { Physics } from "@react-three/cannon";
 import { BoxCollaider } from "@/components/Collaiders/collaiders";
 import { Stadium } from "@/components/stadium/Stadium";
 import { Goalkeeper_1 } from "@/components/goalkeepers/GoalKeeper_1";
@@ -25,17 +16,30 @@ import { kicker_positions } from "@/utils/kickerPositions";
 import { Arrow_1 } from "@/components/arrow/arrow_1";
 import Header from "@/components/header/header";
 import Loader from "@/components/loader/Loader";
+import CameraShake from "@/components/CameraShake";
 import { useRouter } from "next/navigation";
-import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader";
 import { SkyBox } from "@/components/skybox/skybox";
-import { sounds } from "@/components/sounds/sounds";
+import { sounds, preloadSounds } from "@/components/sounds/sounds";
 import { useAuth } from "@/components/providers/auth-provider";
+import { GAME_TIMING, sleep } from "@/utils/gameTiming";
 import * as THREE from "three";
 
-const goalKeeperActions = [];
+const SHADOW_MAP =
+  typeof window !== "undefined" && window.innerWidth < 768 ? 512 : 1024;
 
-const Game = (props) => {
+const Game = () => {
+  return (
+    <div className={styles.container}>
+      <CharacterAnimationProvider>
+        <GameContent />
+      </CharacterAnimationProvider>
+    </div>
+  );
+};
+
+const GameContent = () => {
   const { data: user } = useAuth();
+  const { animationIndex, setAnimationIndex } = useCharacterAnimation();
   const [shootType, setShootType] = useState("penalty");
   const [kickerAction, setKickerAction] = useState("kick");
   const [keeperAction, setKeeperAction] = useState("right_down");
@@ -49,17 +53,63 @@ const Game = (props) => {
   });
   const [arrowState, setArrowState] = useState({ isRotating: true });
   const [start, setStart] = useState(false);
-  const showLoaderRef = useRef(false);
+  const [fading, setFading] = useState(false);
+  const [result, setResult] = useState(null);
+  const [streak, setStreak] = useState(0);
+  const [bestStreak, setBestStreak] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(Number(process.env.TIMER) || 45);
+  const [showSummary, setShowSummary] = useState(false);
+  const [kickCount, setKickCount] = useState(0);
+  const [slowMo, setSlowMo] = useState(false);
+  const [isPowerupShot, setIsPowerupShot] = useState(false);
+  const startedRef = useRef(false);
+  const startRef = useRef(false);
+  const shootTypeRef = useRef("penalty");
+  const lastWasGoalRef = useRef(false);
+  const keeperHitRef = useRef(false);
+  const postHitRef = useRef(false);
+  const attemptResolvedRef = useRef(false);
+  const resultTimerRef = useRef(null);
+  const resettingRef = useRef(false);
+  const startTimeRef = useRef(null);
+  const powerupRef = useRef(false);
+  const bestStreakRef = useRef(0);
+  const { progress } = useProgress();
 
   const router = useRouter();
 
-  const handleStart = () => {
+  useEffect(() => {
+    startRef.current = start;
+  }, [start]);
+
+  useEffect(() => {
+    bestStreakRef.current = Math.max(bestStreakRef.current, streak);
+    setBestStreak(bestStreakRef.current);
+  }, [streak]);
+
+  useEffect(() => {
+    shootTypeRef.current = shootType;
+  }, [shootType]);
+
+  useEffect(() => {
+    if (animationIndex !== 1) return;
+    const drain = setInterval(() => {
+      setForcePercentage((prev) => Math.max(0, prev - 2));
+    }, 40);
+    return () => clearInterval(drain);
+  }, [animationIndex]);
+
+  const handleStart = useCallback(() => {
+    if (startedRef.current) return;
+    startedRef.current = true;
+    startTimeRef.current = Date.now();
     setStart(true);
+    preloadSounds();
     sounds.background_1.stop();
     sounds.background_2.stop();
     sounds.whistle_1.play();
     sounds.stadium.play();
-  };
+  }, []);
 
   const handleUnMount = () => {
     sounds.stadium.stop();
@@ -72,17 +122,35 @@ const Game = (props) => {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      !showLoaderRef.current && handleStart();
-    }, 2000);
+    if (progress === 100) {
+      const timeout = setTimeout(() => {
+        handleStart();
+      }, 1500);
+      return () => clearTimeout(timeout);
+    }
+  }, [progress, handleStart]);
+
+  useEffect(() => {
+    const fallbackTimeout = setTimeout(() => {
+      if (progress < 100) handleStart();
+    }, 8000);
+    return () => clearTimeout(fallbackTimeout);
+  }, [progress, handleStart]);
+
+  useEffect(() => {
     return () => {
       console.log("unmounting");
+      if (resultTimerRef.current) {
+        clearTimeout(resultTimerRef.current);
+        resultTimerRef.current = null;
+      }
       handleUnMount();
     };
   }, []);
 
   const handleStop = () => {
     setStart(false);
+    setShowSummary(true);
     setTimeout(() => {
       sounds.whistle_2.play();
     }, 1000);
@@ -104,23 +172,24 @@ const Game = (props) => {
   }, [shootType, kickerAction]);
 
   const chooseRandomGoalkeeperAction = () => {
-    const biasedActions = [...goalKeeperActions];
+    const totalTime = Number(process.env.TIMER) || 45;
+    const elapsed = startTimeRef.current
+      ? (Date.now() - startTimeRef.current) / 1000
+      : 0;
+    const accuracy = Math.min(0.92, 0.4 + (elapsed / totalTime) * 0.52);
     const unitDirection = direction.split("_")[0];
+    const all = ["left_down", "left_up", "center", "right_down", "right_up"];
+    let correct;
     if (unitDirection === "left") {
-      biasedActions.push("left_down", "left_up");
+      correct = ["left_down", "left_up"];
     } else if (unitDirection === "right") {
-      biasedActions.push("right_down", "right_up");
-    } else if (unitDirection === "center") {
-      biasedActions.push(
-        "left_down",
-        "left_up",
-        "center",
-        "right_down",
-        "right_up"
-      );
+      correct = ["right_down", "right_up"];
+    } else {
+      correct = all;
     }
-    const randomIndex = Math.floor(Math.random() * biasedActions.length);
-    setKeeperAction(biasedActions[randomIndex]);
+    const pool = Math.random() < accuracy ? correct : all;
+    const randomIndex = Math.floor(Math.random() * pool.length);
+    setKeeperAction(pool[randomIndex]);
   };
 
   useEffect(() => {
@@ -129,149 +198,344 @@ const Game = (props) => {
     }
   }, [direction]);
 
-  const attemptShoot = (attemptsZone, callback) => {
-    setAttempts(attempts + 1);
-    if (attemptsZone === 3) {
-      setTimeout(() => {
-        const types = Object.keys(kicker_positions);
-        const currentIndex = types.indexOf(shootType);
-        // exclude shootype of the list of types
-        types.splice(currentIndex, 1);
-        const randomIndex = Math.floor(Math.random() * types.length);
-        setShootType(types[randomIndex]);
-      }, 2000);
-    } else {
-      setTimeout(() => {
-        callback();
-      }, 2000);
+  const endAttempt = useCallback(async () => {
+    if (!startRef.current || resettingRef.current) return;
+    resettingRef.current = true;
+    if (resultTimerRef.current) {
+      clearTimeout(resultTimerRef.current);
+      resultTimerRef.current = null;
     }
-  };
+    setFading(true);
+    await sleep(GAME_TIMING.fadeDuration);
+    const types = Object.keys(kicker_positions).filter(
+      (t) => t !== shootTypeRef.current
+    );
+    const randomIndex = Math.floor(Math.random() * types.length);
+    setShootType(types[randomIndex]);
+    setDirection(null);
+    setForce(1);
+    setForcePercentage(0);
+    lastWasGoalRef.current = false;
+    keeperHitRef.current = false;
+    postHitRef.current = false;
+    attemptResolvedRef.current = false;
+    powerupRef.current = false;
+    setIsPowerupShot(false);
+    setSlowMo(false);
+    resultTimerRef.current = null;
+    setResult(null);
+    setAnimationIndex(0);
+    await sleep(GAME_TIMING.fadeDuration);
+    setFading(false);
+    resettingRef.current = false;
+  }, [setAnimationIndex]);
+
+  const resolveAttempt = useCallback(
+    (outcome) => {
+      if (attemptResolvedRef.current) return;
+      attemptResolvedRef.current = true;
+      if (resultTimerRef.current) {
+        clearTimeout(resultTimerRef.current);
+        resultTimerRef.current = null;
+      }
+      setResult(outcome);
+      if (outcome === "goal") {
+        setAnimationIndex(2);
+      } else {
+        setStreak(0);
+      }
+      setTimeout(() => {
+        setResult(null);
+        endAttempt();
+      }, GAME_TIMING.resultDisplay);
+    },
+    [setAnimationIndex, endAttempt]
+  );
+
+  const handleAttempt = useCallback(() => {
+    if (resettingRef.current) return;
+    setAttempts((prev) => prev + 1);
+    resultTimerRef.current = setTimeout(() => {
+      resultTimerRef.current = null;
+      if (!startRef.current) return;
+      if (lastWasGoalRef.current) return;
+      if (powerupRef.current) {
+        lastWasGoalRef.current = true;
+        setStreak((prev) => prev + 1);
+        resolveAttempt("goal");
+        return;
+      }
+      resolveAttempt(
+        keeperHitRef.current
+          ? "saved"
+          : postHitRef.current
+          ? "post"
+          : "miss"
+      );
+    }, GAME_TIMING.resultWindow);
+  }, [resolveAttempt]);
+
+  const handleSpecial = useCallback((special) => {
+    powerupRef.current = special;
+    setIsPowerupShot(special);
+  }, []);
+
+  const handlePost = useCallback(() => {
+    postHitRef.current = true;
+  }, []);
+
+  const handleTick = useCallback((t) => {
+    setTimeLeft(t);
+  }, []);
+
+  const handleKick = useCallback(() => {
+    setKickCount((c) => c + 1);
+  }, []);
+
+  const handleGoal = useCallback(() => {
+    if (lastWasGoalRef.current) return;
+    lastWasGoalRef.current = true;
+    setStreak((prev) => prev + 1);
+    setSlowMo(true);
+    setTimeout(() => setSlowMo(false), GAME_TIMING.slowMoDuration);
+    resolveAttempt("goal");
+  }, [resolveAttempt]);
+
+  const handleKeeperHit = useCallback(() => {
+    keeperHitRef.current = true;
+  }, []);
 
   return (
-    <div className={styles.container}>
-      {/* <Loader onStart={handleStart} /> */}
-      <CharacterAnimationProvider>
-        <Header goals={goals} start={start} onStop={handleStop} />
-        <Canvas
-          shadows={true}
-          id="canvas"
-          className={styles.canvas}
-          style={{ width: "100vw", height: "100vh" }}
-          gl={{
-            toneMapping: THREE.ACESFilmicToneMapping,
-            toneMappingExposure: 1,
-          }}
+    <>
+      <Header
+        goals={goals}
+        start={start}
+        onStop={handleStop}
+        shots={attempts}
+        streak={streak}
+        bestStreak={bestStreak}
+        onTick={handleTick}
+      />
+      <GameScene
+        shootType={shootType}
+        kickerAction={kickerAction}
+        keeperAction={keeperAction}
+        currentKickerAnimation={currentKickerAnimation}
+        start={start}
+        direction={direction}
+        force={force}
+        arrowState={arrowState}
+        user={user}
+        cameraRef={cameraRef}
+        setCurrentKickerAnimation={setCurrentKickerAnimation}
+        setDirection={setDirection}
+        setArrowState={setArrowState}
+        setForce={setForce}
+        setForcePercentage={setForcePercentage}
+        setGoals={setGoals}
+        onAttempt={handleAttempt}
+        onGoal={handleGoal}
+        onSave={handleKeeperHit}
+        onPost={handlePost}
+        onSpecial={handleSpecial}
+        onKick={handleKick}
+        kickCount={kickCount}
+        slowMo={slowMo}
+        powerup={isPowerupShot}
+      />
+      <Interface
+        setBallPosition={setShootType}
+        setDirection={setDirection}
+        setForce={setForce}
+        setKeeperAction={setKeeperAction}
+        goals={goals}
+        setShootType={setShootType}
+        arrowState={arrowState}
+        attempts={attempts}
+        forcePercentage={forcePercentage}
+        playing={start}
+      />
+      {result && (
+        <div
+          className={`${styles.result} ${
+            styles[`result${result.charAt(0).toUpperCase() + result.slice(1)}`]
+          } ${result === "goal" && powerupRef.current ? styles.resultPowerup : ""}`}
         >
-          <PerspectiveCamera
-            ref={cameraRef}
-            makeDefault
-            position={kicker_positions[shootType][kickerAction].camera_position}
-            fov={50}
-          />
-          <ambientLight intensity={2} color={"0xffffff"} />
-          <directionalLight
-            color="white"
-            position={[20, 20, 20]}
-            intensity={1}
-            castShadow
-            shadow-mapSize-width={1024}
-            shadow-mapSize-height={1024}
-            shadow-camera-far={50}
-            shadow-camera-left={-30}
-            shadow-camera-right={30}
-            shadow-camera-top={30}
-            shadow-camera-bottom={-30}
-          />
-          {/* <OrbitControls target={[0, 1.5, 0]} enableDamping={false} /> */}
-          <Suspense
-            fallback={
-              <Loader
-                onStart={handleStart}
-                showLoader={() => (showLoaderRef.current = true)}
-              />
-            }
-          >
-            {/* <Environment background={true} files={exrTexture} /> */}
-            <SkyBox url="skybox/skybox.exr" />
-            <Physics
-              broadphase="SAP"
-              gravity={[0, -9.8, 0]}
-              frictionGravity={[0, 1, 0]}
-              defaultContactMaterial={{ restitution: 0.8 }}
-            >
-              {/* <Debug color="red"> */}
-              <Kicker_1
-                playing={start}
-                position={shootType}
-                action={kickerAction}
-                onActiveAnimation={setCurrentKickerAnimation}
-                user={user}
-              />
-              <Ball
-                playing={start}
-                position={shootType}
-                animationTime={currentKickerAnimation.time}
-                direction={direction}
-                force={force}
-                arrowState={arrowState}
-                attemptShoot={attemptShoot}
-              />
-              <Arrow_1
-                shootType={shootType}
-                action={kickerAction}
-                setDirection={setDirection}
-                setArrowState={setArrowState}
-                setForcePercentage={setForcePercentage}
-                setForce={setForce}
-                forcePercentage={forcePercentage}
-                playing={start}
-              />
-              <Goalkeeper_1
-                playing={start}
-                action={keeperAction}
-                type={shootType}
-                animationTime={currentKickerAnimation.time}
-              />
-              <Goal
-                scale={[2, 0.6, 0.6]}
-                shootType={shootType}
-                keepPosition={keeperAction}
-                setGoals={setGoals}
-              />
-              <Stadium position={[-0.5, -2.43, 48.5]} />
-              <BoxCollaider
-                args={[120, 1, 120]}
-                position={[0, -0.5, 0]}
-                rotation={[0, 0, 0]}
-                mass={1}
-                type="Static"
-                name="ground"
-                // onCollide={(e) => console.log("collided")}
-              >
-                <mesh>
-                  <boxGeometry args={[120, 1, 120]} />
-                  <meshBasicMaterial />
-                </mesh>
-              </BoxCollaider>
-              {/* </Debug> */}
-            </Physics>
-          </Suspense>
-        </Canvas>
-        <Interface
-          setBallPosition={setShootType}
-          setDirection={setDirection}
-          setForce={setForce}
-          setKeeperAction={setKeeperAction}
-          goals={goals}
-          setShootType={setShootType}
-          arrowState={arrowState}
-          attempts={attempts}
-          forcePercentage={forcePercentage}
-          playing={start}
-        />
-      </CharacterAnimationProvider>
-    </div>
+          {result === "goal" && (
+            <div
+              className={`${styles.goalFlash} ${
+                powerupRef.current ? styles.powerupFlash : ""
+              }`}
+            />
+          )}
+          <span>
+            {result === "goal"
+              ? powerupRef.current
+                ? "BALONAZO!"
+                : "GOAL!"
+              : result === "saved"
+              ? "SAVED!"
+              : result === "post"
+              ? "OFF THE POST!"
+              : "MISS!"}
+          </span>
+        </div>
+      )}
+      {start && timeLeft <= 10 && <div className={styles.lowTime} />}
+      {showSummary && (
+        <div className={styles.summary}>
+          <div className={styles.summaryCard}>
+            <h2 className={styles.summaryTitle}>TIME&apos;S UP!</h2>
+            <div className={styles.summaryStats}>
+              <div className={styles.summaryItem}>
+                <span className={styles.summaryValue}>{goals}</span>
+                <span className={styles.summaryLabel}>GOALS</span>
+              </div>
+              <div className={styles.summaryItem}>
+                <span className={styles.summaryValue}>{bestStreak}</span>
+                <span className={styles.summaryLabel}>BEST STREAK</span>
+              </div>
+              <div className={styles.summaryItem}>
+                <span className={styles.summaryValue}>{attempts}</span>
+                <span className={styles.summaryLabel}>SHOTS</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      <div className={`${styles.fade} ${fading ? styles.fadeVisible : ""}`} />
+    </>
   );
 };
+
+const GameScene = memo(function GameScene({
+  shootType,
+  kickerAction,
+  keeperAction,
+  currentKickerAnimation,
+  start,
+  direction,
+  force,
+  arrowState,
+  user,
+  cameraRef,
+  setCurrentKickerAnimation,
+  setDirection,
+  setArrowState,
+  setForce,
+  setForcePercentage,
+  setGoals,
+  onAttempt,
+  onGoal,
+  onSave,
+  onPost,
+  onSpecial,
+  onKick,
+  kickCount,
+  slowMo,
+  powerup,
+}) {
+  return (
+    <Canvas
+      shadows={true}
+      id="canvas"
+      className={styles.canvas}
+      style={{ width: "100vw", height: "100vh" }}
+      gl={{
+        toneMapping: THREE.ACESFilmicToneMapping,
+        toneMappingExposure: 1,
+      }}
+    >
+      <PerspectiveCamera
+        ref={cameraRef}
+        makeDefault
+        position={kicker_positions[shootType][kickerAction].camera_position}
+        fov={50}
+      />
+      <ambientLight intensity={2} color={"0xffffff"} />
+      <CameraShake trigger={kickCount} />
+      <directionalLight
+        color="white"
+        position={[20, 20, 20]}
+        intensity={1}
+        castShadow
+        shadow-mapSize-width={SHADOW_MAP}
+        shadow-mapSize-height={SHADOW_MAP}
+        shadow-camera-far={50}
+        shadow-camera-left={-30}
+        shadow-camera-right={30}
+        shadow-camera-top={30}
+        shadow-camera-bottom={-30}
+      />
+      <Suspense fallback={<Loader />}>
+        <SkyBox url="skybox/skybox.exr" />
+        <Physics
+          broadphase="SAP"
+          gravity={[0, -9.8, 0]}
+          frictionGravity={[0, 1, 0]}
+          defaultContactMaterial={{ restitution: 0.8 }}
+        >
+          <Kicker_1
+            playing={start}
+            position={shootType}
+            action={kickerAction}
+            onActiveAnimation={setCurrentKickerAnimation}
+            user={user}
+          />
+          <Ball
+            playing={start}
+            position={shootType}
+            animationTime={currentKickerAnimation.time}
+            direction={direction}
+            force={force}
+            onAttempt={onAttempt}
+            onKick={onKick}
+            slowMo={slowMo}
+            powerup={powerup}
+          />
+          <Arrow_1
+            shootType={shootType}
+            action={kickerAction}
+            setDirection={setDirection}
+            setArrowState={setArrowState}
+            setForcePercentage={setForcePercentage}
+            setForce={setForce}
+            playing={start}
+            onSpecial={onSpecial}
+          />
+          <Goalkeeper_1
+            playing={start}
+            action={keeperAction}
+            type={shootType}
+            animationTime={currentKickerAnimation.time}
+          />
+          <Goal
+            scale={[2, 0.6, 0.6]}
+            shootType={shootType}
+            keepPosition={keeperAction}
+            setGoals={setGoals}
+            onGoal={onGoal}
+            onSave={onSave}
+            onPost={onPost}
+          />
+          <Stadium position={[-0.5, -2.43, 48.5]} />
+          <BoxCollaider
+            args={[120, 1, 120]}
+            position={[0, -0.5, 0]}
+            rotation={[0, 0, 0]}
+            mass={1}
+            type="Static"
+            name="ground"
+          >
+            <mesh>
+              <boxGeometry args={[120, 1, 120]} />
+              <meshBasicMaterial />
+            </mesh>
+          </BoxCollaider>
+        </Physics>
+      </Suspense>
+    </Canvas>
+  );
+});
 
 export default Game;

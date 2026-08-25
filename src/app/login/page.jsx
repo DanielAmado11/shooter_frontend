@@ -1,11 +1,16 @@
 "use client";
 import { useState } from "react";
-import styles from "./page.module.css";
 import { useMutation } from "react-query";
 import { createAccount } from "@/services/user";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
+import BackButton from "@/components/ui/BackButton";
+import ImageWithLoader from "@/components/ui/ImageWithLoader";
+import PageShell from "@/components/ui/PageShell";
+import styles from "./page.module.css";
 
-const LoginPage = (props) => {
+const LoginPage = () => {
   const [state, setState] = useState({ name: "" });
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -28,6 +33,7 @@ const LoginPage = (props) => {
 
   const handleCreateUser = async (e) => {
     e.preventDefault();
+    if (!state.name.trim() || createUser.isLoading) return;
     const data = {
       ...state,
       avatar_id: avatarId,
@@ -41,34 +47,44 @@ const LoginPage = (props) => {
 
   return (
     <>
-      <button className="back" id="toggle-button" onClick={handleBack}>
-        <img src="/images/back.png" alt="back" />
-      </button>
-      <div className="content">
-        <div className="item enterName">
-          <div className="characterImg">
-            <img
+      <BackButton onClick={handleBack} />
+      <PageShell>
+        <div className={styles.card}>
+          <div className={styles.character}>
+            <ImageWithLoader
               src={`/images/characters/kicker_${avatarId}_body.jpg`}
               alt="Full body Character"
+              aspectRatio="3 / 4"
+              objectFit="contain"
+              eager
             />
           </div>
-          <div className="contentName">
-            <p className="text">
+          <div className={styles.form}>
+            <h1 className={styles.title}>Create your player</h1>
+            <p className={styles.subtitle}>
               Enter your name to be added to the leaderboard!
             </p>
-            <input
+            <Input
+              id="player-name"
               type="text"
               placeholder="Enter your name"
               name="name"
               value={state.name}
               onChange={handleChange}
+              autoComplete="off"
             />
-            <button className="btn" onClick={handleCreateUser}>
+            <Button
+              type="button"
+              fullWidth
+              loading={createUser.isLoading}
+              disabled={!state.name.trim()}
+              onClick={handleCreateUser}
+            >
               Continue
-            </button>
+            </Button>
           </div>
         </div>
-      </div>
+      </PageShell>
     </>
   );
 };

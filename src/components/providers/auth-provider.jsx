@@ -2,12 +2,19 @@
 import { getUser, logout } from "@/services/user";
 import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 export const authContext = createContext({
   data: {},
   status: "UNAUTHENTICATED",
   signOut: () => {},
+  refresh: () => {},
 });
 
 export const AuthProvider = ({ children }) => {
@@ -16,8 +23,9 @@ export const AuthProvider = ({ children }) => {
 
   const [data, setData] = useState({});
   const [status, setStatus] = useState("UNAUTHENTICATED");
+  const [initialized, setInitialized] = useState(false);
 
-  const getInitialData = async () => {
+  const getInitialData = useCallback(async () => {
     try {
       const { data } = await getUser();
       if (data) {
@@ -27,8 +35,10 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       setData({});
       setStatus("UNAUTHENTICATED");
+    } finally {
+      setInitialized(true);
     }
-  };
+  }, []);
 
   const signOut = async () => {
     try {
@@ -44,28 +54,42 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     getInitialData();
+  }, [getInitialData]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const protectedRoutes = ["/", "/dashboard", "/game", "/leaderboard"];
+    const guestRoutes = ["/", "/home", "/welcome", "/login"];
+
+    const evaluate = () => {
+      if (cancelled || !initialized) return;
+      if (protectedRoutes.includes(pathname) && status === "UNAUTHENTICATED") {
+        router.push("/welcome");
+      }
+      if (guestRoutes.includes(pathname) && status === "AUTHENTICATED") {
+        router.push("/dashboard");
+      }
+    };
+
+    // A protected route reached while UNAUTHENTICATED may mean the cookie was
+    // just set mid-session (login/consent flow): refresh auth before deciding.
     if (
-      (pathname === "/" ||
-        pathname === "/dashboard" ||
-        pathname === "/game" ||
-        pathname === "/leaderboard") &&
-      status === "UNAUTHENTICATED"
+      initialized &&
+      status === "UNAUTHENTICATED" &&
+      protectedRoutes.includes(pathname)
     ) {
-      router.push("/welcome");
+      getInitialData().then(evaluate);
+    } else {
+      evaluate();
     }
-    if (
-      (pathname === "/" ||
-        pathname === "/home" ||
-        pathname === "/welcome" ||
-        pathname === "/login") &&
-      status === "AUTHENTICATED"
-    ) {
-      router.push("/dashboard");
-    }
-  }, [pathname, status]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [pathname, status, initialized, getInitialData, router]);
 
   return (
-    <authContext.Provider value={{ data, status, signOut }}>
+    <authContext.Provider value={{ data, status, signOut, refresh: getInitialData }}>
       {children}
     </authContext.Provider>
   );

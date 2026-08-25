@@ -1,39 +1,44 @@
 "use client";
-import { useEffect } from "react";
-import { redirect, useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 
 const Home = () => {
     const router = useRouter();
+    const intervalRef = useRef(null);
 
     useEffect(() => {
         let progressBar = document.getElementById('progress-bar');
         let width = 0;
-        let interval = setInterval(frame, 50);
+        intervalRef.current = setInterval(frame, 50);
 
         function frame() {
             if (width >= 100) {
-                clearInterval(interval);
+                clearInterval(intervalRef.current);
+                intervalRef.current = null;
                 router.push("/welcome");
-                redirect("/welcome");
             } else {
                 width++;
                 progressBar.style.width = width + '%';
             }
         }
+
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+                intervalRef.current = null;
+            }
+        };
     }, []);
 
     return (
         <div className="content home">
-            <div className="item logoMiami">
-                <img src="/images/logo_miami_moCAAD.png" alt="Miami MoCAAD" />
-            </div>
+            <div className="item logoMiami"></div>
             <div className="item logoAR">
-                <div className="">
-                    <img src="/images/logo_ARshootout.png" alt="AR Shoot Out" />
-                </div>
+                <img src="/images/logo_ARshootout.png" alt="AR Shoot Out" />
                 <div className="progress-container">
                     <div className="progress-bar" id="progress-bar"/>
                 </div>
+                <div className="readyText">GET READY TO SHOOT!</div>
             </div>
             <div className="item"/>
         </div>

@@ -1,27 +1,229 @@
 .container {
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   color: white;
   overflow: hidden;
 }
+
 .canvas {
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   display: block;
 }
 
-@media only screen and (orientation: landscape) {
-  .container,
-  .canvas {
-    width: 100vw;
-    height: 100vh;
+.fade {
+  position: fixed;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    1200px 700px at 15% -10%,
+    var(--bg-soft) 0%,
+    var(--bg) 45%,
+    var(--bg-deep) 100%
+  );
+  transition: opacity 250ms ease;
+}
+
+.fadeVisible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lowTime {
+  position: fixed;
+  inset: 0;
+  z-index: 12;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 55%,
+    rgba(255, 45, 85, 0.35) 100%
+  );
+  animation: lowPulse 1s ease-in-out infinite;
+}
+
+@keyframes lowPulse {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
   }
 }
 
-@media only screen and (orientation: portrait) {
-  .container,
-  .canvas {
-    width: 100vw;
-    height: 100vh;
+.summary {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(23, 10, 16, 0.55);
+  backdrop-filter: blur(4px);
+  animation: summaryFade 0.4s ease both;
+}
+
+@keyframes summaryFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.summaryCard {
+  width: min(90vw, 420px);
+  padding: 32px 24px;
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+}
+
+.summaryTitle {
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: var(--white);
+  margin-bottom: 24px;
+}
+
+.summaryStats {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.summaryItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 90px;
+}
+
+.summaryValue {
+  font-size: clamp(2rem, 6vw, 2.8rem);
+  font-weight: 900;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+
+.summaryLabel {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+}
+
+.result {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 25;
+  pointer-events: none;
+}
+
+.result > span {
+  font-size: clamp(2.5rem, 9vw, 5rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  animation: resultPop 0.4s cubic-bezier(0.22, 1.4, 0.36, 1) both;
+}
+
+.resultGoal > span {
+  background: linear-gradient(100deg, var(--cian), var(--purple), var(--pink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 22px rgba(0, 255, 213, 0.85));
+}
+
+.resultSaved > span {
+  color: var(--white);
+  text-shadow: 0 0 18px rgba(168, 85, 247, 0.9);
+}
+
+.resultMiss > span {
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 0 12px rgba(255, 77, 109, 0.7);
+}
+
+.resultPost > span {
+  color: #ffd166;
+  text-shadow: 0 0 16px rgba(255, 209, 102, 0.85);
+}
+
+.resultPowerup > span {
+  background: linear-gradient(100deg, #ffe259, #ffa751);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 26px rgba(255, 215, 0, 0.95));
+}
+
+.goalFlash {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(0, 255, 213, 0.35),
+    transparent 60%
+  );
+  animation: goalFlashAnim 0.9s ease-out both;
+}
+
+.powerupFlash {
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 215, 0, 0.5),
+    transparent 65%
+  );
+  animation: powerupFlashAnim 1s ease-out both;
+}
+
+@keyframes resultPop {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes goalFlashAnim {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+@keyframes powerupFlashAnim {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.8);
   }
 }

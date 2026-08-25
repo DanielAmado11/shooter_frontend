@@ -1,78 +1,52 @@
 "use client";
 import { useAuth } from "@/components/providers/auth-provider";
 import Cookies from "js-cookie";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import Button from "@/components/ui/Button";
+import BackButton from "@/components/ui/BackButton";
+import PageShell from "@/components/ui/PageShell";
+import styles from "./page.module.css";
 
 const TermConditions = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const userCode = searchParams.get("user_code");
   const { signOut } = useAuth();
+  const [enabled, setEnabled] = useState(false);
+  const [accepting, setAccepting] = useState(false);
+  const [declining, setDeclining] = useState(false);
 
   useEffect(() => {
     const contentContainer = document.getElementById("contentTerms");
-    // const readMoreButton = document.getElementById("read-more");
-    const btnNoAcepted = document.getElementById("btnNoAcepted");
-    const btnAcepted = document.getElementById("btnAcepted");
+    if (!contentContainer) return;
 
     function checkScroll() {
-      if (
+      setEnabled(
         contentContainer.scrollTop + contentContainer.clientHeight >=
-        contentContainer.scrollHeight
-      ) {
-        btnNoAcepted.classList.add("btn");
-        btnAcepted.classList.add("btn");
-        btnNoAcepted.classList.remove("disabledBtn");
-        btnAcepted.classList.remove("disabledBtn");
-      } else {
-        btnNoAcepted.classList.remove("btn");
-        btnAcepted.classList.remove("btn");
-        btnNoAcepted.classList.add("disabledBtn");
-        btnAcepted.classList.add("disabledBtn");
-      }
+          contentContainer.scrollHeight
+      );
     }
 
-    // readMoreButton.addEventListener("click", function () {
-    //   contentContainer.scrollTo({
-    //     top: contentContainer.scrollHeight,
-    //     behavior: "smooth",
-    //   });
-    // });
-
     contentContainer.addEventListener("scroll", checkScroll);
-
-    // Verificar el estado del scroll al cargar la página
     checkScroll();
+
+    return () => contentContainer.removeEventListener("scroll", checkScroll);
   }, []);
 
-  const handleNoAcepted = () => {
-    signOut();
+  const handleNoAcepted = async () => {
+    if (declining || !enabled) return;
+    setDeclining(true);
+    await signOut();
     router.push("/welcome");
+    setDeclining(false);
   };
 
   const handleAccept = () => {
-    const isMobileDevice = () => {
-      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-      const mobileDevices = [
-        "Android",
-        "webOS",
-        "iPhone",
-        "iPad",
-        "iPod",
-        "BlackBerry",
-        "IEMobile",
-        "Opera Mini",
-      ];
-
-      return mobileDevices.some((device) => userAgent.includes(device));
-    };
+    if (accepting || !enabled) return;
+    setAccepting(true);
     Cookies.set("user_code", userCode);
-    if (isMobileDevice()) {
-      router.push("/dashboard");
-    } else {
-      router.push("/dashboard");
-    }
+    router.push("/dashboard");
   };
 
   const handleBack = () => {
@@ -81,34 +55,42 @@ const TermConditions = () => {
 
   return (
     <>
-      <button className="back" id="toggle-button" onClick={handleBack}>
-        <img src="/images/back.png" alt="back" />
-      </button>
-      <div className="content terms_conditions">
-        <div className="text" id="contentTerms">
+      <BackButton onClick={handleBack} />
+      <PageShell className={styles.shell}>
+        <h1 className={styles.title}>Terms &amp; Conditions</h1>
+        <div className={styles.text} id="contentTerms">
           <p>
             By clicking &quot;Consent&quot;, you consent to have your name
             displayed on the game&apos;s leaderboard. This allows other players
             to see your achievements and rank within the game. Your
             participation enhances the competitive spirit and community
             engagement, showcasing your skills and dedication to the game. If
-            you have any concerns about privacy, please refer to our privacy
-            policy at{" "}
-            <a href="https://www.miamimocaad.org/privacy-policy">
-              https://www.miamimocaad.org/privacy-policy
-            </a>{" "}
-            for more details on how your information will be used.
+            you have any concerns about privacy, please contact{" "}
+            <a href="https://github.com/DanielAmado11">DanielAmado11</a> at
+            danielamado1107@gmail.com for more details on how your information
+            will be used.
           </p>
         </div>
-        <div className="contentBtn">
-          <button id="btnNoAcepted" className="btn" onClick={handleNoAcepted}>
+        <div className={styles.actions}>
+          <Button
+            id="btnNoAcepted"
+            variant="ghost"
+            loading={declining}
+            disabled={!enabled || declining}
+            onClick={handleNoAcepted}
+          >
             Do not consent
-          </button>
-          <button id="btnAcepted" className="btn" onClick={handleAccept}>
+          </Button>
+          <Button
+            id="btnAcepted"
+            loading={accepting}
+            disabled={!enabled || accepting}
+            onClick={handleAccept}
+          >
             Consent
-          </button>
+          </Button>
         </div>
-      </div>
+      </PageShell>
     </>
   );
 };

@@ -1,11 +1,24 @@
 "use client";
-import { redirect, useRouter } from "next/navigation";
-import styles from "./page.module.css";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useAuth } from "@/components/providers/auth-provider";
+import Button from "@/components/ui/Button";
+import BackButton from "@/components/ui/BackButton";
+import ImageWithLoader from "@/components/ui/ImageWithLoader";
+import PageShell from "@/components/ui/PageShell";
+import styles from "./page.module.css";
 
 const Dashboard = () => {
   const router = useRouter();
   const { data } = useAuth();
+  const [navigating, setNavigating] = useState(false);
+
+  const go = (path) => {
+    if (navigating) return;
+    setNavigating(true);
+    router.push(path);
+    setTimeout(() => setNavigating(false), 2000);
+  };
 
   const handleBack = () => {
     router.back();
@@ -13,58 +26,81 @@ const Dashboard = () => {
 
   return (
     <>
-      <button className="back" id="toggle-button" onClick={handleBack}>
-        <img src="/images/back.png" alt="back" />
-      </button>
-      <div className="content headerDashboard">
-        <p className="name">{data.name}</p>
-        <p className="userID">User ID: {data.code}</p>
-      </div>
-      <div className="content dashboard">
-        <div className="item">
-          <div className="selectItem">
-            <div className="contentImg">
-              <img src="/images/gamePlay.png" alt="Play" />
+      <BackButton onClick={handleBack} />
+      <PageShell className={styles.shell}>
+        <header className={styles.header}>
+          <div className={styles.avatarThumb}>
+            <ImageWithLoader
+              src={`/images/characters/kicker_${data.avatar_id || 1}.png`}
+              alt="Your avatar"
+              aspectRatio="1 / 1"
+            />
+          </div>
+          <div className={styles.headerText}>
+            <h1 className={styles.name}>{data.name}</h1>
+            <p className={styles.userID}>User ID: {data.code}</p>
+          </div>
+        </header>
+
+        <main className={styles.grid}>
+          <section className={`${styles.card} ${styles.cardPlay}`}>
+            <div className={styles.cardImage}>
+              <ImageWithLoader
+                src="/images/gamePlay.png"
+                alt="Play"
+                aspectRatio="16 / 9"
+              />
             </div>
-            <button
-              className="btn"
-              onClick={() => {
-                router.push("/instructions");
-              }}
+            <Button
+              fullWidth
+              loading={navigating}
+              disabled={navigating}
+              onClick={() => go("/instructions")}
             >
               Play
-            </button>
-          </div>
-        </div>
-        <div className="item">
-          <div className="selectItem">
-            <div className="contentImg">
-              <img src="/images/edit_avatar.png" alt="Edit" />
+            </Button>
+          </section>
+
+          <section className={styles.card}>
+            <div className={styles.cardImage}>
+              <ImageWithLoader
+                src="/images/edit_avatar.png"
+                alt="Edit"
+                aspectRatio="16 / 9"
+              />
             </div>
-            <button
-              className="btn"
-              onClick={() => {
-                router.push("/selection");
-              }}
+            <Button
+              fullWidth
+              variant="ghost"
+              loading={navigating}
+              disabled={navigating}
+              onClick={() => go("/selection")}
             >
               Edit
-            </button>
-          </div>
-          <div className="selectItem">
-            <div className="contentImg">
-              <img src="/images/cup.png" alt="Leaderboard" />
+            </Button>
+          </section>
+
+          <section className={styles.card}>
+            <div className={styles.cardImage}>
+              <ImageWithLoader
+                src="/images/cup.png"
+                alt="Leaderboard"
+                aspectRatio="16 / 9"
+                objectFit="contain"
+              />
             </div>
-            <button
-              className="btn"
-              onClick={() => {
-                router.push("/leaderboard");
-              }}
+            <Button
+              fullWidth
+              variant="ghost"
+              loading={navigating}
+              disabled={navigating}
+              onClick={() => go("/leaderboard")}
             >
               Leaderboard
-            </button>
-          </div>
-        </div>
-      </div>
+            </Button>
+          </section>
+        </main>
+      </PageShell>
     </>
   );
 };

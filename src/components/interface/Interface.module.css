@@ -1,14 +1,73 @@
 .container {
   position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--safe-bottom) + 14px);
   width: 100%;
   height: fit-content;
-  background-color: transparent;
+  background: transparent;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
+
 .container button {
   margin-left: 1rem;
 }
+
+.hint {
+  font-size: clamp(0.72rem, 2.4vw, 0.85rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  background: rgba(23, 10, 16, 0.35);
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(6px);
+  animation: hintFade 0.6s ease both;
+}
+
+.aimZone {
+  font-size: clamp(1rem, 3.4vw, 1.4rem);
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--white);
+  text-align: center;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 255, 213, 0.4);
+  background: rgba(23, 10, 16, 0.4);
+  padding: 8px 24px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  animation: hintFade 0.3s ease both;
+  min-width: 160px;
+}
+
+.aimZone[data-corner="true"] {
+  color: #ffd700;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7), 0 0 22px rgba(255, 215, 0, 0.85);
+  border-color: rgba(255, 215, 0, 0.55);
+}
+
 .barContainer {
   display: flex;
   justify-content: center;
-  background-color: transparent;
+  background: transparent;
+}
+
+@keyframes hintFade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }

@@ -1,53 +1,64 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import Button from "@/components/ui/Button";
+import BackButton from "@/components/ui/BackButton";
+import PageShell from "@/components/ui/PageShell";
+import styles from "./page.module.css";
 
 const Instructions = () => {
   const router = useRouter();
+  const [navigating, setNavigating] = useState(false);
+
   const handleContinue = () => {
+    if (navigating) return;
+    setNavigating(true);
     router.push("/game");
+    setTimeout(() => setNavigating(false), 2000);
   };
+
   const handleBack = () => {
     router.back();
   };
+
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <button className="back" id="toggle-button" onClick={handleBack}>
-          <img src="/images/back.png" alt="" />
-        </button>
-        <h2
-          className="back"
-          style={{
-            width: "min-content",
-            marginLeft: "30px",
-            paddingLeft: "30px",
-            color: "white",
-          }}
+      <BackButton onClick={handleBack} />
+      <PageShell className={styles.shell}>
+        <h1 className={styles.title}>Instructions</h1>
+        <div className={styles.list}>
+          <ol>
+            <li>
+              You will have 45 seconds to score as many goals as you can.
+            </li>
+            <li>
+              Tap or click on the screen to shoot the ball towards the goal.
+            </li>
+            <li>
+              The ball will move in the direction of the target when you tap or
+              click on the screen.
+            </li>
+            <li>
+              The longer you hold your finger on the screen, the more power
+              your shot will have.
+            </li>
+            <li>
+              Charge to FULL power and aim a corner (left or right) for the{" "}
+              <strong>BALONAZO</strong> — a guaranteed goal!
+            </li>
+          </ol>
+        </div>
+        <Button
+          type="button"
+          fullWidth
+          loading={navigating}
+          disabled={navigating}
+          onClick={handleContinue}
+          className={styles.button}
         >
-          Instructions
-        </h2>
-      </div>
-      <div className="content terms_conditions">
-        <div className="text" id="contentTerms">
-          <p>1. You will have 45 seconds to score as many goals as you can.</p>
-          <p>
-            2. Tap or click on the screen to shoot the ball towards the goal.
-          </p>
-          <p>
-            3. The ball will move in the direction of the target when you tap or
-            click on the screen.
-          </p>
-          <p>
-            4. The longer you hold your finger on the screen, the more power
-            your shot will have.
-          </p>
-        </div>
-        <div className="contentBtn">
-          <button id="btnContinue" className="btn" onClick={handleContinue}>
-            Continue
-          </button>
-        </div>
-      </div>
+          Continue
+        </Button>
+      </PageShell>
     </>
   );
 };

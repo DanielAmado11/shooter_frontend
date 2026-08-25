@@ -1,0 +1,49 @@
+.shell {
+  gap: 28px;
+  justify-content: center;
+}
+
+.title {
+  font-size: clamp(1.4rem, 4vw, 1.9rem);
+  font-weight: 800;
+  color: var(--white);
+  text-align: center;
+  animation: fadeInUp 0.4s ease both;
+}
+
+.list {
+  width: min(90vw, 640px);
+  padding: 28px 32px;
+  color: var(--white);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-sm);
+  animation: fadeInUp 0.4s ease both;
+}
+
+.list ol {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-left: 20px;
+}
+
+.list li {
+  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.list li::marker {
+  color: var(--cian);
+  font-weight: 700;
+}
+
+.button {
+  max-width: 380px;
+  width: 100%;
+  animation: fadeInUp 0.4s ease 0.08s both;
+}
