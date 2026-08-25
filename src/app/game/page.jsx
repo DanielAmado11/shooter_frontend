@@ -15,7 +15,6 @@ import { Goalkeeper_1 } from "@/components/goalkeepers/GoalKeeper_1";
 import { kicker_positions } from "@/utils/kickerPositions";
 import { Arrow_1 } from "@/components/arrow/arrow_1";
 import Header from "@/components/header/header";
-import Loader from "@/components/loader/Loader";
 import CameraShake from "@/components/CameraShake";
 import { useRouter } from "next/navigation";
 import { SkyBox } from "@/components/skybox/skybox";
@@ -83,6 +82,8 @@ const GameContent = () => {
   const powerupRef = useRef(false);
   const bestStreakRef = useRef(0);
   const { progress } = useProgress();
+  const MIN_SPLASH = 2500;
+  const mountTimeRef = useRef(Date.now());
 
   const router = useRouter();
 
@@ -131,9 +132,11 @@ const GameContent = () => {
 
   useEffect(() => {
     if (progress === 100) {
+      const elapsed = Date.now() - mountTimeRef.current;
+      const remaining = Math.max(0, MIN_SPLASH - elapsed);
       const timeout = setTimeout(() => {
         handleStart();
-      }, 1500);
+      }, remaining);
       return () => clearTimeout(timeout);
     }
   }, [progress, handleStart]);
@@ -462,6 +465,24 @@ const GameContent = () => {
           </div>
         </div>
       )}
+      {!start && (
+        <div className={styles.splash}>
+          <div className={styles.splashContent}>
+            <img
+              src="/images/logo_ARshootout.png"
+              alt="AR Shoot Out"
+              className={styles.splashLogo}
+            />
+            <div className={styles.splashProgress}>
+              <div
+                className={styles.splashBar}
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+            <div className={styles.splashReady}>GET READY TO SHOOT!</div>
+          </div>
+        </div>
+      )}
       <div className={`${styles.fade} ${fading ? styles.fadeVisible : ""}`} />
     </>
   );
@@ -526,7 +547,7 @@ const GameScene = memo(function GameScene({
         shadow-camera-top={30}
         shadow-camera-bottom={-30}
       />
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={null}>
         <SkyBox url="skybox/skybox.exr" />
         <Physics
           broadphase="SAP"

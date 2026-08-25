@@ -55,25 +55,27 @@ function buildSponsorTexture() {
     ctx.fill();
   }
 
-  // The sponsor board maps to V ~[0.479, 0.508] across the full U width.
-  const bandCenterY = ((0.479 + 0.508) / 2) * 1024;
-  const text = "NATALIA PADILLA <3";
-  ctx.font = '900 30px "Arial Black", Arial, sans-serif';
+  // The sponsor board maps to V ~[0.479, 0.508] and the mesh mirrors the
+  // texture vertically, so we flip the text to appear upright.
+  const bandTopY = 0.508 * 1024; // maps to the board's TOP edge
+  const textY = 514;
+  const text =
+    "NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥ NATALIA PADILLA ♥";
+  ctx.save();
+  ctx.translate(512, textY);
+  ctx.scale(1, -1);
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  // subtle dark plate behind the text so it reads over the LED pattern
-  ctx.fillStyle = "rgba(0, 0, 10, 0.55)";
-  ctx.fillRect(0, bandCenterY - 24, 1024, 48);
-  // glowing gradient text
-  const tg = ctx.createLinearGradient(0, 0, 1024, 0);
+  ctx.font = '900 18px "Arial Black", Arial, sans-serif';
+  const tg = ctx.createLinearGradient(0, -9, 0, 9);
   tg.addColorStop(0, "#00ffd5");
   tg.addColorStop(0.5, "#a855f7");
   tg.addColorStop(1, "#ec4899");
   ctx.fillStyle = tg;
   ctx.shadowColor = "rgba(0, 255, 213, 0.85)";
-  ctx.shadowBlur = 20;
-  ctx.fillText(text, 512, bandCenterY);
-  ctx.shadowBlur = 0;
+  ctx.shadowBlur = 14;
+  ctx.fillText(text, 0, 0);
+  ctx.restore();
 
   const tex = new THREE.CanvasTexture(canvas);
   tex.colorSpace = THREE.SRGBColorSpace;
