@@ -34,12 +34,14 @@ const Interface = (props) => {
         </div>
       )}
       {props.playing && props.arrowState.isRotating && (
-        <div
-          id="aim-zone"
-          className={styles.aimZone}
-          data-corner="false"
-        >
-          CENTER
+        <div className={styles.aimZoneWrap}>
+          <div
+            id="aim-zone"
+            className={styles.aimZone}
+            data-corner="false"
+          >
+            CENTER
+          </div>
         </div>
       )}
       <div className={styles.barContainer}>
