@@ -68,3 +68,19 @@
     box-shadow: 0 0 12px 2px rgba(255, 215, 0, 0.35);
   }
 }
+
+@media (max-height: 500px) {
+  .container {
+    top: calc(var(--safe-top) + 8px);
+  }
+
+  .counterContainer,
+  .timerContainer {
+    padding: 0 0.75rem;
+  }
+
+  .stat {
+    font-size: 0.58rem;
+    padding: 3px 8px;
+  }
+}

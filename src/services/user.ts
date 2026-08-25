@@ -35,6 +35,11 @@ const getUserData = async (username: string) => {
   return response.data;
 };
 
+const updateComment = async (comment: string) => {
+  const response = await AxiosInstance.put("/user/comment", { comment });
+  return response.data;
+};
+
 export {
   getUser,
   createAccount,
@@ -42,4 +47,5 @@ export {
   getAccount,
   logout,
   getUserData,
+  updateComment,
 };

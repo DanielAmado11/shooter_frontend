@@ -130,7 +130,14 @@ const LeaderBoard = () => {
                       aspectRatio="1 / 1"
                     />
                   </div>
-                  <span className={styles.nameText}>{user.name}</span>
+                  <div className={styles.nameTextWrap}>
+                    <span className={styles.nameText}>{user.name}</span>
+                    {user.comment && (
+                      <span className={styles.commentText}>
+                        &ldquo;{user.comment}&rdquo;
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className={styles.score}>{user.score}</div>
               </div>

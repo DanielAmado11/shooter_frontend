@@ -203,6 +203,22 @@
   white-space: nowrap;
 }
 
+.nameTextWrap {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+
+.commentText {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .score {
   text-align: right;
   color: var(--cian);

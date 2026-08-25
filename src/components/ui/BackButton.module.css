@@ -29,3 +29,17 @@
   color: var(--white);
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
 }
+
+@media (max-width: 768px) {
+  .back {
+    width: 40px;
+    height: 40px;
+    top: calc(8px + var(--safe-top));
+    left: 8px;
+  }
+
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
+}

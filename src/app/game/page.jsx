@@ -22,6 +22,9 @@ import { SkyBox } from "@/components/skybox/skybox";
 import { sounds, preloadSounds } from "@/components/sounds/sounds";
 import { useAuth } from "@/components/providers/auth-provider";
 import { GAME_TIMING, sleep } from "@/utils/gameTiming";
+import { getScores } from "@/services/score";
+import { updateComment } from "@/services/user";
+import Button from "@/components/ui/Button";
 import * as THREE from "three";
 
 const SHADOW_MAP =
@@ -57,8 +60,13 @@ const GameContent = () => {
   const [result, setResult] = useState(null);
   const [streak, setStreak] = useState(0);
   const [bestStreak, setBestStreak] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(Number(process.env.TIMER) || 45);
+  const [timeLeft, setTimeLeft] = useState(
+    Number(process.env.TIMER) || GAME_TIMING.duration
+  );
   const [showSummary, setShowSummary] = useState(false);
+  const [userPosition, setUserPosition] = useState(null);
+  const [comment, setComment] = useState("");
+  const [savingComment, setSavingComment] = useState(false);
   const [kickCount, setKickCount] = useState(0);
   const [slowMo, setSlowMo] = useState(false);
   const [isPowerupShot, setIsPowerupShot] = useState(false);
@@ -151,14 +159,37 @@ const GameContent = () => {
   const handleStop = () => {
     setStart(false);
     setShowSummary(true);
+    getScores()
+      .then((data) => {
+        const scores = data?.scores || [];
+        const me = scores.find((s) => s.code === user.code);
+        setUserPosition(me ? me.position : null);
+      })
+      .catch(() => {});
     setTimeout(() => {
       sounds.whistle_2.play();
     }, 1000);
-    setTimeout(() => {
-      sounds.stadium.stop();
-      sounds.background_2.play();
-      router.push("leaderboard");
-    }, 2500);
+  };
+
+  const goToLeaderboard = () => {
+    sounds.stadium.stop();
+    sounds.background_2.play();
+    router.push("leaderboard");
+  };
+
+  const handleSaveComment = async () => {
+    if (savingComment) return;
+    setSavingComment(true);
+    try {
+      await updateComment(comment.trim());
+    } catch (e) {
+      // continue to leaderboard even if the comment fails
+    }
+    goToLeaderboard();
+  };
+
+  const handleSkipComment = () => {
+    goToLeaderboard();
   };
 
   const cameraRef = useRef();
@@ -172,7 +203,7 @@ const GameContent = () => {
   }, [shootType, kickerAction]);
 
   const chooseRandomGoalkeeperAction = () => {
-    const totalTime = Number(process.env.TIMER) || 45;
+    const totalTime = Number(process.env.TIMER) || GAME_TIMING.duration;
     const elapsed = startTimeRef.current
       ? (Date.now() - startTimeRef.current) / 1000
       : 0;
@@ -398,6 +429,34 @@ const GameContent = () => {
               <div className={styles.summaryItem}>
                 <span className={styles.summaryValue}>{attempts}</span>
                 <span className={styles.summaryLabel}>SHOTS</span>
+              </div>
+              <div className={styles.summaryItem}>
+                <span className={styles.summaryValue}>
+                  {userPosition ? `#${userPosition}` : "—"}
+                </span>
+                <span className={styles.summaryLabel}>POSITION</span>
+              </div>
+            </div>
+            <div className={styles.dedication}>
+              <textarea
+                className={styles.commentInput}
+                maxLength={100}
+                rows={2}
+                placeholder="Leave a dedication..."
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              />
+              <div className={styles.dedicationActions}>
+                <Button variant="ghost" onClick={handleSkipComment}>
+                  Skip
+                </Button>
+                <Button
+                  loading={savingComment}
+                  disabled={savingComment}
+                  onClick={handleSaveComment}
+                >
+                  Save &amp; continue
+                </Button>
               </div>
             </div>
           </div>

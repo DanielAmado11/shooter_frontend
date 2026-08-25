@@ -71,3 +71,20 @@
     transform: none;
   }
 }
+
+@media (max-height: 500px) {
+  .container {
+    bottom: calc(var(--safe-bottom) + 8px);
+    gap: 6px;
+  }
+
+  .hint {
+    display: none;
+  }
+
+  .aimZone {
+    font-size: 0.72rem;
+    padding: 4px 14px;
+    min-width: 0;
+  }
+}

@@ -3,10 +3,11 @@ import styles from "./Timer.module.css";
 import { useMutation } from "react-query";
 import { createScore } from "@/services/score";
 import { useCharacterAnimation } from "@/contexts/CharacterAnimation";
+import { GAME_TIMING } from "@/utils/gameTiming";
 
 let goalsCounter = 0;
 
-const timer = process.env.TIMER || 45;
+const timer = process.env.TIMER || GAME_TIMING.duration;
 
 const Timer = ({ start, onStop, goals, onTick }) => {
   const [time, setTime] = useState(timer);

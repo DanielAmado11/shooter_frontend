@@ -31,3 +31,13 @@
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+@media (max-height: 500px) {
+  .container {
+    width: 3.6rem;
+  }
+
+  .number {
+    font-size: 1.9rem;
+  }
+}

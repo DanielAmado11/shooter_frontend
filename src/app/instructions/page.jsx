@@ -29,7 +29,7 @@ const Instructions = () => {
         <div className={styles.list}>
           <ol>
             <li>
-              You will have 45 seconds to score as many goals as you can.
+              You will have 60 seconds to score as many goals as you can.
             </li>
             <li>
               Tap or click on the screen to shoot the ball towards the goal.

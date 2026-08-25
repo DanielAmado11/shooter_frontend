@@ -95,16 +95,17 @@
 }
 
 .summaryStats {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-items: center;
+  gap: 12px;
 }
 
 .summaryItem {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  min-width: 90px;
+  min-width: 0;
 }
 
 .summaryValue {
@@ -122,6 +123,64 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   color: var(--text-muted);
+}
+
+@media (max-height: 500px) {
+  .summaryValue {
+    font-size: 1.6rem;
+  }
+
+  .summaryLabel {
+    font-size: 0.58rem;
+  }
+
+  .summaryCard {
+    padding: 20px 16px;
+  }
+}
+
+.dedication {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.commentInput {
+  width: 100%;
+  min-height: 64px;
+  resize: none;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  background: var(--glass-bg);
+  color: var(--white);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-family: var(--font);
+  font-size: clamp(1rem, 2.8vw, 1.25rem);
+  font-weight: 400;
+  font-style: normal;
+  text-align: center;
+}
+
+.commentInput::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.commentInput:focus {
+  outline: none;
+  border-color: var(--cian);
+  box-shadow: 0 0 0 3px rgba(0, 255, 213, 0.3);
+}
+
+.dedicationActions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.dedicationActions :global(button) {
+  flex: 1;
 }
 
 .result {

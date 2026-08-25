@@ -1,4 +1,6 @@
 export const GAME_TIMING = {
+  // Total match duration in seconds.
+  duration: 60,
   // Delay (ms) between the kick starting and the ball being launched, per avatar.
   shootDelayByPlayer: {
     1: 600,
