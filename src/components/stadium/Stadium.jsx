@@ -85,7 +85,7 @@ function buildSponsorTexture() {
 }
 
 export function Stadium(props) {
-  const { nodes, materials } = useGLTF("../models/stadium/stadium.gltf");
+  const { nodes, materials } = useGLTF("../models/stadium/stadium.glb");
   materials.M_gradas.emissiveIntensity = 1.8;
   materials.M_gradas.envMapIntensity = 1.8;
 
@@ -118,13 +118,11 @@ export function Stadium(props) {
         <mesh
           geometry={nodes.gradas.geometry}
           material={materials.M_gradas}
-          castShadow
           receiveShadow
         />
         <mesh
           geometry={nodes.puclico.geometry}
           material={materials.multidud}
-          castShadow
           receiveShadow
         />
         <mesh
@@ -136,7 +134,6 @@ export function Stadium(props) {
         <mesh
           geometry={nodes.terrain.geometry}
           material={materials.M_terrain}
-          castShadow
           receiveShadow
         />
         <mesh
@@ -156,4 +153,4 @@ export function Stadium(props) {
   );
 }
 
-useGLTF.preload("../models/stadium/stadium.gltf");
+useGLTF.preload("../models/stadium/stadium.glb");

@@ -46,7 +46,7 @@ const Dashboard = () => {
           <section className={`${styles.card} ${styles.cardPlay}`}>
             <div className={styles.cardImage}>
               <ImageWithLoader
-                src="/images/gamePlay.png"
+                src="/images/gamePlay.webp"
                 alt="Play"
                 aspectRatio="16 / 9"
               />
@@ -64,7 +64,7 @@ const Dashboard = () => {
           <section className={styles.card}>
             <div className={styles.cardImage}>
               <ImageWithLoader
-                src="/images/edit_avatar.png"
+                src="/images/edit_avatar.webp"
                 alt="Edit"
                 aspectRatio="16 / 9"
               />

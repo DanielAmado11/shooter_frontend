@@ -7,7 +7,13 @@
     "build": "next build",
     "start": "next start",
     "export": "next build && next export",
-    "lint": "next lint"
+    "lint": "next lint",
+    "assets:ball": "node scripts/resize-ball-textures.js",
+    "assets:stadium": "node scripts/optimize-stadium.js",
+    "assets:skybox": "node scripts/downscale-skybox.mjs",
+    "assets:characters": "node scripts/compress-characters.js",
+    "assets:sounds": "node scripts/compress-sounds.js",
+    "assets:images": "node scripts/optimize-images.js"
   },
   "dependencies": {
     "@react-three/cannon": "^6.6.0",
@@ -27,7 +33,12 @@
     "three": "^0.164.1"
   },
   "devDependencies": {
+    "@gltf-transform/cli": "^4.4.2",
+    "@gltf-transform/core": "^4.4.2",
+    "@gltf-transform/extensions": "^4.4.2",
     "eslint": "^8",
-    "eslint-config-next": "14.2.3"
+    "eslint-config-next": "14.2.3",
+    "ffmpeg-static": "^5.3.0",
+    "sharp": "^0.35.3"
   }
 }

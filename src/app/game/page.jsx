@@ -26,8 +26,9 @@ import { updateComment } from "@/services/user";
 import Button from "@/components/ui/Button";
 import * as THREE from "three";
 
-const SHADOW_MAP =
-  typeof window !== "undefined" && window.innerWidth < 768 ? 512 : 1024;
+const IS_MOBILE = typeof window !== "undefined" && window.innerWidth < 768;
+
+const SHADOW_MAP = IS_MOBILE ? 512 : 2048;
 
 const Game = () => {
   return (
@@ -525,8 +526,9 @@ const GameScene = memo(function GameScene({
       style={{ width: "100vw", height: "100dvh" }}
       gl={{
         toneMapping: THREE.ACESFilmicToneMapping,
-        toneMappingExposure: 1,
+        toneMappingExposure: 1.05,
       }}
+      dpr={IS_MOBILE ? [1, 1.5] : [1, 2]}
     >
       <PerspectiveCamera
         ref={cameraRef}
@@ -534,21 +536,29 @@ const GameScene = memo(function GameScene({
         position={kicker_positions[shootType][kickerAction].camera_position}
         fov={50}
       />
-      <ambientLight intensity={2} color={"0xffffff"} />
-      <CameraShake trigger={kickCount} />
+      <hemisphereLight args={[0xbcd3ff, 0x223344, 0.7]} />
+      <ambientLight intensity={0.25} />
       <directionalLight
         color="white"
         position={[20, 20, 20]}
-        intensity={1}
+        intensity={1.1}
         castShadow
         shadow-mapSize-width={SHADOW_MAP}
         shadow-mapSize-height={SHADOW_MAP}
         shadow-camera-far={50}
-        shadow-camera-left={-30}
-        shadow-camera-right={30}
-        shadow-camera-top={30}
-        shadow-camera-bottom={-30}
+        shadow-camera-left={-20}
+        shadow-camera-right={20}
+        shadow-camera-top={20}
+        shadow-camera-bottom={-20}
+        shadow-bias={-0.0001}
+        shadow-normalBias={0.02}
       />
+      <directionalLight
+        color="#cfe3ff"
+        position={[-12, 8, -18]}
+        intensity={0.35}
+      />
+      <CameraShake trigger={kickCount} />
       <Suspense fallback={null}>
         <SkyBox url="skybox/skybox.exr" />
         <Physics

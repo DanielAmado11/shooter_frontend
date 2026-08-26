@@ -15,7 +15,7 @@ export function Goalkeeper_1(props) {
   const group = useRef();
 
   const { nodes, materials, animations } = useGLTF(
-    "../models/goalkeeper/goalkeeper_1.gltf"
+    "../models/goalkeeper/goalkeeper_1.glb"
   );
   const { actions } = useAnimations(animations, group);
   const { animationIndex } = useCharacterAnimation();
@@ -161,4 +161,4 @@ export function Goalkeeper_1(props) {
   );
 }
 
-useGLTF.preload("models/goalkeeper/goalkeeper_1.gltf");
+useGLTF.preload("models/goalkeeper/goalkeeper_1.glb");

@@ -17,7 +17,7 @@ export function Kicker_1(props) {
   const { data } = useAuth();
 
   const { nodes, materials, animations } = useGLTF(
-    `../models/kicker/kicker_${data.avatar_id ?? 1}.gltf`
+    `../models/kicker/kicker_${data.avatar_id ?? 1}.glb`
   );
   const group = useRef();
 
@@ -110,7 +110,6 @@ export function Kicker_1(props) {
           <primitive object={nodes.mixamorigHips} />
           <group name="black_man1" castShadow receiveShadow>
             <skinnedMesh
-              frustumCulled={false}
               name="Mesh"
               geometry={nodes.Mesh.geometry}
               material={materials.shorts}
@@ -119,7 +118,6 @@ export function Kicker_1(props) {
               receiveShadow
             />
             <skinnedMesh
-              frustumCulled={false}
               name="Mesh_1"
               geometry={nodes.Mesh_1.geometry}
               material={materials.eyes}
@@ -128,7 +126,6 @@ export function Kicker_1(props) {
               receiveShadow
             />
             <skinnedMesh
-              frustumCulled={false}
               name="Mesh_2"
               geometry={nodes.Mesh_2.geometry}
               material={materials.hair}
@@ -137,7 +134,6 @@ export function Kicker_1(props) {
               receiveShadow
             />
             <skinnedMesh
-              frustumCulled={false}
               name="Mesh_3"
               geometry={nodes.Mesh_3.geometry}
               material={materials.shoes}
@@ -146,7 +142,6 @@ export function Kicker_1(props) {
               receiveShadow
             />
             <skinnedMesh
-              frustumCulled={false}
               name="Mesh_4"
               geometry={nodes.Mesh_4.geometry}
               material={materials.body}
@@ -155,7 +150,6 @@ export function Kicker_1(props) {
               receiveShadow
             />
             <skinnedMesh
-              frustumCulled={false}
               name="Mesh_5"
               geometry={nodes.Mesh_5.geometry}
               material={materials.head}
@@ -164,7 +158,6 @@ export function Kicker_1(props) {
               receiveShadow
             />
             <skinnedMesh
-              frustumCulled={false}
               name="Mesh_6"
               geometry={nodes.Mesh_6.geometry}
               material={materials.shirt}
@@ -173,7 +166,6 @@ export function Kicker_1(props) {
               receiveShadow
             />
             <skinnedMesh
-              frustumCulled={false}
               name="Mesh_7"
               geometry={nodes.Mesh_7.geometry}
               material={materials.socks}
@@ -189,5 +181,5 @@ export function Kicker_1(props) {
 }
 
 // useGLTF.preload(
-//   `../models/kicker/kicker_${data.avatar_id}.gltf`
+//   `../models/kicker/kicker_${data.avatar_id}.glb`
 // );
