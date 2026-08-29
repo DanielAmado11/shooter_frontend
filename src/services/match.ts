@@ -1,5 +1,5 @@
 import { getClientAxiosInstance } from "@/config/clientAxiosInstance";
-import { Match, MatchState, Shot } from "@/interfaces/match";
+import { Match, MatchState, MatchStats, Shot } from "@/interfaces/match";
 
 const AxiosInstance = getClientAxiosInstance({ withFiles: false });
 
@@ -31,4 +31,9 @@ const finishMatch = async (id: number) => {
   return response.data as { match: Match; winnerId: number | null };
 };
 
-export { createMatch, joinMatch, getMatch, recordShot, finishMatch };
+const getMatchStats = async () => {
+  const response = await AxiosInstance.get(`/match/stats`);
+  return response.data as MatchStats;
+};
+
+export { createMatch, joinMatch, getMatch, recordShot, finishMatch, getMatchStats };

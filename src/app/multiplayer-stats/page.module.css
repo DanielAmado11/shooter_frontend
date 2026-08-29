@@ -1,0 +1,246 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 100dvh;
+  padding: calc(var(--safe-top) + 20px) 16px calc(var(--safe-bottom) + 20px);
+}
+
+.card {
+  width: min(94vw, 720px);
+  padding: 24px;
+  background: rgba(23, 10, 16, 0.45);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  animation: fadeInUp 0.4s ease both;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.branding {
+  width: 90px;
+  flex-shrink: 0;
+}
+
+.brandText {
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--white);
+  line-height: 1.1;
+}
+
+.title {
+  font-size: clamp(1rem, 3vw, 1.35rem);
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: 0.14em;
+  text-align: center;
+}
+
+.youCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 72px;
+  flex-shrink: 0;
+}
+
+.youImage {
+  width: 64px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 2px solid var(--cian);
+  box-shadow: 0 0 16px rgba(0, 255, 213, 0.35);
+}
+
+.youLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cian);
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+}
+
+.summaryItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.summaryValue {
+  font-size: clamp(1.4rem, 5vw, 2rem);
+  font-weight: 900;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+
+.summaryLabel {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.rankingHeader {
+  display: grid;
+  grid-template-columns: 1fr 60px 56px 56px 60px;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.rankingHeader span {
+  font-size: clamp(0.58rem, 1.8vw, 0.7rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cian);
+  text-align: center;
+}
+
+.rankingHeader span:nth-child(1) {
+  text-align: left;
+}
+
+.ranking {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 48dvh;
+  overflow-y: auto;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 60px 56px 56px 60px;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid transparent;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.row:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.nameImage {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+}
+
+.nameText {
+  color: var(--white);
+  font-weight: 600;
+  font-size: clamp(0.85rem, 2.2vw, 1rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cell {
+  text-align: center;
+  font-weight: 700;
+  font-size: clamp(0.85rem, 2.2vw, 1rem);
+  color: var(--text-muted);
+}
+
+.win {
+  color: var(--cian);
+}
+
+.loss {
+  color: var(--pink);
+}
+
+.percent {
+  color: var(--white);
+}
+
+.empty {
+  padding: 28px;
+  text-align: center;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.ranking::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ranking::-webkit-scrollbar-thumb {
+  background: var(--gradient);
+  border-radius: 8px;
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 16px;
+  }
+
+  .branding {
+    width: 64px;
+  }
+
+  .youCard {
+    width: 56px;
+  }
+
+  .youImage {
+    width: 52px;
+  }
+
+  .summary {
+    padding: 12px 8px;
+  }
+
+  .rankingHeader,
+  .row {
+    grid-template-columns: 1fr 34px 30px 30px 34px;
+    gap: 4px;
+    padding: 8px 8px;
+  }
+}

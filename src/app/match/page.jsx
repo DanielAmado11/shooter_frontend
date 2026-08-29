@@ -114,6 +114,12 @@ const Match = () => {
         </section>
 
         {error && <div className={styles.error}>{error}</div>}
+
+        <section className={styles.section}>
+          <Button variant="ghost" fullWidth onClick={() => router.push("/multiplayer-stats")}>
+            Ver mis estadísticas
+          </Button>
+        </section>
       </PageShell>
     </>
   );

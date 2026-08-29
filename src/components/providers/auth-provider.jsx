@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     let cancelled = false;
-    const protectedRoutes = ["/", "/dashboard", "/game", "/match", "/leaderboard"];
+    const protectedRoutes = ["/", "/dashboard", "/game", "/match", "/multiplayer-stats", "/leaderboard"];
     const guestRoutes = ["/", "/home", "/welcome", "/login"];
 
     const evaluate = () => {

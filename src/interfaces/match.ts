@@ -32,3 +32,20 @@ export interface MatchState {
   goals1: number;
   goals2: number;
 }
+
+export interface OpponentStat {
+  id: number;
+  name: string;
+  avatar_id: number;
+  games: number;
+  wins: number;
+  losses: number;
+  lossPercent: number;
+}
+
+export interface MatchStats {
+  totalGames: number;
+  totalWins: number;
+  totalLosses: number;
+  opponents: OpponentStat[];
+}

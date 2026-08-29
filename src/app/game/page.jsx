@@ -77,7 +77,9 @@ const GameContent = () => {
   const [isMyTurn, setIsMyTurn] = useState(false);
   const [matchFinished, setMatchFinished] = useState(false);
   const [matchWinnerId, setMatchWinnerId] = useState(null);
+  const [myGoals, setMyGoals] = useState(0);
   const [opponentGoals, setOpponentGoals] = useState(0);
+  const [opponentName, setOpponentName] = useState("");
   const [matchStarted, setMatchStarted] = useState(false);
   const startedRef = useRef(false);
   const startRef = useRef(false);
@@ -202,11 +204,10 @@ const GameContent = () => {
         const myId = user?.id;
         setIsMyTurn(data.match.currentPlayerId === myId);
         shotRecordedRef.current = false;
-        setOpponentGoals(
-         data.match.shots.filter(
-           (s) => s.playerId === data.match.player2_id && s.result === "goal"
-          ).length
-        );
+        const isPlayer1 = myId === data.match.player1_id;
+        setMyGoals(isPlayer1 ? data.goals1 : data.goals2);
+        setOpponentGoals(isPlayer1 ? data.goals2 : data.goals1);
+        setOpponentName(isPlayer1 ? data.player2?.name : data.player1?.name);
         if (data.match.status === "playing" && !matchStartedRef.current) {
           matchStartedRef.current = true;
           setMatchStarted(true);
@@ -392,6 +393,7 @@ const GameContent = () => {
       if (powerupRef.current) {
         lastWasGoalRef.current = true;
         setStreak((prev) => prev + 1);
+        setGoals((prev) => prev + 1);
         resolveAttempt("goal");
         return;
       }
@@ -438,7 +440,7 @@ const GameContent = () => {
   return (
     <>
       <Header
-        goals={goals}
+        goals={isMultiplayer ? myGoals : goals}
         start={start}
         onStop={handleStop}
         shots={attempts}
@@ -446,7 +448,7 @@ const GameContent = () => {
         bestStreak={bestStreak}
         onTick={handleTick}
         goals2={isMultiplayer ? opponentGoals : undefined}
-        opponentName={isMultiplayer && matchState?.player2?.name}
+        opponentName={isMultiplayer && opponentName}
       />
       <GameScene
         shootType={shootType}
@@ -601,7 +603,7 @@ const GameContent = () => {
               {matchWinnerId === user?.id ? "You Win!" : "You Lose!"}
             </div>
             <div className={styles.overlayStats}>
-              <span>Goals: {goals}</span>
+              <span>Goals: {myGoals}</span>
               <span>Opponent: {opponentGoals}</span>
             </div>
             <Button variant="primary" onClick={() => router.push("/")}>
@@ -726,6 +728,7 @@ const GameScene = memo(function GameScene({
             onGoal={onGoal}
             onSave={onSave}
             onPost={onPost}
+            powerup={powerup}
           />
           <Stadium position={[-0.5, -2.43, 48.5]} />
           <BoxCollaider

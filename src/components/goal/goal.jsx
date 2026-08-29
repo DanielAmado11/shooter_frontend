@@ -47,14 +47,14 @@ const planes = [
 ];
 
 export function Goal(props) {
-  const { shootType, keepPosition, setGoals, onGoal, onSave, onPost } = props;
+  const { shootType, keepPosition, setGoals, onGoal, onSave, onPost, powerup } = props;
   const goalRef = useRef(false);
   const handleGoal = (e) => {
     if (!goalRef.current) {
       goalRef.current = true;
       sounds.goal.play();
       sounds.goal_stadium.play();
-      setGoals((prev) => prev + 1);
+      if (!powerup) setGoals((prev) => prev + 1);
       if (typeof onGoal === "function") onGoal();
     }
   };
