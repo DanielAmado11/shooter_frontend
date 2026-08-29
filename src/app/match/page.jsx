@@ -16,14 +16,14 @@ const Match = () => {
   const [joinCode, setJoinCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
-  const createdMatchId = searchParams.get("match");
+  const [createdMatchId, setCreatedMatchId] = useState(null);
 
   const handleCreate = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
       const { code: newCode, match } = await createMatch();
+      setCreatedMatchId(match.id);
       setCode(newCode);
       setJoinCode(newCode);
     } catch (e) {
@@ -45,7 +45,7 @@ const Match = () => {
       const match = await joinMatch(trimmed);
       router.push(`/game?match=${match.id}`);
     } catch (e) {
-      setError("Código inválido o partida ya comenzó.");
+      setError(e.response?.data?.error || "Código inválido o partida ya comenzó.");
     } finally {
       setLoading(false);
     }

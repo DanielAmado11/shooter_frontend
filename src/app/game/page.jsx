@@ -97,7 +97,7 @@ const GameContent = () => {
   const mountTimeRef = useRef(Date.now());
 
   const router = useRouter();
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearchParams();
   const queryMatchId = searchParams.get("match");
 
   useEffect(() => {
@@ -136,6 +136,10 @@ const GameContent = () => {
 
   const handleStart = useCallback(() => {
     if (startedRef.current) return;
+    if (isMultiplayer) {
+      setSplashVisible(false);
+      return;
+    }
     startedRef.current = true;
     startTimeRef.current = Date.now();
     setStart(true);
@@ -145,7 +149,7 @@ const GameContent = () => {
     sounds.background_2.stop();
     sounds.whistle_1.play();
     sounds.stadium.play();
-  }, []);
+  }, [isMultiplayer]);
 
   const handleUnMount = () => {
     sounds.stadium.stop();
@@ -199,8 +203,8 @@ const GameContent = () => {
         setIsMyTurn(data.match.currentPlayerId === myId);
         shotRecordedRef.current = false;
         setOpponentGoals(
-          data.shots.filter(
-            (s) => s.playerId === data.match.player2_id && s.result === "goal"
+         data.match.shots.filter(
+           (s) => s.playerId === data.match.player2_id && s.result === "goal"
           ).length
         );
         if (data.match.status === "playing" && !matchStartedRef.current) {
@@ -234,12 +238,6 @@ const GameContent = () => {
     };
   }, [isMultiplayer, matchId, user?.id]);
 
-  useEffect(() => {
-    if (matchFinished) {
-      handleMatchEnd();
-    }
-  }, [matchFinished, handleMatchEnd]);
-
   const handleStop = () => {
     if (isMultiplayer) return;
     setStart(false);
@@ -264,6 +262,12 @@ const GameContent = () => {
       // ignore
     }
   }, [matchId]);
+
+  useEffect(() => {
+    if (matchFinished) {
+      handleMatchEnd();
+    }
+  }, [matchFinished, handleMatchEnd]);
 
   const goToLeaderboard = () => {
     sounds.stadium.stop();
@@ -470,6 +474,9 @@ const GameContent = () => {
         kickCount={kickCount}
         slowMo={slowMo}
         powerup={isPowerupShot}
+        isMultiplayer={isMultiplayer}
+        matchStarted={matchStarted}
+        isMyTurn={isMyTurn}
       />
       <Interface
         setBallPosition={setShootType}
@@ -481,7 +488,7 @@ const GameContent = () => {
         arrowState={arrowState}
         attempts={attempts}
         forcePercentage={forcePercentage}
-        playing={isMultiplayer ? isMyTurn : start}
+        playing={isMultiplayer ? (matchStarted && isMyTurn) : start}
       />
       {result && (
         <div
@@ -578,7 +585,7 @@ const GameContent = () => {
         </div>
       )}
       <div className={`${styles.fade} ${fading ? styles.fadeVisible : ""}`} />
-      {isMultiplayer && !isMyTurn && !matchFinished && (
+      {isMultiplayer && !matchFinished && (!matchStarted || !isMyTurn) && (
         <div className={styles.multiplayerOverlay}>
           <div className={styles.overlayCard}>
             <div className={styles.overlayTitle}>
@@ -633,6 +640,9 @@ const GameScene = memo(function GameScene({
   kickCount,
   slowMo,
   powerup,
+  isMultiplayer,
+  matchStarted,
+  isMyTurn,
 }) {
   return (
     <Canvas
@@ -699,7 +709,7 @@ const GameScene = memo(function GameScene({
             setArrowState={setArrowState}
             setForcePercentage={setForcePercentage}
             setForce={setForce}
-            playing={isMultiplayer ? isMyTurn : start}
+            playing={isMultiplayer ? (matchStarted && isMyTurn) : start}
             onSpecial={onSpecial}
           />
           <Goalkeeper_1
