@@ -356,3 +356,42 @@
     transform: scale(1.8);
   }
 }
+
+.multiplayerOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(23, 10, 16, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.overlayCard {
+  width: min(90vw, 420px);
+  padding: 32px 24px;
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+}
+
+.overlayTitle {
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+
+.overlayStats {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 24px;
+  font-size: 1.1rem;
+  font-weight: 700;
+}

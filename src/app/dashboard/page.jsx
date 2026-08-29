@@ -99,6 +99,26 @@ const Dashboard = () => {
               Leaderboard
             </Button>
           </section>
+
+          <section className={styles.card}>
+            <div className={styles.cardImage}>
+              <ImageWithLoader
+                src="/images/players.webp"
+                alt="Multijugador"
+                aspectRatio="16 / 9"
+                objectFit="contain"
+              />
+            </div>
+            <Button
+              fullWidth
+              variant="ghost"
+              loading={navigating}
+              disabled={navigating}
+              onClick={() => go("/match")}
+            >
+              Multijugador
+            </Button>
+          </section>
         </main>
       </PageShell>
     </>

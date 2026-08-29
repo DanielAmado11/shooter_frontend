@@ -69,6 +69,34 @@
   }
 }
 
+.matchScore {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.matchScoreLabel {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.matchScoreValue {
+  color: var(--cian);
+  font-size: 1.2rem;
+}
+
+.matchScoreVs {
+  color: var(--text-muted);
+  opacity: 0.5;
+  margin: 0 2px;
+}
+
 @media (max-height: 500px) {
   .container {
     top: calc(var(--safe-top) + 8px);
