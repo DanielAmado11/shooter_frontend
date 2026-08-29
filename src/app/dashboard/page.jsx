@@ -100,14 +100,14 @@ const Dashboard = () => {
             </Button>
           </section>
 
-          <section className={styles.card}>
-            <div className={styles.cardImage}>
+          <section className={`${styles.card} ${styles.cardMultiplayer}`}>
+            <div className={`${styles.cardImage} ${styles.vsImage}`}>
               <ImageWithLoader
-                src="/images/players.webp"
+                src="/images/gamePlay.png"
                 alt="Multijugador"
                 aspectRatio="16 / 9"
-                objectFit="contain"
               />
+              <span className={styles.vsBadge}>VS</span>
             </div>
             <Button
               fullWidth
